@@ -5,8 +5,8 @@ sap.ui.define([
     "sap/ui/model/Filter",
     "sap/ui/model/FilterOperator",
     "sap/ui/comp/smartvariants/PersonalizableInfo",
-    "sap/ui/core/Fragment" // Assicurati di includere Fragment qui
-
+    "sap/ui/core/Fragment"
+    
 ], function(Controller, JSONModel, Label, Filter, FilterOperator, PersonalizableInfo, Fragment) {
     "use strict";
 
@@ -246,6 +246,48 @@ sap.ui.define([
             });
             this.oSmartVariantManagement.addPersonalizableControl(oPersInfo);
             this.oSmartVariantManagement.initialise(function () {}, this.oFilterBar);
+        },
+
+        onExportPress: function() {
+            var aData = this.getView().getModel().getProperty("/ProductCollection");
+            var aCols = [
+                { label: 'Numero', property: 'Numero' },
+                { label: 'Data Creazione BEM', property: 'DataCreazioneBEM' },
+                { label: 'Data Registrazione', property: 'DataRegistrazione' },
+                { label: 'Stato', property: 'Stato' },
+                { label: 'Autore', property: 'Autore' },
+                { label: 'Wbs/Cdc', property: 'WbsCdc' },
+                { label: 'Descriz. Wbs/Cdc', property: 'DescWbsCdc' },
+                { label: 'ID Fornitore', property: 'IdFornitore' },
+                { label: 'Fornitore', property: 'Fornitore' },
+                { label: 'Importo Totale', property: 'ImpTot' },
+                { label: 'Importo Benestatario BEM', property: 'ImpBEM' },
+                { label: 'N. OdA', property: 'Noda' },
+                { label: 'Tipo OdA', property: 'TipoOdA' },
+                { label: 'Codice CUP', property: 'CodiceCUP' },
+                { label: 'Codice CIG', property: 'CodiceCIG' },
+                { label: 'Descrizione CIG', property: 'DescCIG' },
+                { label: 'BEM Benestariata', property: 'Benestariata' },
+                { label: 'Data Annullamento', property: 'DataAnnullamento' },
+                { label: 'Utente Annullamento', property: 'UtenteAnnullamento' }
+            ];
+
+            var aExcelData = aData.map(function(oItem) {
+                var oExcelItem = {};
+                aCols.forEach(function(oCol) {
+                    if (oCol.property === 'DataCreazioneBEM' || oCol.property === 'DataRegistrazione' || oCol.property === 'DataAnnullamento') {
+                        oExcelItem[oCol.label] = oItem[oCol.property] ? new Date(oItem[oCol.property]).toLocaleDateString() : "";
+                    } else {
+                        oExcelItem[oCol.label] = oItem[oCol.property];
+                    }
+                });
+                return oExcelItem;
+            });
+
+            var oWorksheet = XLSX.utils.json_to_sheet(aExcelData);
+            var oWorkbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(oWorkbook, oWorksheet, "Sheet1");
+            XLSX.writeFile(oWorkbook, "Export.xlsx");
         },
         
 

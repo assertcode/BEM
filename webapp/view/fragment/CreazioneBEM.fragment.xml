@@ -73,7 +73,7 @@
                     <Toolbar>
                         <Title text="Lista Ordini"/>
                         <ToolbarSpacer></ToolbarSpacer>
-                        <Button text="Trasferisci su BEM" type="Attention" press="onExportPress"/>
+                        <Button text="Trasferisci su BEM" type="Attention" press="onExportTo"/>
                         <Button text="Annulla" type="Reject" press="onCloseFragment"/>                    
                     </Toolbar>
 
@@ -204,4 +204,3 @@
         </content>
     </Dialog>
 </core:FragmentDefinition>
-https://github.com/assertcode/BEM.git
