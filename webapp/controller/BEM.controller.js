@@ -436,6 +436,15 @@ sap.ui.define([
             this.oExpandedLabel.setText(this.getFormattedSummaryTextExpanded());
             this.oSnappedLabel.setText(this.getFormattedSummaryText());
             this.oTable.setShowOverlay(true);
+        },
+
+        onTransfer: function () {
+            if (this.byId("BEMFragment")) {
+                this.byId("BEMFragment").close();
+                const oRouter = this.getOwnerComponent().getRouter();
+                oRouter.navTo("RouteBEMDetail");
+            }
+
         }
     });
 });

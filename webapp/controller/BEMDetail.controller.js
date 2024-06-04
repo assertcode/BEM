@@ -11,7 +11,14 @@ sap.ui.define([
     "use strict";
 
     return Controller.extend("sap.m.bem.controller.BEMDetail", {
-        onInit: function() {   }
+        onInit: function() {                  
+        
+        var sDataPath = sap.ui.require.toUrl("sap/m/bem/flownodes.json");
+        var oModel = new JSONModel(sDataPath);
+        this.getView().setModel(oModel);
+        
+        this.oProcessFlow = this.getView().byId("processflow");
+        this.oProcessFlow.updateModel(); }
 
     });
 });

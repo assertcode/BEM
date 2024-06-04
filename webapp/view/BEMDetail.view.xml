@@ -1,0 +1,22 @@
+<mvc:View controllerName="sap.m.bem.controller.BEMDetail"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:f="sap.f"
+    xmlns:t="sap.ui.table"
+    xmlns:fb="sap.ui.comp.filterbar"
+    xmlns:c="sap.suite.ui.commons"
+    xmlns:svm="sap.ui.comp.smartvariants">
+ <Page id="p" title="{i18n>title}">
+    <c:ProcessFlow id="processflow" scrollable="false" wheelZoomable="false" nodes="{/nodes}" lanes="{/lanes}">
+			<c:nodes>
+				<c:ProcessFlowNode laneId="{lane}" nodeId="{id}" state="{state}" children="{children}" />
+			</c:nodes>
+			<c:lanes>
+				<c:ProcessFlowLaneHeader laneId="{id}" iconSrc="{icon}" text="{label}" position="{position}" />
+			</c:lanes>
+		</c:ProcessFlow>
+ </Page>
+
+
+</mvc:View>

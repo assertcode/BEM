@@ -1,0 +1,45 @@
+{
+	"nodes": [
+		{
+			"id": "1",
+			"lane": "0",
+			"children": [  ],
+			"state": "Positive",
+			"focused": true
+		},
+		{
+			"id": "2",
+			"lane": "1",
+			"children": [ ],
+			"state": "Negative",
+			"focused": false
+		},
+        {
+			"id": "3",
+			"lane": "2",
+			"children": [ ],
+			"state": "Negative",
+			"focused": false
+		}
+      
+	],
+	"lanes": [
+		{
+			"id": "0",
+			"icon": "sap-icon://order-status",
+			"label": "Apertura RDA",
+			"position": 0
+		},
+		{
+			"id": "1",
+			"icon": "sap-icon://error",
+			"label": "RDA Incompleta",
+			"position": 1
+		},		{
+			"id": "2",
+			"icon": "sap-icon://activity-assigned-to-goal",
+			"label": "RDA da autorizzare",
+			"position": 2
+		}
+	]
+}

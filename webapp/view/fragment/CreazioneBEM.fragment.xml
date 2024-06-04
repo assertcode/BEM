@@ -73,7 +73,7 @@
                     <Toolbar>
                         <Title text="Lista Ordini"/>
                         <ToolbarSpacer></ToolbarSpacer>
-                        <Button text="Trasferisci su BEM" type="Attention" press="onExportTo"/>
+                        <Button text="Trasferisci su BEM" type="Attention" press="onTransfer"/>
                         <Button text="Annulla" type="Reject" press="onCloseFragment"/>                    
                     </Toolbar>
 
