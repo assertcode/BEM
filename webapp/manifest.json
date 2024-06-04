@@ -98,6 +98,13 @@
           "target": [
             "TargetBEM"
           ]
+        },
+        {
+          "name": "RouteBEMDetail",
+          "pattern": "BEMDetail",
+          "target": [
+            "TargetBEMDetail"
+          ]
         }
       ],
       "targets": {
@@ -107,6 +114,13 @@
           "clearControlAggregation": false,
           "viewId": "BEM",
           "viewName": "BEM"
+        },
+        "TargetBEMDetail": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "BEMDetail",
+          "viewName": "BEMDetail"
         }
       }
     },
