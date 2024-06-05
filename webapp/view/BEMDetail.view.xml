@@ -16,7 +16,7 @@
                 text="Selezionare una posizione"
                 type="Warning"
                 showIcon="true"
-                showCloseButton="true"
+                showCloseButton="false"
                 class="sapUiMediumMarginBottom">
             </MessageStrip>
         </VBox>
@@ -134,7 +134,7 @@
                     <Toolbar>
                         <Title text="Vista"/>
                         <ToolbarSpacer></ToolbarSpacer>
-                        <Button text="Seleziona da Ordine di Acquisto" type="Accept" press="onOpenFragment" />
+                        <Button text=" da Ordine di Acquisto" type="Accept" press="onOpenFragment" />
                         <Button text="Dettaglio Ticket" type="Emphasized" press="onPressButton5" />
                         <Button text="Azzera Importi" type="Attention" press="onPressButton6"/>
                         <Button text="Cancella Posizione" type="Reject" press="onPressButton7"/>
