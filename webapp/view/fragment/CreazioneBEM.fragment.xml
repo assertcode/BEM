@@ -71,7 +71,7 @@
                 <Toolbar>
                     <Title text="Lista Ordini"/>
                     <ToolbarSpacer></ToolbarSpacer>
-                    <Button id="transferButton" text="Trasferisci su BEM" type="Attention" press="onCloseFragment" enabled="false"/> <!-- DA INSERIRE -> onTransfer QUANDO VIENE IMPLMENTATO IL BACK END -->
+                    <Button id="transferButton" text="Trasferisci su BEM" type="Attention" press="onTransfer" enabled="false"/> <!-- DA INSERIRE -> onTransfer QUANDO VIENE IMPLMENTATO IL BACK END -->
                     <Button text="Annulla" type="Reject" press="onCloseFragment"/>                    
                 </Toolbar>
 

@@ -10,17 +10,6 @@
 
    <Page id="p" title="{i18n>TitoloAvanzamento}">
 
-        <VBox id="messageContainer" visible="false">
-            <MessageStrip
-                id="messageStrip"
-                text="Selezionare una posizione"
-                type="Warning"
-                showIcon="true"
-                showCloseButton="false"
-                class="sapUiMediumMarginBottom">
-            </MessageStrip>
-        </VBox>
-
         <headerContent>
             <Toolbar style="Clear">
                 <ToolbarSpacer />
@@ -41,6 +30,17 @@
    
     <VBox class="sapUiSmallMargin">
                     
+            <VBox id="messageContainer" visible="false">
+                <MessageStrip
+                    id="messageStrip"
+                    text="Selezionare una posizione"
+                    type="Warning"
+                    showIcon="true"
+                    showCloseButton="false"
+                    class="sapUiMediumMarginBottom">
+                </MessageStrip>
+            </VBox>
+
         <f:SimpleForm
             id="SimpleForm1"
             editable="false"
@@ -129,6 +129,7 @@
         </f:SimpleForm>
     </VBox>
 		<content>
+
             <VBox class="sapUiSmallMargin">
                     <Toolbar>
                         <Title text="Vista"/>
@@ -275,8 +276,6 @@
                         </t:Column>
                     </t:columns>
                 </t:Table>
-
-
             </VBox>
       </content>
 

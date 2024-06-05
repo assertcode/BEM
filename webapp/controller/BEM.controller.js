@@ -328,24 +328,24 @@ sap.ui.define([
             }
         },
 
-        // onTransfer: function() {
-        //     var oSocieta = this.byId("societaMultiComboBox").getSelectedKeys();
-        //     var oProtocollo = this.byId("protocolloMultiComboBox").getSelectedKeys();
-        //     var oCodiceFornitore = this.byId("CodiceFornitoreMultiComboBox").getSelectedKeys();
-        //     var oCodiceODA = this.byId("CodiceODAMultiComboBox").getSelectedKeys();
-        //     var oElementoWBS = this.byId("ElementoWBSMultiComboBox").getSelectedKeys();
-        //     var oNTicket = this.byId("nTicketInput").getValue();
-        //     var oSedeTecnica = this.byId("SedeTecnicaInput").getValue();
+        onTransfer: function() {
+            var oSocieta = this.byId("societaMultiComboBox").getSelectedKeys();
+            var oProtocollo = this.byId("protocolloMultiComboBox").getSelectedKeys();
+            var oCodiceFornitore = this.byId("CodiceFornitoreMultiComboBox").getSelectedKeys();
+            var oCodiceODA = this.byId("CodiceODAMultiComboBox").getSelectedKeys();
+            var oElementoWBS = this.byId("ElementoWBSMultiComboBox").getSelectedKeys();
+            var oNTicket = this.byId("nTicketInput").getValue();
+            var oSedeTecnica = this.byId("SedeTecnicaInput").getValue();
 
-        //     if (oSocieta.length === 0 || oProtocollo.length === 0 || oCodiceFornitore.length === 0 ||
-        //         oCodiceODA.length === 0 || oElementoWBS.length === 0 || !oNTicket || !oSedeTecnica) {
-        //         // MessageBox.error("Per favore, compila tutti i camqpi di filtro.");
-        //         //return;
-        //     }
+            if (oSocieta.length === 0 || oProtocollo.length === 0 || oCodiceFornitore.length === 0 ||
+                oCodiceODA.length === 0 || oElementoWBS.length === 0 || !oNTicket || !oSedeTecnica) {
+                MessageBox.error("Per favore, compila tutti i camqpi di filtro.");
+                return;
+            }
 
-        //     // Da continuare con l'azione di trasferimento con il back-end
-        //     MessageToast.show("Trasferimento effettuato con successo.");
-        // },
+            // Da continuare con l'azione di trasferimento con il back-end
+            MessageToast.show("Trasferimento effettuato con successo.");
+        },
         
         
 
