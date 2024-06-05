@@ -10,6 +10,17 @@
 
    <Page id="p" title="{i18n>TitoloAvanzamento}">
 
+        <VBox id="messageContainer" visible="false">
+            <MessageStrip
+                id="messageStrip"
+                text="Selezionare una posizione"
+                type="Warning"
+                showIcon="true"
+                showCloseButton="true"
+                class="sapUiMediumMarginBottom">
+            </MessageStrip>
+        </VBox>
+
         <headerContent>
             <Toolbar style="Clear">
                 <ToolbarSpacer />
@@ -121,10 +132,9 @@
 		<content>
             <VBox class="sapUiSmallMargin">
                     <Toolbar>
-
                         <Title text="Vista"/>
                         <ToolbarSpacer></ToolbarSpacer>
-                        <Button text="Seleziona da Ordine di Acquisto" type="Accept" press="onPressButton4" />
+                        <Button text="Seleziona da Ordine di Acquisto" type="Accept" press="onOpenFragment" />
                         <Button text="Dettaglio Ticket" type="Emphasized" press="onPressButton5" />
                         <Button text="Azzera Importi" type="Attention" press="onPressButton6"/>
                         <Button text="Cancella Posizione" type="Reject" press="onPressButton7"/>

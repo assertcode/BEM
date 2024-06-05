@@ -39,7 +39,7 @@ sap.ui.define([
                 NumeroODA: ""
             };
 
-            var oModel = new JSONModel(oData);
+            var oModel = new JSONModel(oData, sResponsivePaddingClasses);
             this.getView().setModel(oModel);
         
         
@@ -168,13 +168,6 @@ sap.ui.define([
             
             var oMockModel = new JSONModel({ BemTableDetail: aBemTableDetail });
             this.getView().setModel(oMockModel, "bemModel");
-            
-            
-            var oMockModel = new JSONModel({ BemTableDetail: aBemTableDetail });
-            this.getView().setModel(oMockModel, "bemModel");
-
-            var oMockModel = new JSONModel({ BemTableDetail: aBemTableDetail });
-            this.getView().setModel(oMockModel, "bemModel");
 
             // PROCESS FLOW    
             var sDataPath = sap.ui.require.toUrl("sap/m/bem/flownodes.json");
@@ -220,14 +213,14 @@ sap.ui.define([
         },
         
 
-        onPressButton10: function() { // Tasto Chiudi
-            const oRouter = this.getOwnerComponent().getRouter();
-            oRouter.navTo("RouteBEM");
-        },
+        // onPressButton10: function() { // Tasto Chiudi
+        //     const oRouter = this.getOwnerComponent().getRouter();
+        //     oRouter.navTo("RouteBEM");
+        // },
 
         //Bottoni Tabella
 
-        onPressButton4: function() {
+        onOpenFragment: function() {
             var oView = this.getView();
 
             if (!this.byId("BEMFragment")) {
@@ -250,8 +243,40 @@ sap.ui.define([
             }
         },
 
-        onPressButton5: function() {
-           
+        onRowSelectionChange: function(oEvent) {
+            var oTable = oEvent.getSource();
+            var aSelectedIndices = oTable.getSelectedIndices();
+            var oTransferButton = this.byId("transferButton");
+
+            if (aSelectedIndices.length > 0) {
+                oTransferButton.setEnabled(true);
+            } else {
+                oTransferButton.setEnabled(false);
+            }
+        },
+
+        onTransfer: function() {
+            var oSocieta = this.byId("societaMultiComboBox").getSelectedKeys();
+            var oProtocollo = this.byId("protocolloMultiComboBox").getSelectedKeys();
+            var oCodiceFornitore = this.byId("CodiceFornitoreMultiComboBox").getSelectedKeys();
+            var oCodiceODA = this.byId("CodiceODAMultiComboBox").getSelectedKeys();
+            var oElementoWBS = this.byId("ElementoWBSMultiComboBox").getSelectedKeys();
+            var oNTicket = this.byId("nTicketInput").getValue();
+            var oSedeTecnica = this.byId("SedeTecnicaInput").getValue();
+
+            if (oSocieta.length === 0 || oProtocollo.length === 0 || oCodiceFornitore.length === 0 ||
+                oCodiceODA.length === 0 || oElementoWBS.length === 0 || !oNTicket || !oSedeTecnica) {
+                MessageBox.error("Per favore, compila tutti i campi di filtro.");
+                return;
+            }
+
+            // Da continuare con l'azione di trasferimento con il back-end
+            MessageToast.show("Trasferimento effettuato con successo.");
+        },
+
+        onPressButton5: function () {
+            var oMessageContainer = this.byId("messageContainer");
+            oMessageContainer.setVisible(true);
         },
 
         onPressButton6: function() {

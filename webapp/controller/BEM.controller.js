@@ -5,10 +5,13 @@ sap.ui.define([
     "sap/ui/model/Filter",
     "sap/ui/model/FilterOperator",
     "sap/ui/comp/smartvariants/PersonalizableInfo",
-    "sap/ui/core/Fragment"
+    "sap/ui/core/Fragment",
+    "sap/m/MessageBox"
     
-], function(Controller, JSONModel, Label, Filter, FilterOperator, PersonalizableInfo, Fragment) {
+], function(Controller, JSONModel, Label, Filter, FilterOperator, PersonalizableInfo, Fragment, MessageBox) {
     "use strict";
+
+    var sResponsivePaddingClasses = "sapUiResponsivePadding--header sapUiResponsivePadding--content sapUiResponsivePadding--footer";
 
     return Controller.extend("sap.m.bem.controller.BEM", {
         onInit: function() {
@@ -221,7 +224,7 @@ sap.ui.define([
             ];
             
         
-            this.oModel.setData({ ProductCollection: aProductCollection, ConsultCollection: aConsultCollection});
+            this.oModel.setData({ ProductCollection: aProductCollection, ConsultCollection: aConsultCollection, ResponsivePaddingClasses: sResponsivePaddingClasses});
             this.getView().setModel(this.oModel);
         
             this.applyData = this.applyData.bind(this);
@@ -289,7 +292,6 @@ sap.ui.define([
             XLSX.utils.book_append_sheet(oWorkbook, oWorksheet, "Sheet1");
             XLSX.writeFile(oWorkbook, "Export.xlsx");
         },
-        
 
         onOpenFragment: function() {
             var oView = this.getView();
@@ -312,6 +314,60 @@ sap.ui.define([
             if (this.byId("BEMFragment")) {
                 this.byId("BEMFragment").close();
             }
+        },
+
+        onRowSelectionChange: function(oEvent) {
+            var oTable = oEvent.getSource();
+            var aSelectedIndices = oTable.getSelectedIndices();
+            var oTransferButton = this.byId("transferButton");
+
+            if (aSelectedIndices.length > 0) {
+                oTransferButton.setEnabled(true);
+            } else {
+                oTransferButton.setEnabled(false);
+            }
+        },
+
+        onTransfer: function() {
+            var oSocieta = this.byId("societaMultiComboBox").getSelectedKeys();
+            var oProtocollo = this.byId("protocolloMultiComboBox").getSelectedKeys();
+            var oCodiceFornitore = this.byId("CodiceFornitoreMultiComboBox").getSelectedKeys();
+            var oCodiceODA = this.byId("CodiceODAMultiComboBox").getSelectedKeys();
+            var oElementoWBS = this.byId("ElementoWBSMultiComboBox").getSelectedKeys();
+            var oNTicket = this.byId("nTicketInput").getValue();
+            var oSedeTecnica = this.byId("SedeTecnicaInput").getValue();
+
+            if (oSocieta.length === 0 || oProtocollo.length === 0 || oCodiceFornitore.length === 0 ||
+                oCodiceODA.length === 0 || oElementoWBS.length === 0 || !oNTicket || !oSedeTecnica) {
+                MessageBox.error("Per favore, compila tutti i campi di filtro.");
+                return;
+            }
+
+            // Da continuare con l'azione di trasferimento con il back-end
+            MessageToast.show("Trasferimento effettuato con successo.");
+        },
+
+        onDeletePress: function () {
+            var sResponsivePaddingClasses = "sapUiResponsivePadding--header sapUiResponsivePadding--content sapUiResponsivePadding--footer";
+            var oRouter = this.getOwnerComponent().getRouter();
+        
+            MessageBox.warning(
+                "Vuoi annullare il protocollo selezionato?",
+                {
+                    icon: MessageBox.Icon.WARNING,
+                    title: "Conferma Annullamento",
+                    actions: [MessageBox.Action.OK, MessageBox.Action.CANCEL],
+                    emphasizedAction: MessageBox.Action.OK,
+                    initialFocus: MessageBox.Action.CANCEL,
+                    styleClass: sResponsivePaddingClasses,
+                    dependentOn: this.getView(),
+                    // onClose: function (sAction) {
+                    //     if (sAction === MessageBox.Action.OK) {
+                    //         oRouter.navTo("RouteBEM");
+                    //     }
+                    // }
+                }
+            );
         },
 
         onExit: function() {
