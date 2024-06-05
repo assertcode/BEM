@@ -2,21 +2,277 @@
     xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
     xmlns="sap.m"
     xmlns:core="sap.ui.core"
-    xmlns:f="sap.f"
+    xmlns:f="sap.ui.layout.form"
     xmlns:t="sap.ui.table"
     xmlns:fb="sap.ui.comp.filterbar"
     xmlns:c="sap.suite.ui.commons"
     xmlns:svm="sap.ui.comp.smartvariants">
- <Page id="p" title="{i18n>title}">
-    <c:ProcessFlow id="processflow" scrollable="false" wheelZoomable="false" nodes="{/nodes}" lanes="{/lanes}">
+
+   <Page id="p" >
+
+        <Toolbar style="Clear">
+            <Title text="Dettagli Consuntivazione" />
+            <ToolbarSpacer />
+            <Button text="Salva" type="Accept" press="onPressButton1" />
+            <Button text="Allegati" type="Default" press="onPressButton2" />
+            <Button text="Chiudi" type="Reject" press="onPressButton3" />
+        </Toolbar>
+   
+    <c:ProcessFlow id="processflow" scrollable="false" wheelZoomable="false" nodes="{/nodes}" lanes="{/lanes}" class="sapUiSmallMargin">
 			<c:nodes>
 				<c:ProcessFlowNode laneId="{lane}" nodeId="{id}" state="{state}" children="{children}" />
 			</c:nodes>
 			<c:lanes>
 				<c:ProcessFlowLaneHeader laneId="{id}" iconSrc="{icon}" text="{label}" position="{position}" />
 			</c:lanes>
-		</c:ProcessFlow>
- </Page>
+	</c:ProcessFlow>
+   
+    <VBox class="sapUiSmallMargin">
+                    
+        <f:SimpleForm
+            id="SimpleForm1"
+            editable="false"
+            layout="ResponsiveGridLayout"
+            title="Dettagli Consultivazione"
+            labelSpanXL="4"
+            labelSpanL="4"
+            labelSpanM="12"
+            labelSpanS="12"
+            adjustLabelSpan="false"
+            emptySpanXL="0"
+            emptySpanL="0"
+            emptySpanM="0"
+            emptySpanS="0"
+            columnsXL="3"
+            columnsL="2"
+            columnsM="1"
+            singleContainerFullSize="false">
+
+            <f:content>
+                <!-- Prima sezione -->
+                <Label text="Numero Consuntivazione" />
+                <Text text="{NumeroConsuntivazione}" />
+
+                <Label text="Data fine lavori" />
+                <DatePicker value="{DataFineLavori}" editable="true" />
+
+                <Label text="Data Registrazione" />
+                <DatePicker value="{DataRegistrazione}" editable="true" />
+
+                <Label text="Società" />
+                <Text text="{Societa}" />
+
+                <Label text="Stato Consuntivazione" />
+                <Text text="{StatoConsuntivazione}" />
+
+                <Label text="Acquisito il" />
+                <Text text="{AcquisitoIl}" />
+
+                <Label text="Autore Acquisizione" />
+                <Text text="{AutoreAcquisizione}" />
+
+                <Label text="Tipo Consuntivazione" />
+                <Text text="{TipoConsuntivazione}" />
+
+                <!-- Seconda sezione -->
+                <core:Title text="Dettagli Commessa" />
+                <Label text="Commessa" />
+                <Text text="{Commessa}" />
+
+                <Label text="Descrizione" />
+                <Text text="{Descrizione}" />
+
+                <Label text="Importo Totale" />
+                <Text text="{ImportoTotale}" />
+
+                <Label text="Ordinato da" />
+                <Text text="{OrdinatoDa}" />
+
+                <Label text="Area" />
+                <Text text="{Area}" />
+
+                <Label text="Sotto-Area" />
+                <Text text="{SottoArea}" />
+
+                <!-- Terza sezione -->
+                <core:Title text="Dettagli Fornitore" />
+                <Label text="Fornitore" />
+                <Text text="{Fornitore}" />
+
+                <Label text="Ragione Sociale" />
+                <Text text="{RagioneSociale}" />
+
+                <Label text="Bolla Consegna" />
+                <Input value="{BollaConsegna}" editable="true" />
+
+                <Label text="Lettera Vettura" />
+                <Input value="{LetteraVettura}" editable="true" />
+
+                <Label text="Gruppo Acquisti" />
+                <Text text="{GruppoAcquisti}" />
+
+                <Label text="Numero ODA" />
+                <Text text="{NumeroODA}" />
+            </f:content>
+        </f:SimpleForm>
+    </VBox>
+
+		<content>
+            <VBox class="sapUiSmallMargin">
+                    <Toolbar>
+
+                        <Title text="Vista"/>
+                        <ToolbarSpacer></ToolbarSpacer>
+                        <Button text="Seleziona da Ordine di Acquisto" type="Accept" press="onPressButton4" />
+                        <Button text="Dettaglio Ticket" type="Emphasized" press="onPressButton5" />
+                        <Button text="Azzera Importi" type="Attention" press="onPressButton6"/>
+                        <Button text="Cancella Posizione" type="Reject" press="onPressButton7"/>
+
+                    </Toolbar>
+
+                <t:Table id="BEMDetailTable" rows="{bemModel>/BemTableDetail}" selectionMode="MultiToggle" rowMode="Auto">
+                    <t:columns>
+                        <t:Column width="11rem">
+                            <Label text="Numero" />
+                            <t:template>
+                                <Text text="{bemModel>Numero}" wrapping="false" />
+                            </t:template>
+                        </t:Column>
+
+                        <t:Column width="11rem">
+                            <Label text="Data Creazione BEM" />
+                            <t:template>
+                                <Text text="{path: 'bemModel>DataCreazioneBEM', type: 'sap.ui.model.type.Date', formatOptions: {pattern: 'dd/MM/yyyy'}}" wrapping="false" />
+                            </t:template>
+                        </t:Column>
+
+                        <t:Column width="11rem">
+                            <Label text="Data Registrazione" />
+                            <t:template>
+                                <Text text="{path: 'bemModel>DataRegistrazione', type: 'sap.ui.model.type.Date', formatOptions: {pattern: 'dd/MM/yyyy'}}" wrapping="false" />
+                            </t:template>
+                        </t:Column>
+
+                        <t:Column width="11rem">
+                            <Label text="Stato" />
+                            <t:template>
+                                <Text text="{bemModel>Stato}" wrapping="false" />
+                            </t:template>
+                        </t:Column>
+
+                        <t:Column width="11rem">
+                            <Label text="Autore" />
+                            <t:template>
+                                <Text text="{bemModel>Autore}" wrapping="false" />
+                            </t:template>
+                        </t:Column>
+
+                        <t:Column width="11rem">
+                            <Label text="Wbs/Cdc" />
+                            <t:template>
+                                <Text text="{bemModel>WbsCdc}" wrapping="false" />
+                            </t:template>
+                        </t:Column>
+
+                        <t:Column width="11rem">
+                            <Label text="Descriz. Wbs/Cdc" />
+                            <t:template>
+                                <Text text="{bemModel>DescWbsCdc}" wrapping="false" />
+                            </t:template>
+                        </t:Column>
+
+                        <t:Column width="11rem">
+                            <Label text="ID Fornitore" />
+                            <t:template>
+                                <Text text="{bemModel>IdFornitore}" wrapping="false" />
+                            </t:template>
+                        </t:Column>
+
+                        <t:Column width="11rem">
+                            <Label text="Fornitore" />
+                            <t:template>
+                                <Text text="{bemModel>Fornitore}" wrapping="false" />
+                            </t:template>
+                        </t:Column>
+                        
+                        <t:Column width="11rem">
+                            <Label text="Importo Totale" />
+                            <t:template>
+                                <Text text="{bemModel>ImpTot}" wrapping="false" />
+                            </t:template>
+                        </t:Column>
+
+                        <t:Column width="11rem">
+                            <Label text="Importo Benestatario BEM" />
+                            <t:template>
+                                <Text text="{bemModel>ImpBEM}" wrapping="false" />
+                            </t:template>
+                        </t:Column>
+
+                        <t:Column width="11rem">
+                            <Label text="N. OdA" />
+                            <t:template>
+                                <Text text="{bemModel>Noda}" wrapping="false" />
+                            </t:template>
+                        </t:Column>
+
+                        <t:Column width="11rem">
+                            <Label text="Tipo OdA" />
+                            <t:template>
+                                <Text text="{bemModel>TipoOdA}" wrapping="false" />
+                            </t:template>
+                        </t:Column>
+
+                        <t:Column width="11rem">
+                            <Label text="Codice CUP" />
+                            <t:template>
+                                <Text text="{bemModel>CodiceCUP}" wrapping="false" />
+                            </t:template>
+                        </t:Column>
+
+                        <t:Column width="11rem">
+                            <Label text="Codice CIG" />
+                            <t:template>
+                                <Text text="{bemModel>CodiceCIG}" wrapping="false" />
+                            </t:template>
+                        </t:Column>
+
+                        <t:Column width="11rem">
+                            <Label text="Descrizione CIG" />
+                            <t:template>
+                                <Text text="{bemModel>DescCIG}" wrapping="false" />
+                            </t:template>
+                        </t:Column>
+
+                        <t:Column width="11rem">
+                            <Label text="BEM Benestariata" />
+                            <t:template>
+                                <ObjectStatus class="greenIcon" icon="{= ${bemModel>Benestariata} === 'true' ? 'sap-icon://accept' : 'sap-icon://decline'}" state="{= ${bemModel>Benestariata} === 'true' ? 'Success' : 'Error'}"/>
+                            </t:template>
+                        </t:Column>
+
+                        <t:Column width="11rem">
+                            <Label text="Data Annullamento" />
+                            <t:template>
+                                <Text text="{path: 'bemModel>DataAnnullamento', type: 'sap.ui.model.type.Date', formatOptions: {pattern: 'dd/MM/yyyy'}}" wrapping="false" />
+                            </t:template>
+                        </t:Column>
+                        
+                        <t:Column width="11rem">
+                            <Label text="Utente Annullamento" />
+                            <t:template>
+                                <Text text="{bemModel>UtenteAnnullamento}" wrapping="false" />
+                            </t:template>
+                        </t:Column>
+
+                    </t:columns>
+                </t:Table>
+
+            </VBox>
+      </content>
 
 
+   </Page>
+
+   
 </mvc:View>

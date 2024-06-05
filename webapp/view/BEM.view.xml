@@ -20,8 +20,8 @@
                     <f:snappedContent>
                         <Label id="snappedLabel" text="Non ci sono filtri attivi" />
                     </f:snappedContent>
-                </f:DynamicPageTitle>
-            </f:title>
+            </f:DynamicPageTitle>
+                </f:title>
                 <f:header>
                     <f:DynamicPageHeader>
                         <Title text="Ricerca BEM"/>
