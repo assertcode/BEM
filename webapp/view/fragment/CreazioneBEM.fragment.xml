@@ -75,7 +75,7 @@
                     <Button text="Annulla" type="Reject" press="onCloseFragment"/>                    
                 </Toolbar>
 
-                <t:Table id="ListaOrdini" rows="{/ConsultCollection}" selectionMode="MultiToggle" rowMode="Auto" rowSelectionChange="onRowSelectionChange">
+                <t:Table id="ListaOrdini" rows="{/ConsultCollection}" selectionMode="Single" rowMode="Auto" rowSelectionChange="onRowSelectionChange">
                     <t:columns>
                         <t:Column width="11rem">
                             <Label text="Doc. Acq." />

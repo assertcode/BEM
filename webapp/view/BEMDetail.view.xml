@@ -128,17 +128,15 @@
             </f:content>
         </f:SimpleForm>
     </VBox>
-
 		<content>
             <VBox class="sapUiSmallMargin">
                     <Toolbar>
                         <Title text="Vista"/>
                         <ToolbarSpacer></ToolbarSpacer>
-                        <Button text=" da Ordine di Acquisto" type="Accept" press="onOpenFragment" />
+                        <Button text="Importa da Ordine di Acquisto" type="Accept" press="onOpenFragment" />
                         <Button text="Dettaglio Ticket" type="Emphasized" press="onPressButton5" />
                         <Button text="Azzera Importi" type="Attention" press="onPressButton6"/>
                         <Button text="Cancella Posizione" type="Reject" press="onPressButton7"/>
-
                     </Toolbar>
 
                 <t:Table id="BEMDetailTable" rows="{bemModel>/BemTableDetail}" selectionMode="MultiToggle" rowMode="Auto">
