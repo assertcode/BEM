@@ -8,15 +8,16 @@
     xmlns:c="sap.suite.ui.commons"
     xmlns:svm="sap.ui.comp.smartvariants">
 
-   <Page id="p" >
+   <Page id="p" title="{i18n>TitoloAvanzamento}">
 
-        <Toolbar style="Clear">
-            <Title text="Dettagli Consuntivazione" />
-            <ToolbarSpacer />
-            <Button text="Salva" type="Accept" press="onPressButton1" />
-            <Button text="Allegati" type="Default" press="onPressButton2" />
-            <Button text="Chiudi" type="Reject" press="onPressButton3" />
-        </Toolbar>
+        <headerContent>
+            <Toolbar style="Clear">
+                <ToolbarSpacer />
+                <Button text="Salva" type="Accept" press="onPressButton1" />
+                <Button text="Allegati" type="Default" press="onPressButton2" />
+                <Button text="Chiudi" type="Reject" press=".onPressButton3" ariaHasPopup="Dialog" />
+            </Toolbar>
+        </headerContent>
    
     <c:ProcessFlow id="processflow" scrollable="false" wheelZoomable="false" nodes="{/nodes}" lanes="{/lanes}" class="sapUiSmallMargin">
 			<c:nodes>
@@ -133,140 +134,140 @@
                 <t:Table id="BEMDetailTable" rows="{bemModel>/BemTableDetail}" selectionMode="MultiToggle" rowMode="Auto">
                     <t:columns>
                         <t:Column width="11rem">
-                            <Label text="Numero" />
+                            <Label text="Testo breve materiale" />
                             <t:template>
-                                <Text text="{bemModel>Numero}" wrapping="false" />
+                                <Text text="{bemModel>TestoBreveMateriale}" wrapping="false" />
                             </t:template>
                         </t:Column>
-
                         <t:Column width="11rem">
-                            <Label text="Data Creazione BEM" />
+                            <Label text="Elemento WBS" />
                             <t:template>
-                                <Text text="{path: 'bemModel>DataCreazioneBEM', type: 'sap.ui.model.type.Date', formatOptions: {pattern: 'dd/MM/yyyy'}}" wrapping="false" />
+                                <Text text="{bemModel>ElementoWBS}" wrapping="false" />
                             </t:template>
                         </t:Column>
-
                         <t:Column width="11rem">
-                            <Label text="Data Registrazione" />
+                            <Label text="Quantità" />
                             <t:template>
-                                <Text text="{path: 'bemModel>DataRegistrazione', type: 'sap.ui.model.type.Date', formatOptions: {pattern: 'dd/MM/yyyy'}}" wrapping="false" />
+                                <Text text="{bemModel>Quantita}" wrapping="false" />
                             </t:template>
                         </t:Column>
-
                         <t:Column width="11rem">
-                            <Label text="Stato" />
+                            <Label text="Imp. divisa int." />
                             <t:template>
-                                <Text text="{bemModel>Stato}" wrapping="false" />
+                                <Text text="{bemModel>ImpDivisaInt}" wrapping="false" />
                             </t:template>
                         </t:Column>
-
                         <t:Column width="11rem">
-                            <Label text="Autore" />
+                            <Label text="UMO" />
                             <t:template>
-                                <Text text="{bemModel>Autore}" wrapping="false" />
+                                <Text text="{bemModel>UMO}" wrapping="false" />
                             </t:template>
                         </t:Column>
-
                         <t:Column width="11rem">
-                            <Label text="Wbs/Cdc" />
+                            <Label text="Prz. netto" />
                             <t:template>
-                                <Text text="{bemModel>WbsCdc}" wrapping="false" />
+                                <Text text="{bemModel>PrzNetto}" wrapping="false" />
                             </t:template>
                         </t:Column>
-
                         <t:Column width="11rem">
-                            <Label text="Descriz. Wbs/Cdc" />
+                            <Label text="Riferimento" />
                             <t:template>
-                                <Text text="{bemModel>DescWbsCdc}" wrapping="false" />
+                                <Text text="{bemModel>Riferimento}" wrapping="false" />
                             </t:template>
                         </t:Column>
-
                         <t:Column width="11rem">
-                            <Label text="ID Fornitore" />
+                            <Label text="Anno Stz." />
                             <t:template>
-                                <Text text="{bemModel>IdFornitore}" wrapping="false" />
+                                <Text text="{bemModel>AnnoStz}" wrapping="false" />
                             </t:template>
                         </t:Column>
-
                         <t:Column width="11rem">
-                            <Label text="Fornitore" />
+                            <Label text="% Stz." />
                             <t:template>
-                                <Text text="{bemModel>Fornitore}" wrapping="false" />
+                                <Text text="{bemModel>PercentStz}" wrapping="false" />
                             </t:template>
                         </t:Column>
-                        
                         <t:Column width="11rem">
-                            <Label text="Importo Totale" />
+                            <Label text="N. Doc. Stz." />
                             <t:template>
-                                <Text text="{bemModel>ImpTot}" wrapping="false" />
+                                <Text text="{bemModel>NumeroDocStz}" wrapping="false" />
                             </t:template>
                         </t:Column>
-
                         <t:Column width="11rem">
-                            <Label text="Importo Benestatario BEM" />
+                            <Label text="Pos. Stz." />
                             <t:template>
-                                <Text text="{bemModel>ImpBEM}" wrapping="false" />
+                                <Text text="{bemModel>PosStz}" wrapping="false" />
                             </t:template>
                         </t:Column>
-
                         <t:Column width="11rem">
-                            <Label text="N. OdA" />
+                            <Label text="Altri doc" />
                             <t:template>
-                                <Text text="{bemModel>Noda}" wrapping="false" />
+                                <Text text="{bemModel>AltriDoc}" wrapping="false" />
                             </t:template>
                         </t:Column>
-
                         <t:Column width="11rem">
-                            <Label text="Tipo OdA" />
+                            <Label text="Stz. Finale" />
                             <t:template>
-                                <Text text="{bemModel>TipoOdA}" wrapping="false" />
+                                <Text text="{bemModel>StzFinale}" wrapping="false" />
                             </t:template>
                         </t:Column>
-
+                        <t:Column width="11rem">
+                            <Label text="Importo stanziamento" />
+                            <t:template>
+                                <Text text="{bemModel>ImportoStanziamento}" wrapping="false" />
+                            </t:template>
+                        </t:Column>
+                        <t:Column width="11rem">
+                            <Label text="Sospeso Residuo" />
+                            <t:template>
+                                <Text text="{bemModel>SospesoResiduo}" wrapping="false" />
+                            </t:template>
+                        </t:Column>
+                        <t:Column width="11rem">
+                            <Label text="Osservazioni Stanziamento" />
+                            <t:template>
+                                <Text text="{bemModel>OsservazioniStanziamento}" wrapping="false" />
+                            </t:template>
+                        </t:Column>
                         <t:Column width="11rem">
                             <Label text="Codice CUP" />
                             <t:template>
                                 <Text text="{bemModel>CodiceCUP}" wrapping="false" />
                             </t:template>
                         </t:Column>
-
                         <t:Column width="11rem">
                             <Label text="Codice CIG" />
                             <t:template>
                                 <Text text="{bemModel>CodiceCIG}" wrapping="false" />
                             </t:template>
                         </t:Column>
-
                         <t:Column width="11rem">
                             <Label text="Descrizione CIG" />
                             <t:template>
-                                <Text text="{bemModel>DescCIG}" wrapping="false" />
+                                <Text text="{bemModel>DescrizioneCIG}" wrapping="false" />
                             </t:template>
                         </t:Column>
-
                         <t:Column width="11rem">
-                            <Label text="BEM Benestariata" />
+                            <Label text="Dettaglio Ticket" />
                             <t:template>
-                                <ObjectStatus class="greenIcon" icon="{= ${bemModel>Benestariata} === 'true' ? 'sap-icon://accept' : 'sap-icon://decline'}" state="{= ${bemModel>Benestariata} === 'true' ? 'Success' : 'Error'}"/>
+                                <Text text="{bemModel>DettaglioTicket}" wrapping="false" />
                             </t:template>
                         </t:Column>
-
                         <t:Column width="11rem">
-                            <Label text="Data Annullamento" />
+                            <Label text="Sede Tecnica" />
                             <t:template>
-                                <Text text="{path: 'bemModel>DataAnnullamento', type: 'sap.ui.model.type.Date', formatOptions: {pattern: 'dd/MM/yyyy'}}" wrapping="false" />
+                                <Text text="{bemModel>SedeTecnica}" wrapping="false" />
                             </t:template>
                         </t:Column>
-                        
                         <t:Column width="11rem">
-                            <Label text="Utente Annullamento" />
+                            <Label text="Descrizione Sede Tecnica" />
                             <t:template>
-                                <Text text="{bemModel>UtenteAnnullamento}" wrapping="false" />
+                                <Text text="{bemModel>DescrizioneSedeTecnica}" wrapping="false" />
                             </t:template>
                         </t:Column>
-
                     </t:columns>
                 </t:Table>
+
 
             </VBox>
       </content>

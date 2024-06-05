@@ -1,5 +1,5 @@
 <core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:ff="sap.ui.layout.form" xmlns:f="sap.f" xmlns:fb="sap.ui.comp.filterbar" xmlns:t="sap.ui.table">
-    <Dialog id="BEMFragment" title="Crea" draggable="true" resizable="true">
+    <Dialog id="BEMFragment" title="Crea Nuova BEM" draggable="true" resizable="true">
         <content>
             <VBox class="sapUiSmallMargin">
                 <ff:SimpleForm

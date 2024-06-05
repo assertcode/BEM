@@ -5,11 +5,13 @@ sap.ui.define([
     "sap/ui/model/Filter",
     "sap/ui/model/FilterOperator",
     "sap/ui/comp/smartvariants/PersonalizableInfo",
-    "sap/ui/core/Fragment"
+    "sap/ui/core/Fragment",
+    "sap/m/MessageBox"
     
-], function(Controller, JSONModel, Label, Filter, FilterOperator, PersonalizableInfo, Fragment) {
+], function(Controller, JSONModel, Label, Filter, FilterOperator, PersonalizableInfo, Fragment, MessageBox) {
     "use strict";
-
+    
+    var sResponsivePaddingClasses = "sapUiResponsivePadding--header sapUiResponsivePadding--content sapUiResponsivePadding--footer";
 
     return Controller.extend("sap.m.bem.controller.BEMDetail", {
         onInit: function() {
@@ -42,112 +44,134 @@ sap.ui.define([
         
         
             var aBemTableDetail = [
-                {   
-                    Numero: "Prodotto A",
-                    DataCreazioneBEM: new Date("2023-01-15"),
-                    DataRegistrazione: new Date("2023-01-16"),
-                    Stato: "Stato A",
-                    Autore: "Autore A",
-                    WbsCdc: "Wbs/Cdc A",
-                    DescWbsCdc: "Descriz. Wbs/Cdc A",
-                    IdFornitore: "ID Fornitore A",
-                    Fornitore: "Fornitore A",
-                    ImpTot: 1000,
-                    ImpBEM: 500,
-                    Noda: "N. OdA A",
-                    TipoOdA: "Tipo OdA A",
-                    CodiceCUP: "Codice CUP A",
-                    CodiceCIG: "Codice CIG A",
-                    DescCIG: "Descrizione CIG A",
-                    Benestariata: "false",
-                    DataAnnullamento: new Date("2023-01-17"),
-                    UtenteAnnullamento: "Utente Annullamento A"
+                {
+                    TestoBreveMateriale: "Material A",
+                    ElementoWBS: "WBS001",
+                    Quantita: 10,
+                    ImpDivisaInt: 1000,
+                    UMO: "PCE",
+                    PrzNetto: 100,
+                    Riferimento: "Ref001",
+                    AnnoStz: 2024,
+                    PercentStz: 50,
+                    NumeroDocStz: "Doc001",
+                    PosStz: 1,
+                    AltriDoc: "Doc002",
+                    StzFinale: "Final",
+                    ImportoStanziamento: 500,
+                    SospesoResiduo: 100,
+                    OsservazioniStanziamento: "Observation",
+                    CodiceCUP: "CUP001",
+                    CodiceCIG: "CIG001",
+                    DescrizioneCIG: "Description CIG",
+                    DettaglioTicket: "Detail",
+                    SedeTecnica: "Technical Site",
+                    DescrizioneSedeTecnica: "Description Site"
                 },
-                {   
-                    Numero: "Prodotto B",
-                    DataCreazioneBEM: new Date("2023-02-20"),
-                    DataRegistrazione: new Date("2023-02-21"),
-                    Stato: "Stato B",
-                    Autore: "Autore B",
-                    WbsCdc: "Wbs/Cdc B",
-                    DescWbsCdc: "Descriz. Wbs/Cdc B",
-                    IdFornitore: "ID Fornitore B",
-                    Fornitore: "Fornitore B",
-                    ImpTot: 2000,
-                    ImpBEM: 1000,
-                    Noda: "N. OdA B",
-                    TipoOdA: "Tipo OdA B",
-                    CodiceCUP: "Codice CUP B",
-                    CodiceCIG: "Codice CIG B",
-                    DescCIG: "Descrizione CIG B",
-                    Benestariata: "true",
-                    DataAnnullamento: new Date("2023-03-01"),
-                    UtenteAnnullamento: "Utente Annullamento B"
+                {
+                    TestoBreveMateriale: "Material B",
+                    ElementoWBS: "WBS002",
+                    Quantita: 20,
+                    ImpDivisaInt: 2000,
+                    UMO: "KG",
+                    PrzNetto: 200,
+                    Riferimento: "Ref002",
+                    AnnoStz: 2024,
+                    PercentStz: 70,
+                    NumeroDocStz: "Doc002",
+                    PosStz: 2,
+                    AltriDoc: "Doc003",
+                    StzFinale: "Final",
+                    ImportoStanziamento: 700,
+                    SospesoResiduo: 200,
+                    OsservazioniStanziamento: "Observation 2",
+                    CodiceCUP: "CUP002",
+                    CodiceCIG: "CIG002",
+                    DescrizioneCIG: "Description CIG 2",
+                    DettaglioTicket: "Detail 2",
+                    SedeTecnica: "Technical Site 2",
+                    DescrizioneSedeTecnica: "Description Site 2"
                 },
-                {   
-                    Numero: "Prodotto C",
-                    DataCreazioneBEM: new Date("2023-03-10"),
-                    DataRegistrazione: new Date("2023-03-11"),
-                    Stato: "Stato C",
-                    Autore: "Autore C",
-                    WbsCdc: "Wbs/Cdc C",
-                    DescWbsCdc: "Descriz. Wbs/Cdc C",
-                    IdFornitore: "ID Fornitore C",
-                    Fornitore: "Fornitore C",
-                    ImpTot: 1500,
-                    ImpBEM: 800,
-                    Noda: "N. OdA C",
-                    TipoOdA: "Tipo OdA C",
-                    CodiceCUP: "Codice CUP C",
-                    CodiceCIG: "Codice CIG C",
-                    DescCIG: "Descrizione CIG C",
-                    Benestariata: "false",
-                    DataAnnullamento: new Date("2023-03-12"),
-                    UtenteAnnullamento: "Utente Annullamento C"
+                {
+                    TestoBreveMateriale: "Material C",
+                    ElementoWBS: "WBS003",
+                    Quantita: 30,
+                    ImpDivisaInt: 3000,
+                    UMO: "LTR",
+                    PrzNetto: 300,
+                    Riferimento: "Ref003",
+                    AnnoStz: 2024,
+                    PercentStz: 90,
+                    NumeroDocStz: "Doc003",
+                    PosStz: 3,
+                    AltriDoc: "Doc004",
+                    StzFinale: "Final",
+                    ImportoStanziamento: 900,
+                    SospesoResiduo: 300,
+                    OsservazioniStanziamento: "Observation 3",
+                    CodiceCUP: "CUP003",
+                    CodiceCIG: "CIG003",
+                    DescrizioneCIG: "Description CIG 3",
+                    DettaglioTicket: "Detail 3",
+                    SedeTecnica: "Technical Site 3",
+                    DescrizioneSedeTecnica: "Description Site 3"
                 },
-                {   
-                    Numero: "Prodotto D",
-                    DataCreazioneBEM: new Date("2023-04-10"),
-                    DataRegistrazione: new Date("2023-04-11"),
-                    Stato: "Stato D",
-                    Autore: "Autore D",
-                    WbsCdc: "Wbs/Cdc D",
-                    DescWbsCdc: "Descriz. Wbs/Cdc D",
-                    IdFornitore: "ID Fornitore D",
-                    Fornitore: "Fornitore D",
-                    ImpTot: 3000,
-                    ImpBEM: 1500,
-                    Noda: "N. OdA D",
-                    TipoOdA: "Tipo OdA D",
-                    CodiceCUP: "Codice CUP D",
-                    CodiceCIG: "Codice CIG D",
-                    DescCIG: "Descrizione CIG D",
-                    Benestariata: "true",
-                    DataAnnullamento: new Date("2023-04-12"),
-                    UtenteAnnullamento: "Utente Annullamento D"
+                {
+                    TestoBreveMateriale: "Material D",
+                    ElementoWBS: "WBS004",
+                    Quantita: 40,
+                    ImpDivisaInt: 4000,
+                    UMO: "BOX",
+                    PrzNetto: 400,
+                    Riferimento: "Ref004",
+                    AnnoStz: 2024,
+                    PercentStz: 80,
+                    NumeroDocStz: "Doc004",
+                    PosStz: 4,
+                    AltriDoc: "Doc005",
+                    StzFinale: "Final",
+                    ImportoStanziamento: 800,
+                    SospesoResiduo: 400,
+                    OsservazioniStanziamento: "Observation 4",
+                    CodiceCUP: "CUP004",
+                    CodiceCIG: "CIG004",
+                    DescrizioneCIG: "Description CIG 4",
+                    DettaglioTicket: "Detail 4",
+                    SedeTecnica: "Technical Site 4",
+                    DescrizioneSedeTecnica: "Description Site 4"
                 },
-                {   
-                    Numero: "Prodotto E",
-                    DataCreazioneBEM: new Date("2023-05-10"),
-                    DataRegistrazione: new Date("2023-05-11"),
-                    Stato: "Stato E",
-                    Autore: "Autore E",
-                    WbsCdc: "Wbs/Cdc E",
-                    DescWbsCdc: "Descriz. Wbs/Cdc E",
-                    IdFornitore: "ID Fornitore E",
-                    Fornitore: "Fornitore E",
-                    ImpTot: 2500,
-                    ImpBEM: 1200,
-                    Noda: "N. OdA E",
-                    TipoOdA: "Tipo OdA E",
-                    CodiceCUP: "Codice CUP E",
-                    CodiceCIG: "Codice CIG E",
-                    DescCIG: "Descrizione CIG E",
-                    Benestariata: "false",
-                    DataAnnullamento: new Date("2023-05-12"),
-                    UtenteAnnullamento: "Utente Annullamento E"
+                {
+                    TestoBreveMateriale: "Material E",
+                    ElementoWBS: "WBS005",
+                    Quantita: 50,
+                    ImpDivisaInt: 5000,
+                    UMO: "PAL",
+                    PrzNetto: 500,
+                    Riferimento: "Ref005",
+                    AnnoStz: 2024,
+                    PercentStz: 100,
+                    NumeroDocStz: "Doc005",
+                    PosStz: 5,
+                    AltriDoc: "Doc006",
+                    StzFinale: "Final",
+                    ImportoStanziamento: 1000,
+                    SospesoResiduo: 500,
+                    OsservazioniStanziamento: "Observation 5",
+                    CodiceCUP: "CUP005",
+                    CodiceCIG: "CIG005",
+                    DescrizioneCIG: "Description CIG 5",
+                    DettaglioTicket: "Detail 5",
+                    SedeTecnica: "Technical Site 5",
+                    DescrizioneSedeTecnica: "Description Site 5"
                 }
             ];
+            
+            var oMockModel = new JSONModel({ BemTableDetail: aBemTableDetail });
+            this.getView().setModel(oMockModel, "bemModel");
+            
+            
+            var oMockModel = new JSONModel({ BemTableDetail: aBemTableDetail });
+            this.getView().setModel(oMockModel, "bemModel");
 
             var oMockModel = new JSONModel({ BemTableDetail: aBemTableDetail });
             this.getView().setModel(oMockModel, "bemModel");
@@ -163,22 +187,67 @@ sap.ui.define([
 
         //Bottoni Dettagli Consultivazione
 
-        onPressButton1: function() {
+        onPressButton1: function() { // Tasto Salva
             
         },
 
-        onPressButton2: function() {
+        onPressButton2: function() { // Tasto Allegati
            
         },
 
-        onPressButton3: function() {
-            
+       
+        onPressButton3: function () {
+            var sResponsivePaddingClasses = "sapUiResponsivePadding--header sapUiResponsivePadding--content sapUiResponsivePadding--footer";
+            var oRouter = this.getOwnerComponent().getRouter();
+        
+            MessageBox.warning(
+                "Sei in modalità modifica. Vuoi uscire senza salvare?",
+                {
+                    icon: MessageBox.Icon.WARNING,
+                    title: "Conferma Chiusura",
+                    actions: [MessageBox.Action.OK, MessageBox.Action.CANCEL],
+                    emphasizedAction: MessageBox.Action.OK,
+                    initialFocus: MessageBox.Action.CANCEL,
+                    styleClass: sResponsivePaddingClasses,
+                    dependentOn: this.getView(),
+                    onClose: function (sAction) {
+                        if (sAction === MessageBox.Action.OK) {
+                            oRouter.navTo("RouteBEM");
+                        }
+                    }
+                }
+            );
+        },
+        
+
+        onPressButton10: function() { // Tasto Chiudi
+            const oRouter = this.getOwnerComponent().getRouter();
+            oRouter.navTo("RouteBEM");
         },
 
         //Bottoni Tabella
 
         onPressButton4: function() {
-            
+            var oView = this.getView();
+
+            if (!this.byId("BEMFragment")) {
+                Fragment.load({
+                    id: oView.getId(),
+                    name: "sap.m.bem.view.fragment.CreazioneBEM",
+                    controller: this
+                }).then(function(oDialog) {
+                    oView.addDependent(oDialog);
+                    oDialog.open();
+                });
+            } else {
+                this.byId("BEMFragment").open();
+            }
+        },
+
+        onCloseFragment: function() {
+            if (this.byId("BEMFragment")) {
+                this.byId("BEMFragment").close();
+            }
         },
 
         onPressButton5: function() {
@@ -189,8 +258,27 @@ sap.ui.define([
             
         },
         
-        onPressButton6: function() {
-            
+        onPressButton7: function() {
+            var sResponsivePaddingClasses = "sapUiResponsivePadding--header sapUiResponsivePadding--content sapUiResponsivePadding--footer";
+            var oRouter = this.getOwnerComponent().getRouter();
+        
+            MessageBox.warning(
+                "Vuoi eliminare la posizione salvata?",
+                {
+                    icon: MessageBox.Icon.WARNING,
+                    title: "Conferma Cancellazione",
+                    actions: [MessageBox.Action.OK, MessageBox.Action.CANCEL],
+                    emphasizedAction: MessageBox.Action.OK,
+                    initialFocus: MessageBox.Action.CANCEL,
+                    styleClass: sResponsivePaddingClasses,
+                    dependentOn: this.getView(),
+                    // onClose: function (sAction) {
+                    //     if (sAction === MessageBox.Action.OK) {
+                    //         oRouter.navTo("RouteBEM");
+                    //     }
+                    // }
+                }
+            );
         }
 
     });
