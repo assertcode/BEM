@@ -139,7 +139,7 @@
                         <Button text="Cancella Posizione" type="Reject" press="onPressButton7"/>
                     </Toolbar>
 
-                <t:Table id="BEMDetailTable" rows="{bemModel>/BemTableDetail}" selectionMode="MultiToggle" rowMode="Auto">
+                <t:Table id="BEMDetailTable" rows="{bemModel>/BemTableDetail}" selectionMode="Single" rowMode="Auto">
                     <t:columns>
                         <t:Column width="11rem">
                             <Label text="Testo breve materiale" />

@@ -71,112 +71,112 @@
                 <Toolbar>
                     <Title text="Lista Ordini"/>
                     <ToolbarSpacer></ToolbarSpacer>
-                    <Button id="transferButton" text="Trasferisci su BEM" type="Attention" press="onTransfer" enabled="false"/>
+                    <Button id="transferButton" text="Trasferisci su BEM" type="Attention" press="onCloseFragment" enabled="false"/> <!-- DA INSERIRE -> onTransfer QUANDO VIENE IMPLMENTATO IL BACK END -->
                     <Button text="Annulla" type="Reject" press="onCloseFragment"/>                    
                 </Toolbar>
 
-                <t:Table id="ListaOrdini" rows="{/ConsultCollection}" selectionMode="Single" rowMode="Auto" rowSelectionChange="onRowSelectionChange">
+                <t:Table id="ListaOrdini" rows="{TrialDataModel>/ConsultCollection}" selectionMode="Single" rowMode="Auto" rowSelectionChange="onRowSelectionChange">
                     <t:columns>
                         <t:Column width="11rem">
                             <Label text="Doc. Acq." />
                             <t:template>
-                                <Text text="{DocAcq}" wrapping="false" />
+                                <Text text="{TrialDataModel>DocAcq}" wrapping="false" />
                             </t:template>
                         </t:Column>
                         <t:Column width="11rem">
                             <Label text="Pos." />
                             <t:template>
-                                <Text text="{Pos}" wrapping="false" />
+                                <Text text="{TrialDataModel>Pos}" wrapping="false" />
                             </t:template>
                         </t:Column>
                         <t:Column width="11rem">
                             <Label text="OdA Batch" />
                             <t:template>
-                                <ObjectStatus class="greenIcon" icon="{= ${SubappaltoOK} === 'true' ? 'sap-icon://accept' : 'sap-icon://decline'}" state="{= ${SubappaltoOK} === 'true' ? 'Success' : 'Error'}"/>
+                                <ObjectStatus class="greenIcon" icon="{= ${TrialDataModel>SubappaltoOK} === 'true' ? 'sap-icon://accept' : 'sap-icon://decline'}" state="{= ${TrialDataModel>SubappaltoOK} === 'true' ? 'Success' : 'Error'}"/>
                             </t:template>
                         </t:Column>
                         <t:Column width="11rem">
                             <Label text="Materiale" />
                             <t:template>
-                                <Text text="{Materiale}" wrapping="false" />
+                                <Text text="{TrialDataModel>Materiale}" wrapping="false" />
                             </t:template>
                         </t:Column>
                         <t:Column width="11rem">
                             <Label text="Testo Breve" />
                             <t:template>
-                                <Text text="{TestoBreve}" wrapping="false" />
+                                <Text text="{TrialDataModel>TestoBreve}" wrapping="false" />
                             </t:template>
                         </t:Column>
                         <t:Column width="11rem">
                             <Label text="Quantità" />
                             <t:template>
-                                <Text text="{Quantita}" wrapping="false" />
+                                <Text text="{TrialDataModel>Quantita}" wrapping="false" />
                             </t:template>
                         </t:Column>
                         <t:Column width="11rem">
                             <Label text="Quantità Residua" />
                             <t:template>
-                                <Text text="{QuantitaResidua}" wrapping="false" />
+                                <Text text="{TrialDataModel>QuantitaResidua}" wrapping="false" />
                             </t:template>
                         </t:Column>
                         <t:Column width="11rem">
                             <Label text="Valore" />
                             <t:template>
-                                <Text text="{Valore}" wrapping="false" />
+                                <Text text="{TrialDataModel>Valore}" wrapping="false" />
                             </t:template>
                         </t:Column>
                         <t:Column width="11rem">
                             <Label text="Valore Residuo" />
                             <t:template>
-                                <Text text="{ValoreResiduo}" wrapping="false" />
+                                <Text text="{TrialDataModel>ValoreResiduo}" wrapping="false" />
                             </t:template>
                         </t:Column>
                         <t:Column width="11rem">
                             <Label text="Imp. div. int." />
                             <t:template>
-                                <Text text="{ImpDivInt}" wrapping="false" />
+                                <Text text="{TrialDataModel>ImpDivInt}" wrapping="false" />
                             </t:template>
                         </t:Column>
                         <t:Column width="11rem">
                             <Label text="UMO" />
                             <t:template>
-                                <Text text="{UMO}" wrapping="false" />
+                                <Text text="{TrialDataModel>UMO}" wrapping="false" />
                             </t:template>
                         </t:Column>
                         <t:Column width="11rem">
                             <Label text="Prz. Netto" />
                             <t:template>
-                                <Text text="{PrzNetto}" wrapping="false" />
+                                <Text text="{TrialDataModel>PrzNetto}" wrapping="false" />
                             </t:template>
                         </t:Column>
                         <t:Column width="11rem">
                             <Label text="Dettaglio Ticket" />
                             <t:template>
-                                <ObjectStatus class="greenIcon" icon="{= ${DettaglioTicket} === 'true' ? 'sap-icon://accept' : 'sap-icon://decline'}" state="{= ${DettaglioTicket} === 'true' ? 'Success' : 'Error'}"/>
+                                <ObjectStatus class="greenIcon" icon="{= ${TrialDataModel>DettaglioTicket} === 'true' ? 'sap-icon://accept' : 'sap-icon://decline'}" state="{= ${TrialDataModel>DettaglioTicket} === 'true' ? 'Success' : 'Error'}"/>
                             </t:template>
                         </t:Column>
                         <t:Column width="11rem">
                             <Label text="Data Inizio Attività" />
                             <t:template>
-                                <Text text="{path: 'DataInizioAttivita', type: 'sap.ui.model.type.Date', formatOptions: {pattern: 'dd/MM/yyyy'}}" wrapping="false" />
+                                <Text text="{path: 'TrialDataModel>DataInizioAttivita', type: 'sap.ui.model.type.Date', formatOptions: {pattern: 'dd/MM/yyyy'}}" wrapping="false" />
                             </t:template>
                         </t:Column>
                         <t:Column width="11rem">
                             <Label text="Data Fine Attività" />
                             <t:template>
-                                <Text text="{path: 'DataFineAttivita', type: 'sap.ui.model.type.Date', formatOptions: {pattern: 'dd/MM/yyyy'}}" wrapping="false" />
+                                <Text text="{path: 'TrialDataModel>DataFineAttivita', type: 'sap.ui.model.type.Date', formatOptions: {pattern: 'dd/MM/yyyy'}}" wrapping="false" />
                             </t:template>
                         </t:Column>
                         <t:Column width="11rem">
                             <Label text="Sede Tecnica" />
                             <t:template>
-                                <Text text="{SedeTecnica}" wrapping="false" />
+                                <Text text="{TrialDataModel>SedeTecnica}" wrapping="false" />
                             </t:template>
                         </t:Column>
                         <t:Column width="11rem">
                             <Label text="Descrizione Sede Tecnica" />
                             <t:template>
-                                <Text text="{DescSedeTecnica}" wrapping="false" />
+                                <Text text="{TrialDataModel>DescSedeTecnica}" wrapping="false" />
                             </t:template>
                         </t:Column>
                     </t:columns>
