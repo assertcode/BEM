@@ -170,7 +170,7 @@ sap.ui.define([
             this.getView().setModel(oMockModel, "bemModel");
 
 
-            // PROCESS FLOW    
+            // PROCESS FLOW
             var sDataPath = sap.ui.require.toUrl("sap/m/bem/flownodes.json");
             var oModel = new JSONModel(sDataPath);
             this.getView().setModel(oModel);
@@ -256,7 +256,12 @@ sap.ui.define([
             }
         },
 
-        onTransfer: function() {
+        onTransfer: function() { // Implementare logica per il trasferimento dei dati back-end in visualizzazione sul Form
+
+            if (this.byId("BEMFragment")) {
+                this.byId("BEMFragment").close();
+            }
+            
             var oSocieta = this.byId("societaMultiComboBox").getSelectedKeys();
             var oProtocollo = this.byId("protocolloMultiComboBox").getSelectedKeys();
             var oCodiceFornitore = this.byId("CodiceFornitoreMultiComboBox").getSelectedKeys();

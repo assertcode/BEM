@@ -127,17 +127,20 @@
                 <Text text="{NumeroODA}" />
             </f:content>
         </f:SimpleForm>
+
     </VBox>
+
 		<content>
 
             <VBox class="sapUiSmallMargin">
+
                     <Toolbar>
                         <Title text="Vista"/>
                         <ToolbarSpacer></ToolbarSpacer>
-                        <Button text="Importa da Ordine di Acquisto" type="Accept" press="onOpenFragment" />
-                        <Button text="Dettaglio Ticket" type="Emphasized" press="onPressButton5" />
-                        <Button text="Azzera Importi" type="Attention" press="onPressButton6"/>
-                        <Button text="Cancella Posizione" type="Reject" press="onPressButton7"/>
+                        <Button id="OrAcquistoButton" text="Importa da Ordine di Acquisto" type="Accept" press="onOpenFragment" />
+                        <Button id="TicketButton" text="Dettaglio Ticket" type="Emphasized" press="onPressButton5" />
+                        <Button id="AzzeraImportiButton" text="Azzera Importi" type="Attention" press="onPressButton6"/>
+                        <Button id="CancellaPosButton" text="Cancella Posizione" type="Reject" press="onPressButton7"/>
                     </Toolbar>
 
                 <t:Table id="BEMDetailTable" rows="{bemModel>/BemTableDetail}" selectionMode="Single" rowMode="Auto">
