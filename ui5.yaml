@@ -15,6 +15,22 @@ server:
             - /resources
             - /test-resources
           url: https://ui5.sap.com
+        backend:
+          - url: http://rkp-gwt-emb:8000
+            path: /sap
+            destination: ECCDev
+          - path: /get-documents
+            destination: APImanutencoop
+            authenticationType: none
+          - path: /UploadFile
+            destination: APImanutencoop
+            authenticationType: none
+          - path: /DownloadFile
+            destination: APImanutencoop
+            authenticationType: none
+          - path: /DeleteFile
+            destination: APImanutencoop
+            authenticationType: none
     - name: fiori-tools-appreload
       afterMiddleware: compression
       configuration:

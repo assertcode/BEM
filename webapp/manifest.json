@@ -1,150 +1,191 @@
 {
-  "_version": "1.59.0",
-  "sap.app": {
-    "id": "sap.m.bem",
-    "type": "application",
-    "i18n": "i18n/i18n.properties",
-    "applicationVersion": {
-      "version": "0.0.1"
-    },
-    "title": "{{appTitle}}",
-    "description": "{{appDescription}}",
-    "resources": "resources.json",
-    "sourceTemplate": {
-      "id": "@sap/generator-fiori:basic",
-      "version": "1.13.5",
-      "toolsId": "b7408f23-0d83-4f72-88de-09cb59fdfa51"
-    },
-    "crossNavigation": {
-      "inbounds": {
-        "RicercaBEM-display": {
-          "semanticObject": "RicercaBEM",
-          "action": "display",
-          "title": "{{flpTitle}}",
-          "signature": {
-            "parameters": {},
-            "additionalParameters": "allowed"
-          }
-        }
-      }
-    }
-  },
-  "sap.ui": {
-    "technology": "UI5",
-    "icons": {
-      "icon": "",
-      "favIcon": "",
-      "phone": "",
-      "phone@2": "",
-      "tablet": "",
-      "tablet@2": ""
-    },
-    "deviceTypes": {
-      "desktop": true,
-      "tablet": true,
-      "phone": true
-    }
-  },
-  "sap.ui5": {
-    "flexEnabled": false,
-    "dependencies": {
-      "minUI5Version": "1.124.0",
-      "libs": {
-        "sap.m": {},
-        "sap.ui.core": {},
-        "sap.f": {},
-        "sap.suite.ui.generic.template": {},
-        "sap.ui.comp": {},
-        "sap.ui.generic.app": {},
-        "sap.ui.table": {},
-        "sap.ushell": {},
-        "sap.ui.fl": {},
-        "sap.ui.mdc": {}
-      }
-    },
-    "contentDensities": {
-      "compact": true,
-      "cozy": true
-    },
-    "models": {
-      "i18n": {
-        "type": "sap.ui.model.resource.ResourceModel",
-        "settings": {
-          "bundleName": "sap.m.bem.i18n.i18n"
-        }
-      }
-    },
-    "resources": {
-      "css": [
-        {
-          "uri": "css/style.css"
-        }
-      ]
-    },
-    "routing": {
-      "config": {
-        "routerClass": "sap.m.routing.Router",
-        "viewType": "XML",
-        "async": true,
-        "viewPath": "sap.m.bem.view",
-        "controlAggregation": "pages",
-        "controlId": "app",
-        "clearControlAggregation": false
-      },
-      "routes": [
-        {
-          "name": "RouteBEM",
-          "pattern": ":?query:",
-          "target": [
-            "TargetBEM"
-          ]
+    "_version": "1.59.0",
+    "sap.app": {
+        "id": "sap.m.bem",
+        "type": "application",
+        "i18n": "i18n/i18n.properties",
+        "applicationVersion": {
+            "version": "0.0.1"
         },
-        {
-          "name": "RouteBEMDetail",
-          "pattern": "BEMDetail",
-          "target": [
-            "TargetBEMDetail"
-          ]
-        }
-      ],
-      "targets": {
-        "TargetBEM": {
-          "viewType": "XML",
-          "transition": "slide",
-          "clearControlAggregation": false,
-          "viewId": "BEM",
-          "viewName": "BEM"
+        "title": "{{appTitle}}",
+        "description": "{{appDescription}}",
+        "resources": "resources.json",
+        "sourceTemplate": {
+            "id": "@sap/generator-fiori:basic",
+            "version": "1.13.5",
+            "toolsId": "b7408f23-0d83-4f72-88de-09cb59fdfa51"
         },
-        "TargetBEMDetail": {
-          "viewType": "XML",
-          "transition": "slide",
-          "clearControlAggregation": false,
-          "viewId": "BEMDetail",
-          "viewName": "BEMDetail"
+        "crossNavigation": {
+            "inbounds": {
+                "RicercaBEM-display": {
+                    "semanticObject": "RicercaBEM",
+                    "action": "display",
+                    "title": "Consuntivazione Costi",
+                    "info": "BEM",
+                    "subTitle": "",
+                    "icon": "sap-icon://money-bills",
+                    "signature": {
+                        "parameters": {},
+                        "additionalParameters": "allowed"
+                    }
+                }
+            }
+        },
+        "dataSources": {
+            "ZGTW_BEM_SRV": {
+                "uri": "/sap/opu/odata/sap/ZGTW_BEM_SRV",
+                "type": "OData",
+                "settings": {
+                    "annotations": [],
+                    "localUri": "localService/metadata.xml",
+                    "odataVersion": "2.0"
+                }
+            }
         }
-      }
     },
-    "rootView": {
-      "viewName": "sap.m.bem.view.App",
-      "type": "XML",
-      "async": true,
-      "id": "App"
+    "sap.ui": {
+        "technology": "UI5",
+        "icons": {
+            "icon": "",
+            "favIcon": "",
+            "phone": "",
+            "phone@2": "",
+            "tablet": "",
+            "tablet@2": ""
+        },
+        "deviceTypes": {
+            "desktop": true,
+            "tablet": true,
+            "phone": true
+        }
     },
-    "config": {
-      "sample": {
-        "stretch": true,
-        "files": [
-          "Component.js",
-          "DynamicPageListReport.controller.js",
-          "DynamicPageListReport.view.xml",
-          "manifest.json",
-          "model.json"
-        ]
-      }
+    "sap.ui5": {
+        "flexEnabled": false,
+        "dependencies": {
+            "minUI5Version": "1.124.0",
+            "libs": {
+                "sap.m": {},
+                "sap.ui.core": {},
+                "sap.f": {},
+                "sap.suite.ui.generic.template": {},
+                "sap.ui.comp": {},
+                "sap.ui.generic.app": {},
+                "sap.ui.table": {},
+                "sap.ushell": {},
+                "sap.ui.fl": {},
+                "sap.ui.mdc": {}
+            }
+        },
+        "contentDensities": {
+            "compact": true,
+            "cozy": true
+        },
+        "models": {
+            "i18n": {
+                "type": "sap.ui.model.resource.ResourceModel",
+                "settings": {
+                    "bundleName": "sap.m.bem.i18n.i18n"
+                }
+            },
+            "": {
+                "preload": true,
+                "dataSource": "ZGTW_BEM_SRV",
+                "settings": {
+                    "defaultUpdateMethod": "PUT",
+                    "defaultBindingMode": "TwoWay",
+                    "defaultCountMode": "Inline",
+                    "refreshAfterChange": false,
+                    "metadataUrlParams": {
+                        "sap-value-list": "none"
+                    }
+                }
+            }
+        },
+        "resources": {
+            "css": [
+                {
+                    "uri": "css/style.css"
+                }
+            ]
+        },
+        "routing": {
+            "config": {
+                "routerClass": "sap.m.routing.Router",
+                "viewType": "XML",
+                "async": true,
+                "viewPath": "sap.m.bem.view",
+                "controlAggregation": "pages",
+                "controlId": "app",
+                "clearControlAggregation": false
+            },
+            "routes": [
+                {
+                    "name": "RouteBEM",
+                    "pattern": ":?query:",
+                    "target": [
+                        "TargetBEM"
+                    ]
+                },
+                {
+                    "name": "BEMDetail",
+                    "pattern": "BEMDetail",
+                    "target": [
+                        "BEMDetail"
+                    ]
+                },
+                {
+                    "name": "AvanzamentoBem",
+                    "pattern": "AvanzamentoBem",
+                    "target": [
+                        "AvanzamentoBem"
+                    ]
+                }
+            ],
+            "targets": {
+                "TargetBEM": {
+                    "viewType": "XML",
+                    "transition": "slide",
+                    "clearControlAggregation": false,
+                    "viewId": "BEM",
+                    "viewName": "BEM"
+                },
+                "BEMDetail": {
+                    "viewType": "XML",
+                    "transition": "slide",
+                    "clearControlAggregation": false,
+                    "viewId": "BEMDetail",
+                    "viewName": "BEMDetail"
+                },
+                "AvanzamentoBem": {
+                    "viewType": "XML",
+                    "transition": "slide",
+                    "clearControlAggregation": false,
+                    "viewId": "AvanzamentoBem",
+                    "viewName": "AvanzamentoBem"
+                }
+            }
+        },
+        "rootView": {
+            "viewName": "sap.m.bem.view.App",
+            "type": "XML",
+            "async": true,
+            "id": "App"
+        },
+        "config": {
+            "sample": {
+                "stretch": true,
+                "files": [
+                    "Component.js",
+                    "DynamicPageListReport.controller.js",
+                    "DynamicPageListReport.view.xml",
+                    "manifest.json",
+                    "model.json"
+                ]
+            }
+        }
+    },
+    "sap.cloud": {
+        "public": true,
+        "service": "sapmbem"
     }
-  },
-  "sap.cloud": {
-    "public": true,
-    "service": "sapmbem"
-  }
 }

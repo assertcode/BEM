@@ -1,0 +1,1525 @@
+sap.ui.define([
+    "sap/ui/core/mvc/Controller",
+    "sap/ui/model/json/JSONModel",
+    "sap/m/MessageToast",
+    "sap/ui/model/Filter",
+    "sap/ui/model/FilterOperator",
+    "sap/ushell/Container",
+    "sap/m/Dialog",
+    "sap/m/Button",
+    "sap/m/Label",
+    "sap/m/Table",
+    "sap/m/Column",
+    "sap/m/CheckBox",
+    "sap/m/Text",
+    "sap/m/ColumnListItem",
+    "sap/ui/core/library",
+    "sap/ui/core/Item",
+    "sap/ui/core/Fragment",
+    "sap/m/PDFViewer"
+
+], function (Controller, JSONModel, MessageToast, Filter, FilterOperator, Container, Dialog, Button, Label, Table, Column, CheckBox, Text, ColumnListItem, coreLibrary, CoreItem, Fragment, PDFViewer) {
+    "use strict";
+
+    var addBody;
+    var AllegatiFileID;
+    var userUploader
+    var sPath
+
+    return Controller.extend("sap.m.bem.controller.AvanzamentoBem", {
+        onInit: function () {
+            var oModel = this.createFlowModel();
+            this.getView().setModel(oModel, "modello");
+
+            if (this.getOwnerComponent().getModel("CreazioneModel").getProperty("/Nprot") == "") {
+                var oRouter = this.getOwnerComponent().getRouter()
+                oRouter.navTo("RouteBEM");
+            }
+
+            this.oItemsProcessor = [];
+            this.globalModel = {}
+
+            var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+            oRouter.getRoute("AvanzamentoBem").attachPatternMatched(this.onSearch, this);
+
+        },
+
+        onSearch: function () {
+            if (this.getOwnerComponent().getModel("CreazioneModel").getProperty("/Addposition") == true) {
+                this.getOwnerComponent().getModel("CreazioneModel").setProperty("/Addposition", false)
+                return
+            }
+            var that = this
+            var nprot = this.getOwnerComponent().getModel("CreazioneModel").getProperty("/Nprot");
+            var aFilter = []
+            const oModel = that.getOwnerComponent().getModel();
+            aFilter.push(new Filter("Znprot", FilterOperator.EQ, nprot));
+            oModel.read("/GetDetailSet",
+                {
+                    filters: aFilter,
+                    urlParameters: {
+                        "$expand": "DettagliSet,Testata,ListaCampiSet,ListaFunzioniSet"
+                    },
+                    success: function (data) {
+
+                        const aStati = {};
+
+                        for (const d of data.results[0].ListaCampiSet.results) {
+                            aStati[d.Zobjname] = {
+                                ...d,
+                                Zvisible: d.Zvisible === '01' ? false : true,
+                                Zstate: d.Zstate === '00' ? false : true
+                            };
+                        }
+
+
+                        that.getOwnerComponent().getModel("DatiBemDetail").setProperty("/OTESTATASet", data.results[0].Testata)
+
+                        var tpprot = that.getOwnerComponent().getModel("DatiBemDetail").getProperty("/OTESTATASet/Ztpprot")
+                        if (tpprot == "75") {
+                            aStati.Zxblnr1.Zvisible = true
+                        }
+
+                        that.getOwnerComponent().getModel("DatiBemDetail").setProperty("/INumeroprotocollo", data.results[0].Znprot)
+                        that.getOwnerComponent().getModel("DatiBemDetail").setProperty("/IUser", data.IUser)
+
+                        that.getOwnerComponent().getModel("DatiBemDetail").setProperty("/IDettaglioSet", data.results[0].DettagliSet.results);
+                        that.getOwnerComponent().getModel("DatiBemDetail").setProperty("/ListaCampiSet", aStati);
+                        that.getOwnerComponent().getModel("DatiBemDetail").setProperty("/ListaFunzioniSet", data.results[0].ListaFunzioniSet.results);
+                        
+
+                        // logica per eliminazione mandt
+                        // var aData = that.getView().getModel("DatiBemDetail").getProperty("/IDettaglioSet"); 
+                        // var aFilteredData = aData.filter(function(oRecord) {
+                        //     return !oRecord.Mandt; 
+                        // });
+                        // that.getView().getModel("DatiBemDetail").setProperty("/IDettaglioSet", aFilteredData); 
+
+
+
+                        that.getOwnerComponent().getModel("SaveModel").setProperty('/status1', '')
+                        that.getOwnerComponent().getModel("SaveModel").setProperty('/value1', '')
+                        that.getOwnerComponent().getModel("SaveModel").setProperty('/status2', '')
+                        that.getOwnerComponent().getModel("SaveModel").setProperty('/value2', '')
+
+
+                        if (data.results[0].ListaFunzioniSet.results.length === 1) {
+                            that.getOwnerComponent().getModel("SaveModel").setProperty('/status1', data.results[0].ListaFunzioniSet.results[0].Zdescst)
+                            that.getOwnerComponent().getModel("SaveModel").setProperty('/value1', data.results[0].ListaFunzioniSet.results[0].Ztpstsu)
+                        } else if (data.results[0].ListaFunzioniSet.results.length === 2) {
+                            that.getOwnerComponent().getModel("SaveModel").setProperty('/status1', data.results[0].ListaFunzioniSet.results[0].Zdescst)
+                            that.getOwnerComponent().getModel("SaveModel").setProperty('/value1', data.results[0].ListaFunzioniSet.results[0].Ztpstsu)
+                            that.getOwnerComponent().getModel("SaveModel").setProperty('/status2', data.results[0].ListaFunzioniSet.results[1].Zdescst)
+                            that.getOwnerComponent().getModel("SaveModel").setProperty('/value2', data.results[0].ListaFunzioniSet.results[1].Ztpstsu)
+                        }
+                        that.onFlowCalculator()
+                        that.getSyUser()
+                        that.AggiornaImportoTotale()
+                    },
+                    error: function (err) {
+                        console.error(err)
+
+                    }
+                });
+                
+        },
+
+        onFlowCalculator: function () {
+            var modello = this.getView().getModel("modello").getProperty("/nodes");
+            var Stato = this.getOwnerComponent().getModel("DatiBemDetail").getProperty("/OTESTATASet/Ztpstato")
+            var Enabled = this.getOwnerComponent().getModel("EnabledButton");
+            if (Stato === "B03") {
+                Enabled.setProperty("/Modifica", false)
+                this.getView().getModel("VisibleButton").setProperty("/Salva", false)
+                modello.forEach(function (node) {
+                    if (node.id === "2" || node.id === "3") {
+                        node.state = "Positive";
+                    }
+                    if (node.id === "4") {
+                        node.state = "Negative";
+                    }
+                });
+            } else if (Stato === "B02") {
+                Enabled.setProperty("/Modifica", true)
+                // this.getView().getModel("VisibleButton").setProperty("/Salva", false)
+                modello.forEach(function (node) {
+                    if (node.id === "2") {
+                        node.state = "Positive";
+                    }
+                    if (node.id === "3" || node.id === "4") {
+                        node.state = "Negative";
+                    }
+                });
+            } else if (Stato === "B01") {
+                Enabled.setProperty("/Modifica", true);
+                modello.forEach(function (node) {
+                    if (node.id === "2" || node.id === "3" || node.id === "4") {
+                        node.state = "Negative";
+                    }
+                });
+            } else if (Stato === "B04") {
+                Enabled.setProperty("/Modifica", false);
+                this.getView().getModel("VisibleButton").setProperty("/Salva", false)
+                modello.forEach(function (node) {
+                    if (node.id === "2" || node.id === "3" || node.id === "4") {
+                        node.state = "Positive";
+                    }
+                });
+            }
+            this.byId("processFlow").updateModel();
+        },
+
+        createFlowModel: function () {
+            return new JSONModel({
+                "nodes": [
+                    {
+                        "id": "1",
+                        "lane": "0",
+                        "children": ["2"],
+                        "state": "Positive",
+                        "title": "Node 1",
+                        "focused": true
+                    },
+                    {
+                        "id": "2",
+                        "lane": "1",
+                        "children": ["3"],
+                        "state": "Negative",
+                        "title": "Node 2",
+                        "focused": false
+                    },
+                    {
+                        "id": "3",
+                        "lane": "2",
+                        "children": [4],
+                        "state": "Negative",
+                        "title": "Node 3",
+                        "focused": false
+                    },
+                    {
+                        "id": "4",
+                        "lane": "3",
+                        "children": [],
+                        "state": "Negative",
+                        "title": "Node 4",
+                        "focused": false
+                    }
+                ],
+                "lanes": [
+                    {
+                        "id": "0",
+                        "icon": "sap-icon://add-document",
+                        "label": "Consuntivazione Costi Aperta",
+                        "position": 0
+                    },
+                    {
+                        "id": "1",
+                        "icon": "sap-icon://save",
+                        "label": "Consuntivazione Costi Salvata",
+                        "position": 1
+                    },
+                    {
+                        "id": "2",
+                        "icon": "sap-icon://accept",
+                        "label": "Consuntivazione Costi Rilasciata",
+                        "position": 2
+                    }, {
+                        "id": "3",
+                        "icon": "sap-icon://decline",
+                        "label": "Consuntivazione Costi Annullata",
+                        "position": 3
+                    }
+                ]
+            });
+        },
+
+        onNavigateBEF: function () {
+
+            sap.ushell.Container.getServiceAsync("CrossApplicationNavigation")
+                .then(function (oCrossAppNavigator) {
+                    var oModel = this.getOwnerComponent().getModel("DatiBemDetail");
+                    var sSocieta = oModel.getProperty("/OTESTATASet/Zbukrs");
+                    var sFornitore = oModel.getProperty("/OTESTATASet/Zlifnr");
+                    var sNprot = this.getOwnerComponent().getModel("CreazioneModel").getProperty("/Nprot");
+
+                    if (!sSocieta || !sFornitore) {
+                        sap.m.MessageToast.show("Dati mancanti per la navigazione.");
+                        return;
+                    }
+
+                    var sSemanticObject = "BEF";
+                    var sAction = "display";
+
+                    var oParams = {
+                        Societa: sSocieta,
+                        Forn: sFornitore,
+                        Nprot: sNprot
+                    };
+
+                    // Navigazione verso l'applicazione target
+                    oCrossAppNavigator.toExternal({
+                        target: {
+                            semanticObject: sSemanticObject,
+                            action: sAction
+                        },
+                        params: oParams
+                    });
+                }.bind(this)) // Usa .bind(this) per mantenere il contesto del controller
+                .catch(function (oError) {
+                    sap.m.MessageToast.show("Errore durante il recupero del servizio di navigazione.");
+                    console.error(oError);
+                });
+        },
+        // onNavigateBEF: function () {
+
+        //     var oCrossAppNavigator = sap.ushell.Container.getService("CrossApplicationNavigation");
+        //     var Soc = this.getOwnerComponent().getModel("DatiBemDetail").getProperty("/OTESTATASet/Zbukrs")
+        //     var Forn = this.getOwnerComponent().getModel("DatiBemDetail").getProperty("/OTESTATASet/Zlifnr")
+
+        //     var sSemanticObject = "BEF";
+        //     var sAction = "display";
+
+        //     // Definire i parametri che vuoi passare all'altra app
+        //     var oParams = {
+        //         "Societa": Soc,
+        //         "Forn": Forn
+        //     };
+
+
+        //     oCrossAppNavigator.toExternal({
+        //         target: {
+        //             semanticObject: sSemanticObject,
+        //             action: sAction
+        //         },
+        //         params: oParams
+        //     });
+        // },
+
+        onControlli: function (oEvent) {
+
+
+            var oButton = oEvent.getSource();
+            var oRowContext = oButton.getBindingContext("DatiBemDetail");
+            var oTable = this.byId("PositionTable");
+            var aContexts = oTable.getBinding("rows").getContexts();
+            var iIndex = aContexts.findIndex(function (oContext) {
+                return oContext.getObject().Zebelp === oRowContext.getObject().Zebelp;
+            });
+
+            var sPropertyPath = "/IDettaglioSet/" + iIndex + "/Zsgtxt";
+            var Owner = this.getOwnerComponent().getModel("Cont")
+            var property = this.getOwnerComponent().getModel("DatiBemDetail").getProperty(sPropertyPath);
+            if (property.includes("*")) {
+                Owner.setProperty("/As", true)
+            } else { Owner.setProperty("/As", false) } if (property.includes("A")) {
+                Owner.setProperty("/A", true)
+            } else { Owner.setProperty("/A", false) } if (property.includes("B")) {
+                Owner.setProperty("/B", true)
+            } else { Owner.setProperty("/B", false) } if (property.includes("C")) {
+                Owner.setProperty("/C", true)
+            } else { Owner.setProperty("/C", false) } if (property.includes("D")) {
+                Owner.setProperty("/D", true)
+            } else { Owner.setProperty("/D", false) } if (property.includes("E")) {
+                Owner.setProperty("/E", true)
+            } else { Owner.setProperty("/E", false) } if (property.includes("F")) {
+                Owner.setProperty("/F", true)
+            } else { Owner.setProperty("/F", false) } if (property.includes("G")) {
+                Owner.setProperty("/G", true)
+            } else { Owner.setProperty("/G", false) } if (property.includes("H")) {
+                Owner.setProperty("/H", true)
+            } else { Owner.setProperty("/H", false) } if (property.includes("I")) {
+                Owner.setProperty("/I", true)
+            } else { Owner.setProperty("/I", false) }
+
+            var oTable = new Table({
+                columns: [
+                    new Column({
+                        header: new Label({ text: "Sel." })
+                    }),
+                    new Column({
+                        header: new Label({ text: "Codice" })
+                    }),
+                    new Column({
+                        header: new Label({ text: "Descrizione" })
+                    })
+                ]
+            });
+
+
+
+
+            var oModel = new JSONModel({
+                items: [
+                    { sel: Owner.getProperty("/As"), codice: "*", descrizione: "TUTTO BENE" },
+                    { sel: Owner.getProperty("/A"), codice: "A", descrizione: "RITARDO NELLA CONSEGNA INF. A DUE GG" },
+                    { sel: Owner.getProperty("/B"), codice: "B", descrizione: "RITARDO NELLA CONSEGNA SUP. A DUE GG" },
+                    { sel: Owner.getProperty("/C"), codice: "C", descrizione: "DIFF. TRA QUANT. CONS. E ORD. INF. 2%" },
+                    { sel: Owner.getProperty("/D"), codice: "D", descrizione: "DIFF. TRA QUANT. CONS. E ORD. SUP. 2%" },
+                    { sel: Owner.getProperty("/E"), codice: "E", descrizione: "LUOGO DI CONSEGNA" },
+                    { sel: Owner.getProperty("/F"), codice: "F", descrizione: "RISPETTO IDENTITÀ DEL BENE" },
+                    { sel: Owner.getProperty("/G"), codice: "G", descrizione: "INTEGRITÀ DELL'IMBALLAGGIO" },
+                    { sel: Owner.getProperty("/H"), codice: "H", descrizione: "COMPLETEZZA DELLA DOCUMENTAZIONE" },
+                    { sel: Owner.getProperty("/I"), codice: "I", descrizione: "SOLLECITI" },
+                    { sel: Owner.getProperty("/Z"), codice: "Z", descrizione: "50001: EM NON SIGNIFICATIVA X ISO 50001", editable: false },
+                    { sel: Owner.getProperty("/Y"), codice: "Y", descrizione: "50001: MANCATA CONSEGNA DOC. PREVISTA", editable: false },
+                    { sel: Owner.getProperty("/X"), codice: "X", descrizione: "50001: NON RISP. TEMPISTICHE FORNIT.", editable: false },
+                    { sel: Owner.getProperty("/W"), codice: "W", descrizione: "50001: NON RISP. REG. LEG. E CERTIFIC.", editable: false },
+                    { sel: Owner.getProperty("/V"), codice: "V", descrizione: "50001: NON RISP. SPEC. TEC. E REQ. PROG.", editable: false },
+                    { sel: Owner.getProperty("/Q"), codice: "Q", descrizione: "50001: PIENAMENTE CONFORME ISO 50001", editable: false }
+                ]
+            });
+            oTable.setModel(oModel);
+            var that = this
+            var oTemplate = new ColumnListItem({
+                cells: [
+                    new CheckBox({
+                        selected: "{sel}",
+                        editable: "{editable}",
+                        select: function (oEvent) {
+
+                            var selected = oEvent.getParameter("selected");
+                            var codice = oEvent.getSource().getBindingContext().getProperty("codice");
+
+                            if (selected) {
+                                var str = that.getOwnerComponent().getModel("DatiBemDetail").getProperty(sPropertyPath);
+                                if (str.includes(codice)) {
+                                } else {
+                                    if (str.length == 6) {
+                                        return
+                                    }
+                                    var str2 = str + codice
+                                    that.getOwnerComponent().getModel("DatiBemDetail").setProperty(sPropertyPath, str2);
+                                }
+
+                            } else {
+
+                                var str = that.getOwnerComponent().getModel("DatiBemDetail").getProperty(sPropertyPath);
+                                if (str.includes(codice)) {
+                                    var nuovaStr = str.replace(codice, "");
+                                    that.getOwnerComponent().getModel("DatiBemDetail").setProperty(sPropertyPath, nuovaStr);
+                                }
+
+                            }
+                        }
+                    }),
+                    new Text({ text: "{codice}" }),
+                    new Text({ text: "{descrizione}" })
+                ]
+            });
+
+            oTable.bindItems({
+                path: "/items",
+                template: oTemplate
+            });
+
+            var oDialog = new Dialog({
+                title: "Controlli in ingresso ed accettazione",
+                content: [oTable],
+                contentWidth: "45%",
+                buttons: [
+                    new Button({
+                        text: "Conferma",
+                        type: "Accept",
+                        press: function () {
+                            oDialog.close();
+                        }
+                    }),
+                    new Button({
+                        text: "Annulla",
+                        press: function () {
+                            oDialog.close();
+                        }
+                    })
+                ]
+            });
+
+            oDialog.open();
+        },
+
+        SelezioneOrdineAcquisto: function (oEvent) {
+            var oRouter = this.getOwnerComponent().getRouter()
+            oRouter.navTo("BEMDetail");
+        },
+        ModificaButton: function () {
+
+            var Visible = this.getView().getModel("VisibleButton")
+
+            if (Visible.getProperty("/Salva") == false) {
+                Visible.setProperty("/Salva", true)
+            } else {
+                Visible.setProperty("/Salva", false)
+            }
+        },
+
+        // formatDateWithoutTimezone: function(oDate) {
+        //     if (oDate) {
+        //         // Imposta l'ora a mezzogiorno per evitare problemi di fuso orario
+        //         oDate.setHours(12, 0, 0, 0);
+        //         return oDate;
+        //     }
+        //     return null;
+        // },
+
+        CommessaValueHelp: function (oEvent) {
+
+            var oInput = oEvent.getSource();
+
+            var oBindingContext = oInput.getBindingContext("DatiBemDetail");
+            // Ottieni il path del contesto
+            sPath = oBindingContext.getPath();
+
+
+            var oView = this.getView();
+            if (!this.byId("IdCommessaHelpRequest")) {
+                Fragment.load({
+                    id: oView.getId(),
+                    name: "sap.m.bem.view.fragment.CommessaHelpRequest",
+                    controller: this
+                }).then(function (oDialog) {
+                    oView.addDependent(oDialog);
+                    oDialog.open();
+                });
+            } else {
+                this.byId("IdCommessaHelpRequest").open();
+            }
+        },
+
+        onSearchCommessa: function () {
+            var that = this;
+            var aFilter = [];
+            this.byId("CommessaTable").setBusy(true)
+            const oModel = this.getOwnerComponent().getModel("CommessaFilterModel");
+            var wbs = oModel.getProperty("/wbs")
+            var definizione = oModel.getProperty("/definizione")
+            var commessa = oModel.getProperty("/commessa")
+            var responsabile = oModel.getProperty("/responsabile")
+            var mercato = oModel.getProperty("/mercato")
+            if (wbs) {
+                aFilter.push(new Filter("IPosid", FilterOperator.Contains, wbs));
+            }
+            if (definizione) {
+                aFilter.push(new Filter("IPost1", FilterOperator.Contains, definizione));
+            }
+            if (commessa) {
+                aFilter.push(new Filter("IPspid", FilterOperator.Contains, commessa));
+            }
+            if (responsabile) {
+                aFilter.push(new Filter("IVerna", FilterOperator.Contains, responsabile));
+            }
+            if (mercato) {
+                aFilter.push(new Filter("IZztipocliente", FilterOperator.Contains, mercato));
+            }
+
+            this.getOwnerComponent().getModel().read('/CommessaSet',
+
+                {
+                    filters: aFilter,
+                    urlParameters: {
+                        "$expand": "EValoriSet"
+                    },
+                    success: function (data) {
+
+                        that.getView().getModel("MatchCode").setProperty("/Commessa", data.results[0].EValoriSet.results);
+                        that.byId("CommessaTable").setBusy(false)
+
+
+                    },
+                    error: function (err) {
+                        console.error(err)
+                        that.byId("CommessaTable").setBusy(false)
+
+                    }
+                });
+
+        },
+
+        // onRowSelectionChange: function(oEvent) {
+        //     var oTable = oEvent.getSource();
+        //     var aSelectedIndices = oTable.getSelectedIndices();
+
+        //     if (aSelectedIndices.length > 0) {
+        //         // Ottieni il primo indice selezionato
+        //         var iSelectedIndex = aSelectedIndices[0];
+
+        //         // Ottieni l'elemento di contesto utilizzando l'indice
+        //         var oBindingContext = oTable.getContextByIndex(iSelectedIndex);
+
+        //         if (oBindingContext) {
+        //             // Estrai il valore desiderato
+        //             var sValue = oBindingContext.getProperty("Zposid"); // Sostituisci "desiredField" con il campo corretto
+
+        //             // Imposta il valore nell'input
+        //             var oInput = this.getView().byId("CommessaAvanzamento");
+        //             oInput.setValue(sValue);
+
+        //             // Chiudi il dialogo
+        //             this.byId("IdCommessaHelpRequest").close();
+        //         }
+        //     }
+        // },
+
+        onRowSelectionChange: function (oEvent) {
+            var oTable = oEvent.getSource();
+            var aSelectedIndices = oTable.getSelectedIndices();
+
+            if (aSelectedIndices.length > 0) {
+                // Ottieni il primo indice selezionato
+                var iSelectedIndex = aSelectedIndices[0];
+
+                // Ottieni l'elemento di contesto utilizzando l'indice
+                var oBindingContext = oTable.getContextByIndex(iSelectedIndex);
+
+                if (oBindingContext) {
+                    // Estrai il valore desiderato
+                    var sValue = oBindingContext.getProperty("Zposid"); // Assicurati che il campo esista
+
+                    this.getOwnerComponent().getModel("DatiBemDetail").setProperty(sPath + "/ZpsPosid", sValue)
+
+                    // Chiudi il dialogo
+                    this.byId("IdCommessaHelpRequest").close();
+                }
+            }
+        },
+
+
+
+        ConfermaCommessa: function () {
+            var oDialog = this.byId("IdCommessaHelpRequest");
+            if (oDialog) {
+                oDialog.close();
+            }
+        },
+
+        mapDataToModel: function (inputArray) {
+            var nprot = this.getOwnerComponent().getModel("CreazioneModel").getProperty("/Nprot");
+            const modelTemplate = {
+                Znprot: nprot.toString(),
+                Zmblnr: "",
+                Zmjahr: "",
+                Zcig: "",
+                Zcup: "",
+                Zdesccig: "",
+                Zdmbtr: "",
+                Zebelp: "",
+                Zkbetr: "",
+                Zknttp: "",
+                Zmaktx: "",
+                Zmatkl: "",
+                Zmatnr: "",
+                Zmeins: "",
+                ZmengeD: "",
+                Zpltxt: "",
+                Zprzsconto: "",
+                ZpsPosid: "",
+                Zsgtxt: "",
+                Zsospeso: "",
+                ZstaBelnrBm: "",
+                ZstaBuzeiBm: "",
+                ZstaDmStz: "",
+                ZstaGjahrBm: "",
+                ZstaNoteBm: "",
+                ZstaPrcStz: "",
+                ZstaStzFin: false,
+                ZstaStzahr: "",
+                ZticketExists: false,
+                Ztplnr: "",
+                Zxblnr: "",
+                Zelikz: false,
+            };
+
+            return inputArray.map(item => {
+                // Create a new object based on the model template
+                const mappedItem = { ...modelTemplate };
+
+                // Map the values from the input to the template structure
+                Object.keys(mappedItem).forEach(key => {
+                    if (item.hasOwnProperty(key)) {
+                        mappedItem[key] = item[key];
+                    }
+                });
+
+                return mappedItem;
+            });
+        },
+
+        AggiornaImportoTotale: function(){
+            var Dati = this.getView().getModel("DatiBemDetail").getData()
+            var dettaglierr = []
+
+            dettaglierr = Dati.IDettaglioSet
+            const dettagli = this.mapDataToModel(dettaglierr);
+            var prezzotot = 0;
+
+            for (var i = 0; i < dettagli.length; i++) {
+                var prezzo = parseFloat(dettagli[i].Zprzsconto);
+                prezzotot += prezzo;
+             
+            }
+            this.getOwnerComponent().getModel("DatiBemDetail").setProperty("/OTESTATASet/ZnetwrAk" , prezzotot);
+            return prezzotot
+        },
+
+        SalvaButton: function (oEvent) {
+
+            var page = this.byId("AvanzamentoBemPage");
+            page.setBusy(true);
+            var oButton = oEvent.getSource();
+            var buttonText = oButton.getText();
+            var Dati = this.getView().getModel("DatiBemDetail").getData()
+
+            var Stato = Dati.OTESTATASet.Ztpstato
+            var nxStato = ""
+
+            if (this.getOwnerComponent().getModel("SaveModel").getProperty('/status1') === buttonText) {
+                nxStato = this.getOwnerComponent().getModel("SaveModel").getProperty('/value1')
+            }
+
+            if (this.getOwnerComponent().getModel("SaveModel").getProperty('/status2') === buttonText) {
+                nxStato = this.getOwnerComponent().getModel("SaveModel").getProperty('/value2')
+            }
+
+            var dettaglierr = []
+
+            // if ( Dati.IDettaglioSet) {
+            dettaglierr = Dati.IDettaglioSet
+
+            const dettagli = this.mapDataToModel(dettaglierr);
+            // dettagli[0].Zdmbtr = Number(dettagli[0].Zdmbtr)
+
+            // dettagli[0].Zkbetr = Number(dettagli[0].Zkbetr)
+
+            // dettagli[0].Zprzsconto = Number(dettagli[0].Zprzsconto)
+
+            // dettagli[0].ZstaDmStz = Number(dettagli[0].ZstaDmStz)
+
+            // dettagli[0].Zsospeso = Number(dettagli[0].Zsospeso)
+
+            // dettagli[0].ZmengeD = Number(dettagli[0].ZmengeD)
+
+            // dettagli[0].ZstaPrcStz = Number(dettagli[0].ZstaPrcStz)
+
+            // }
+
+            var testata = Dati.OTESTATASet
+            if (testata.Zbldat) {
+                testata.Zbldat.setHours(6, 0, 0, 0);
+            }
+            if (testata.Zbudat) {
+                testata.Zbudat.setHours(6, 0, 0, 0);
+            }
+
+            // var prezzotot = 0;
+             var prezzotot = this.AggiornaImportoTotale();
+
+            // for (var i = 0; i < dettagli.length; i++) {
+            //     var prezzo = parseFloat(dettagli[i].Zprzsconto);
+            //     prezzotot += prezzo;
+             
+            // }
+            // this.getOwnerComponent().getModel("DatiBemDetail").setProperty("/OTESTATASet/ZnetwrAk" , prezzotot);
+
+            prezzotot = prezzotot.toString();
+            var payload = {
+                "INumeroprotocollo": testata.Znprot,
+                "IStatusnew": nxStato,
+                "ICommit": "",
+                "Znprot": testata.Znprot,
+                "Zbldat": testata.Zbldat,
+                "Zbudat": testata.Zbudat,
+                "Zebeln": testata.Zebeln,
+                "Zekgrp": testata.Zekgrp,
+                "ZpsPosid": testata.ZpsPosid,
+                "ZpsPost1": testata.ZpsPost1,
+                "Zlifnr": testata.Zlifnr,
+                "Zname1": testata.Zname1,
+                "Zbukrs": testata.Zbukrs,
+                "Zuname": testata.Zuname,
+                "ZnetwrAk": prezzotot,
+                "Ztpprot": testata.Ztpprot,
+                "Zerdat": testata.Zerdat,
+                "Zernam": testata.Zernam,
+                "Ztpstato": testata.Ztpstato,
+                "Ztpsotst": testata.Ztpsotst,
+                "Ztpogg": testata.Ztpogg,
+                "Zdescst": testata.Zdescst,
+                "Zdesctp": testata.Zdesctp,
+                "Zareat": testata.Zareat,
+                "Zdscarea": testata.Zdscarea,
+                "Zstarea": testata.Zstarea,
+                "Zdscareas": testata.Zdscareas,
+                "Zxblnr1": testata.Zxblnr1,
+                "Zfrbnr": testata.Zfrbnr,
+                "Zeknam": testata.Zeknam,
+                "Zlemin": testata.Zlemin,
+                "Zautobem": testata.Zautobem,
+                "Zmotivsopravv": testata.Zmotivsopravv,
+                "Zpernr": testata.Zpernr,
+                "Zename": testata.Zename,
+                "Zkostl": testata.Zkostl,
+                "ZdescrCdc": testata.ZdescrCdc,
+                "Zaufnr": testata.Zaufnr,
+                "Zauftext": testata.Zauftext,
+                "Zmodel": testata.Zmodel,
+                "IDettaglioSet": dettagli
+            }
+            var that = this;
+            var oModel = this.getOwnerComponent().getModel();
+            oModel.create("/BEM_CHANGESet", payload, {
+                success: function (data) {
+
+                    page.setBusy(false)
+
+                    if (data.Message !== "") {
+
+                        that.getOwnerComponent().getModel("DetailErrorModel").setProperty("/Visibility", true);
+                        that.getOwnerComponent().getModel("DetailErrorModel").setProperty("/Message", data.Message);
+                        var messagee = data.Message.toString()
+
+                        if (messagee.includes("Il modulo di acquisizione") | messagee.includes("creato con successo")) {
+                            that.ModificaButton()
+                            that.onSearch()
+                        } else {
+
+                        }
+                    } else {
+                        that.getOwnerComponent().getModel("DetailErrorModel").setProperty("/Visibility", false);
+                        that.getOwnerComponent().getModel("DetailErrorModel").setProperty("/Message", "ERROR");
+                        that.onSearch()
+                        MessageToast.show('Operazione Completata');
+
+
+                    }
+                },
+                error: function (oError) {
+                    page.setBusy(false)
+                    console.error(oError);
+                },
+
+            });
+
+        },
+
+        onStampa: function () {
+            var that = this;
+            const filters = [];
+            var IZnprot = this.getOwnerComponent().getModel("DatiBemDetail").getProperty("/OTESTATASet/Znprot");
+
+            /*if (IZnprot) {
+                filters.push(new sap.ui.model.Filter("INprot", sap.ui.model.FilterOperator.EQ, IZnprot));
+            }*/
+
+            var url = "/sap/opu/odata/sap/ZGTW_BEM_SRV/StampaSet('10033464')/$value";
+            url = url.replace('10033464', IZnprot);
+
+
+            var appId = this.getOwnerComponent().getManifestEntry("/sap.app/id"),
+                appPath = appId.replaceAll(".", "/"),
+                appModulePath = jQuery.sap.getModulePath(appPath);
+
+            var opdfViewer = new PDFViewer();
+            this.getView().addDependent(opdfViewer);
+            var sServiceURL = this.getView().getModel().sServiceUrl;
+            var sSource = appModulePath + url;
+            opdfViewer.setSource(sSource);
+            opdfViewer.setTitle(IZnprot);
+            opdfViewer.open();
+
+
+            /* this.getOwnerComponent().getModel().read("/StampaSet", {
+                 filters: filters,
+                 urlParameters: {
+                     "$expand": "Pdf_RawSet,Pdf_DataSet"
+                 },
+                 success: function (data) {
+ 
+                     var aFormattLines = [];
+                     const aLines = data.results[0].Pdf_RawSet.results;
+                     aLines.forEach(aLine => {
+                         aFormattLines.push(aLine.Line)
+                     });
+                     let base64String = aFormattLines.join('');
+ 
+ 
+                     base64String = base64String.replace(/[^A-Za-z0-9+/=]/g, '');
+ 
+                     const padding = base64String.length % 4;
+                     if (padding > 0) {
+                         base64String += '='.repeat(4 - padding);
+                     }
+ 
+ 
+ 
+ 
+ 
+                     try {
+                         const sDecodedPdfText = window.atob(base64String);
+ 
+                         const blob = new Blob([sDecodedPdfText], { type: 'application/pdf' });
+                         const blobUrl = URL.createObjectURL(blob);
+ 
+                         const a = document.createElement('a');
+                         a.href = blobUrl;
+                         a.download = `${IZnprot}.pdf`;
+                         document.body.appendChild(a);
+                         a.click();
+                         document.body.removeChild(a);
+ 
+                         URL.revokeObjectURL(blobUrl);
+                     } catch (e) {
+                         console.error("Error decoding PDF:", e);
+                         sap.m.MessageToast.show("Errore nella decodifica del PDF.");
+                     }
+                 },
+                 error: function (oError) {
+                     var jsonObject = JSON.parse(oError.responseText);
+                     sap.m.MessageToast.show(jsonObject.error.message.value);
+                 }
+             });
+             */
+        },
+
+        onDeletePosition: function () {
+            var oTable = this.byId("PositionTable");
+            var aSelectedIndices = oTable.getSelectedIndices();
+
+
+            if (aSelectedIndices.length === 0) {
+                sap.m.MessageToast.show("Nessun record selezionato");
+                return;
+            }
+
+            var oModel = oTable.getModel("DatiBemDetail");
+
+            var aData = oModel.getProperty("/IDettaglioSet");
+            aSelectedIndices.sort(function (a, b) { return b - a; });
+            aSelectedIndices.forEach(function (index) {
+                aData.splice(index, 1);
+            });
+            oModel.setProperty("/IDettaglioSet", aData);
+            oTable.clearSelection();
+            sap.m.MessageToast.show("Record eliminato con successo");
+
+
+
+        },
+
+        Chiudi: function (oEvent) {
+            this.getOwnerComponent().getModel("DetailErrorModel").setProperty("/Visibility", false);
+            this.getOwnerComponent().getModel("DetailErrorModel").setProperty("/Message", "ERROR");
+            var oRouter = this.getOwnerComponent().getRouter()
+            oRouter.navTo("RouteBEM");
+        },
+
+        onCloseAllegati: function () {
+            this.getView().byId("AllegatiDialog").close();
+        },
+
+        onAllegatiGetDocument: function () {
+
+            var that = this
+            that.getOwnerComponent().getModel("AllegatiModel").setProperty("/Allegati", [])
+            var oTable = this.byId("UploadSetTable");
+            if (oTable) {
+                oTable.removeSelections();
+            }
+
+
+            this.zDialog ??= this.loadFragment({
+                name: "sap.m.bem.view.fragment.Allegati"
+            });
+            this.zDialog.then((oDialog) => {
+                oDialog.open();
+
+                const oAllegatiTable = this.byId("UploadSetTable");
+                if (oAllegatiTable) {
+                    if (oAllegatiTable.getBusy()) {
+
+                    } else { oAllegatiTable.setBusy(true); }
+
+
+                }
+            });
+
+            // inizio logica Guid
+            var AllegatiConfig = this.getOwnerComponent().getModel("AllegatiConfig").getData();
+            var guid = '';
+            var oModel = this.getOwnerComponent().getModel("DatiBemDetail");
+
+            var selSocieta = this.getOwnerComponent().getModel("DatiBemDetail").getProperty("/OTESTATASet/Zbukrs");
+
+            guid = AllegatiConfig.filter((AllegatiConfig) => {
+                return AllegatiConfig.Societa == selSocieta;
+            });
+
+            if (window.location.href.indexOf("test") > 0) {
+                guid[0].Id = '556c5111-2fa0-476a-9ff8-43d80b5cdee2'
+            }
+
+            var oModel = this.getView().getModel("societaModel2").getProperty("/TipoProtocollo");
+
+            var tpprot = this.getOwnerComponent().getModel("DatiBemDetail").getProperty("/OTESTATASet/Ztpprot");
+            // fine logica Guid
+
+
+            var that = this
+            var numeroprotocolloF = this.getOwnerComponent().getModel("CreazioneModel").getProperty("/Nprot");
+
+            var result = oModel.find(function (item) {
+                return item.value === tpprot; // Confronta i valori
+            });
+
+            var folderID = numeroprotocolloF + " " + result.description
+
+            var body = {
+                "Metadata": {
+                    "AVA_PF_NumeroProtocollo": numeroprotocolloF
+                },
+                "Path": folderID,
+                // "relativePath":  numeroprotocolloF,
+                "Guid": guid[0].Id
+            }
+
+            var strbody = JSON.stringify(body)
+
+            var appId = this.getOwnerComponent().getManifestEntry("/sap.app/id"),
+                appPath = appId.replaceAll(".", "/"),
+                appModulePath = jQuery.sap.getModulePath(appPath);
+
+            $.ajax({
+                method: "POST",
+                url: appModulePath + "/SharePoint/SharePointRWApi/api/get-documents",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                data: strbody,
+                success: function (data, result) {
+
+                    that.getOwnerComponent().getModel("AllegatiModel").setProperty("/Allegati", data)
+
+                    that.onSelectionChangeA()
+                    that.byId("UploadSetTable").setBusy(false);
+
+                }.bind(this),
+                error: function (error) {
+                    var oTable = that.byId("UploadSetTable");
+                    if (oTable) {
+                        oTable.setBusy(false);
+                        that.onCloseAllegati()
+                    }
+                    MessageToast.show("Chiamata Fallita Riprovare");
+
+
+                }.bind(this),
+            })
+
+        },
+
+        onAllegatiGetDocument2: function () {
+
+            var that = this
+
+            var oTable = this.byId("UploadSetTable");
+            if (oTable) {
+                oTable.removeSelections();
+            }
+
+
+            this.zDialog ??= this.loadFragment({
+                name: "sap.m.bem.view.fragment.Allegati"
+            });
+            this.zDialog.then((oDialog) => {
+                oDialog.open();
+
+                const oAllegatiTable = this.byId("UploadSetTable");
+                if (oAllegatiTable) {
+                    if (oAllegatiTable.getBusy()) {
+
+                    } else { oAllegatiTable.setBusy(true); }
+
+
+                }
+            });
+
+            // inizio logica Guid
+            var AllegatiConfig = this.getOwnerComponent().getModel("AllegatiConfig").getData();
+            var guid = '';
+            var selSocieta = this.getOwnerComponent().getModel("DatiBemDetail").getProperty("/OTESTATASet/Zbukrs");
+
+            guid = AllegatiConfig.filter((AllegatiConfig) => {
+                return AllegatiConfig.Societa == selSocieta;
+            });
+
+            if (window.location.href.indexOf("test") > 0) {
+                guid[0].Id = '556c5111-2fa0-476a-9ff8-43d80b5cdee2'
+            }
+
+            var oModel = this.getView().getModel("societaModel2").getProperty("/TipoProtocollo");
+
+            var tpprot = this.getOwnerComponent().getModel("DatiBemDetail").getProperty("/OTESTATASet/Ztpprot");
+            // fine logica Guid
+
+
+            var that = this
+            var numeroprotocolloF = this.getOwnerComponent().getModel("CreazioneModel").getProperty("/Nprot");
+
+            var result = oModel.find(function (item) {
+                return item.value === tpprot; // Confronta i valori
+            });
+
+            var folderID = numeroprotocolloF + " " + result.description
+
+            var body = {
+                "Metadata": {
+                    "AVA_PF_NumeroProtocollo": numeroprotocolloF
+                },
+                "Path": folderID,
+                // "relativePath":  numeroprotocolloF,
+                "Guid": guid[0].Id
+            }
+
+            var strbody = JSON.stringify(body)
+
+            var appId = this.getOwnerComponent().getManifestEntry("/sap.app/id"),
+                appPath = appId.replaceAll(".", "/"),
+                appModulePath = jQuery.sap.getModulePath(appPath);
+
+            $.ajax({
+                method: "POST",
+                url: appModulePath + "/SharePoint/SharePointRWApi/api/get-documents",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                data: strbody,
+                success: function (data, result) {
+
+                    that.getOwnerComponent().getModel("AllegatiModel").setProperty("/Allegati", data)
+
+                    that.onSelectionChangeA()
+                    that.byId("UploadSetTable").setBusy(false);
+
+                }.bind(this),
+                error: function (error) {
+                    var oTable = that.byId("UploadSetTable");
+                    if (oTable) {
+                        oTable.setBusy(false);
+                        that.onCloseAllegati()
+                    }
+                    MessageToast.show("Chiamata Fallita Riprovare");
+
+
+                }.bind(this),
+            })
+
+        },
+
+        getSyUser: function () {
+
+            this.getOwnerComponent().getModel().read("/SYNAMESet('IUser')", {
+                success: function (data) {
+                    userUploader = data.IUser;
+
+                }.bind(this),
+                error: function (oError) {
+                    MessageToast.show('Impossibile recuperare username');
+                }
+            });
+        },
+
+
+        onBeforeUploadStarts: function (oEvent) {
+            const oItem = oEvent.getParameter("item"); // Prende l'elemento caricato
+            const oFile = oItem.getFileObject(); // Prende l'oggetto file effettivo
+            var today = new Date();
+
+            // Estrai giorno, mese e anno
+            var day = String(today.getDate()).padStart(2, '0');    // Aggiunge lo zero iniziale se il giorno è minore di 10
+            var month = String(today.getMonth() + 1).padStart(2, '0');
+            var year = today.getFullYear();
+
+            // Combina i valori nel formato desiderato
+            const dataOggi = day + '/' + month + '/' + year;
+            var numeroprotocolloF = this.getOwnerComponent().getModel("CreazioneModel").getProperty("/Nprot");
+            var soc = this.getOwnerComponent().getModel("DatiBemDetail").getProperty("/OTESTATASet/Zbukrs");
+            var Area = this.getOwnerComponent().getModel("DatiBemDetail").getProperty("/OTESTATASet/Zareat");
+            var tpprot = this.getOwnerComponent().getModel("DatiBemDetail").getProperty("/OTESTATASet/Ztpprot");
+            var commessa = this.getOwnerComponent().getModel("DatiBemDetail").getProperty("/OTESTATASet/ZpsPosid");
+            var Forn = this.getOwnerComponent().getModel("DatiBemDetail").getProperty("/OTESTATASet/Zlifnr");
+            var NomeFornitore = this.getOwnerComponent().getModel("DatiBemDetail").getProperty("/OTESTATASet/Zname1");
+            var NomeWBE = this.getOwnerComponent().getModel("DatiBemDetail").getProperty("/OTESTATASet/ZpsPost1");
+            var AutoreP = this.getOwnerComponent().getModel("DatiBemDetail").getProperty("/OTESTATASet/Zernam");
+            var tipoAllegato = this.getOwnerComponent().getModel("FileUploadModel").getProperty("/SelectedCategory");
+            var today = new Date();
+            var oModel = this.getView().getModel("societaModel2").getProperty("/TipoProtocollo");
+
+            var tpprot = this.getOwnerComponent().getModel("DatiBemDetail").getProperty("/OTESTATASet/Ztpprot");
+            // fine logica Guid
+
+
+            var that = this
+            var numeroprotocolloF = this.getOwnerComponent().getModel("CreazioneModel").getProperty("/Nprot");
+
+            var result = oModel.find(function (item) {
+                return item.value === tpprot; // Confronta i valori
+            });
+
+            var folderID = numeroprotocolloF + " " + result.description
+
+            if (oFile) {
+                const oReader = new FileReader();
+
+                oReader.onload = (e) => {
+                    // Estrae la stringa Base64
+                    const sBase64 = e.target.result.split(",")[1];
+
+                    this.addBody = {
+
+                        "Metadata": {
+                            "AVA_PF_AreaTerritoriale": Area,
+                            "AVA_PF_Societa1": soc,
+                            "AVA_PF_AutoreProtocollo": AutoreP,
+                            "AVA_PF_AutoreUpload": userUploader,
+                            "AVA_PF_NumeroProtocollo": numeroprotocolloF,
+                            "AVA_PF_DataProtocollo": today,
+                            "AVA_PF_TipoProtocollo": tpprot,
+                            "AVA_PF_WBE": commessa,
+                            "AVA_PF_Fornitore": Forn,
+                            "AVA_PF_DescrizioneFornitore": NomeFornitore,
+                            "AVA_PF_DescrizioneWBE": NomeWBE,
+                            "AVA_PF_TipoAllegato": tipoAllegato,
+                        },
+                        "FileName": oFile.name,
+                        "FileData": sBase64,
+                        "FolderPath": folderID,
+                        "FolderType": 0,
+                        "Guid": "556c5111-2fa0-476a-9ff8-43d80b5cdee2"
+
+                    }
+
+
+                };
+
+                oReader.readAsDataURL(oFile);
+            } else {
+                console.error("File non trovato.");
+            }
+        },
+
+
+        onUploadCompleted: function () {
+            var that = this
+            var numeroprotocolloF = this.getOwnerComponent().getModel("CreazioneModel").getProperty("/Nprot");
+            var AllegatiConfig = this.getOwnerComponent().getModel("AllegatiConfig").getData();
+            var guid = '';
+            var selSocieta = this.getOwnerComponent().getModel("DatiBemDetail").getProperty("/OTESTATASet/Zbukrs");
+
+            guid = AllegatiConfig.filter((AllegatiConfig) => {
+                return AllegatiConfig.Societa == selSocieta;
+            });
+
+            if (window.location.href.indexOf("test") > 0) {
+                guid[0].Id = '556c5111-2fa0-476a-9ff8-43d80b5cdee2'
+            }
+
+            this.addBody.pathToUpload = "/" + numeroprotocolloF;
+            this.addBody.Guid = guid[0].Id;
+            this.containerType = "0";
+
+            var body = JSON.stringify(this.addBody)
+            that.byId("UploadSetTable").setBusy(true);
+
+            var appId = this.getOwnerComponent().getManifestEntry("/sap.app/id"),
+                appPath = appId.replaceAll(".", "/"),
+                appModulePath = jQuery.sap.getModulePath(appPath);
+
+            $.ajax({
+                method: "POST",
+                url: appModulePath + "/SharePoint/SharePointRWApi/api/UploadFile",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                data: body,
+                success: function (data) {
+                    that.onAllegatiGetDocument2()
+                    // that.byId("UploadSetTable").setBusy(false);
+
+                }.bind(this),
+                error: function (error) {
+                    that.byId("UploadSetTable").setBusy(false);
+                    MessageToast.show("Chiamata Fallita Riprovare");
+
+                }.bind(this),
+            })
+
+        },
+
+        onDownloadFiles: function () {
+            var that = this
+            that.byId("UploadSetTable").setBusy(true);
+
+            var stringID = JSON.stringify(AllegatiFileID)
+
+            // inizio logica Guid
+            var AllegatiConfig = this.getOwnerComponent().getModel("AllegatiConfig").getData();
+            var guid = '';
+            var selSocieta = this.getOwnerComponent().getModel("DatiBemDetail").getProperty("/OTESTATASet/Zbukrs");
+
+            guid = AllegatiConfig.filter((AllegatiConfig) => {
+                return AllegatiConfig.Societa == selSocieta;
+            });
+
+            if (window.location.href.indexOf("test") > 0) {
+                guid[0].Id = '556c5111-2fa0-476a-9ff8-43d80b5cdee2'
+            }
+
+            // fine logica Guid
+
+            var body = {
+                "IdSharepoint": stringID,
+                "Guid": guid[0].Id
+            }
+
+            var stringbody = JSON.stringify(body)
+            var appId = this.getOwnerComponent().getManifestEntry("/sap.app/id"),
+                appPath = appId.replaceAll(".", "/"),
+                appModulePath = jQuery.sap.getModulePath(appPath);
+
+            $.ajax({
+                method: "POST",
+                url: appModulePath + "/SharePoint/SharePointRWApi/api/DownloadFile",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                data: stringbody,
+                success: function (data) {
+
+                    try {
+                        const sDecodedPdfText = window.atob(data.DataFile);
+                        const blob = new Blob([sDecodedPdfText], { type: 'application/pdf' });
+                        const blobUrl = URL.createObjectURL(blob);
+
+                        const a = document.createElement('a');
+                        a.href = blobUrl;
+                        a.download = data.FileName;
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+
+                        URL.revokeObjectURL(blobUrl);
+                    } catch (e) {
+                        console.error("Error decoding PDF:", e);
+                        sap.m.MessageToast.show("Errore nella decodifica del PDF.");
+                    }
+
+                    that.byId("UploadSetTable").setBusy(false);
+
+                }.bind(this),
+                error: function (error) {
+                    that.byId("UploadSetTable").setBusy(false);
+
+                }.bind(this),
+            })
+        },
+
+
+
+        onDeleteAllegati: function (oEvent) {
+
+            var that = this
+            that.byId("UploadSetTable").setBusy(true);
+
+            var stringID = JSON.stringify(AllegatiFileID)
+
+            // inizio logica Guid
+            var AllegatiConfig = this.getOwnerComponent().getModel("AllegatiConfig").getData();
+            var guid = '';
+            var selSocieta = this.getOwnerComponent().getModel("DatiBemDetail").getProperty("/OTESTATASet/Zbukrs");
+
+            guid = AllegatiConfig.filter((AllegatiConfig) => {
+                return AllegatiConfig.Societa == selSocieta;
+            });
+
+            if (window.location.href.indexOf("test") > 0) {
+                guid[0].Id = '556c5111-2fa0-476a-9ff8-43d80b5cdee2'
+            }
+
+            // fine logica Guid
+
+            var body = {
+                "IdSharepoint": stringID,
+                "Guid": guid[0].Id
+            }
+
+            var stringbody = JSON.stringify(body)
+
+            var appId = this.getOwnerComponent().getManifestEntry("/sap.app/id"),
+                appPath = appId.replaceAll(".", "/"),
+                appModulePath = jQuery.sap.getModulePath(appPath);
+
+            $.ajax({
+                method: "POST",
+                url: appModulePath + "/SharePoint/SharePointRWApi/api/DeleteFile",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                data: stringbody,
+                success: function (data) {
+
+
+                    that.onAllegatiGetDocument2()
+                    // that.byId("UploadSetTable").setBusy(false);
+
+                }.bind(this),
+                error: function (error) {
+                    that.byId("UploadSetTable").setBusy(false);
+
+                }.bind(this),
+            })
+        },
+
+        onSelectionChangeA: function (oEvent) {
+            var oTable = this.byId("UploadSetTable");
+
+            var oSelectedItem = oTable.getSelectedItem();
+
+            if (oSelectedItem) {
+
+                var oContext = oSelectedItem.getBindingContext("AllegatiModel");
+
+                var oSelectedData = oContext.getObject();
+
+                AllegatiFileID = oSelectedData.FileId
+
+                this.byId("downloadSelectedButton").setEnabled(true)
+
+            } else {
+                this.byId("downloadSelectedButton").setEnabled(false)
+            }
+        },
+
+        itemValidationCallback: function (oItemInfo) {
+            this._oFilesTobeuploaded = [];
+            this.oItemsProcessor = [];
+            this.getOwnerComponent().getModel("FileUploadModel").setProperty("/ItemName", oItemInfo.oItem.mProperties.fileName)
+
+            const { oItem, iTotalItemsForUpload } = oItemInfo;
+            var oItemPromise = new Promise((resolve, reject) => {
+                this.oItemsProcessor.push({
+                    item: oItem,
+                    resolve: resolve,
+                    reject: reject
+                });
+            });
+
+            // if (iTotalItemsForUpload === 1) {
+            this.openFileUploadDialog();
+            // } else if (iTotalItemsForUpload === this.oItemsProcessor.length) {
+            //     this.openFileUploadDialog();
+            // }
+            this.byId("UploadSetTable").setBusy(false);
+            return oItemPromise;
+
+        },
+
+
+        openFileUploadDialog: function () {
+            var items = this.oItemsProcessor;
+
+            this._oFilesTobeuploaded = items;
+
+            var oItemsMap = this._oFilesTobeuploaded.map(function (oItemProcessor) {
+
+                return {
+                    fileName: oItemProcessor.item.getFileName(),
+                    fileCategorySelected: this.getOwnerComponent().getModel("FileUploadModel").getProperty("/SelectedCategory"),
+                    itemInstance: oItemProcessor.item,
+                    fnResolve: oItemProcessor.resolve,
+                    fnReject: oItemProcessor.reject
+                };
+            }.bind(this));
+
+            var oModel = new JSONModel({
+                "selectedItems": oItemsMap,
+                "types": this.documentTypes
+
+            });
+
+            this.globalModel = oModel
+
+
+            this.zzDialog ??= this.loadFragment({
+                name: "sap.m.bem.view.fragment.FileUpload"
+            });
+            this.zzDialog.then((oDialog) => {
+                oDialog.open();
+
+            });
+
+        },
+
+        handleConfirmation: function () {
+            var oSelectedItems = this.globalModel.oData.selectedItems
+            var oItemToUploadRef = oSelectedItems[0].itemInstance;
+            var oItem = oSelectedItems[0]
+
+            oItemToUploadRef.addHeaderField(new CoreItem({
+                key: "documentType",
+                text: oItem.fileCategorySelected
+            }));
+
+            // Risolvi la funzione di callback
+            oItem.fnResolve(oItemToUploadRef);
+
+            this.closeFileUplaodFragment()
+        },
+
+        closeFileUplaodFragment: function () {
+            this.getView().byId("FileUploadDialog").close();
+            this._oFilesTobeuploaded = [];
+            this.oItemsProcessor = [];
+        },
+
+        getCategoryText: function (sCategoryId) {
+            var aFileCategories = [
+                { categoryId: "01", categoryText: "Preventivo o altro" },
+                { categoryId: "02", categoryText: "Contratto" },
+                { categoryId: "03", categoryText: "Verbale di coordinamento" },
+                { categoryId: "04", categoryText: "Subappalto" },
+                { categoryId: "05", categoryText: "Richieste Clienti" }
+            ];
+
+            var oCategory = aFileCategories.find(function (category) {
+                return category.categoryId === sCategoryId;
+            });
+
+            return oCategory ? oCategory.categoryText : ""; // Restituisce il testo o una stringa vuota se non trova corrispondenze
+        },
+
+        onDateChange: function (oEvent) {
+
+            var tpprot = this.getOwnerComponent().getModel("DatiBemDetail").getProperty("/OTESTATASet/Ztpprot")
+            if (tpprot != "74" & tpprot != "75") {
+
+                const sValue = oEvent.getParameter("value");
+
+                if (sValue) {
+
+                    var parts = sValue.split("/");
+
+                    var year = parts[2];
+
+                    var Dati = this.getView().getModel("DatiBemDetail").getData()
+                    var dettagli = Dati.IDettaglioSet
+
+
+                    if (dettagli != []) {
+                        for (var i = 0; i < dettagli.length; i++) {
+                            dettagli[i].ZstaStzahr = year
+                        }
+                    }
+
+                }
+            }
+        }
+
+    });
+});

@@ -6,329 +6,270 @@
     xmlns:t="sap.ui.table"
     xmlns:fb="sap.ui.comp.filterbar"
     xmlns:svm="sap.ui.comp.smartvariants">
-    <Page id="page" title="{i18n>title}">
-        <content>
-            <f:DynamicPage headerExpanded="{/headerExpanded}">
-                <f:title>
-                <f:DynamicPageTitle>
-                    <f:heading>
-                        <svm:SmartVariantManagement id="svm" showExecuteOnSelection="true" />
-                    </f:heading>
-                    <f:expandedContent>
-                        <Label id="expandedLabel" text="Non ci sono filtri attivi" />
-                    </f:expandedContent>
-                    <f:snappedContent>
-                        <Label id="snappedLabel" text="Non ci sono filtri attivi" />
-                    </f:snappedContent>
-                </f:DynamicPageTitle>
-            </f:title>
-                <f:header>
-                    <f:DynamicPageHeader>
-                        <Title text="Ricerca BEM"/>
+     <Page id="page" title="{i18n>title}" >
+        <content >
+            <f:DynamicPage  >
+                <!-- <f:title>
+                    <f:DynamicPageTitle>
+                        <f:heading>
+                            <svm:SmartVariantManagement id="svm" showExecuteOnSelection="true" />
+                        </f:heading>
+                        <f:expandedContent>
+                            <Label id="expandedLabel" text="{i18n>Noncisonofiltriattivi}" />
+                        </f:expandedContent>
+                        <f:snappedContent>
+                            <Label id="snappedLabel" text="{i18n>Noncisonofiltriattivi}" />
+                        </f:snappedContent>
+                    </f:DynamicPageTitle>
+                </f:title> -->
+                <f:header >
+                    <f:DynamicPageHeader pinnable="false">
                         <f:content>
-                            <fb:FilterBar id="filterbar" persistencyKey="myPersKey" useToolbar="false" search=".onSearch" filterChange=".onFilterChange" afterVariantLoad=".onAfterVariantLoad">
-                        <fb:filterGroupItems>
-                        
-                        <fb:FilterGroupItem name="NumeroProtocollo" label="Numero Protocollo" groupName="Group1" visibleInFilterBar="true">
-                            <fb:control>
-                                <Input name="NumeroProtocollo">
-                                    <core:Item key="{NumeroProtocollo}" text="{NumeroProtocollo}" />
-                                </Input>
-                            </fb:control>
-                        </fb:FilterGroupItem>
+                            <fb:FilterBar id="filterbar" clear="clearFilter" showClearOnFB="true" persistencyKey="myPersKey" useToolbar="false" search="LetturaDati" filterChange=".onFilterChange" >
+                                <fb:filterGroupItems>
+                                    <fb:FilterGroupItem name="NumeroProtocollo" label="{i18n>NumeroProtocollo}" groupName="Group1" visibleInFilterBar="true">
+                                        <fb:control>
+                                            <Input name="NumeroProtocollo" value="{FilterModelFirstPage>/INumeroprotocollo}" maxLength="10"/>
+                                        </fb:control>
+                                    </fb:FilterGroupItem>
+                                    <fb:FilterGroupItem name="DataDABEM" label="{i18n>DataDABEM}" groupName="Group1" visibleInFilterBar="true">
+                                        <fb:control>
+                                            <DatePicker placeholder=" " value="{path: 'FilterModelFirstPage>/DataDABEM', type: 'sap.ui.model.type.Date', formatOptions: {pattern: 'dd/MM/yyyy'}}">
+                                            </DatePicker>
 
-                        <fb:FilterGroupItem name="DataDABEM" label="Data Da" groupName="Group1" visibleInFilterBar="true">
-                            <fb:control>
-                                <DatePicker>
-                                </DatePicker>
-                            </fb:control>
-                        </fb:FilterGroupItem>
-
-                        <fb:FilterGroupItem name="A" label="A" groupName="Group1" visibleInFilterBar="true">
-                            <fb:control>
-                                <DatePicker>
-                                </DatePicker>
-                            </fb:control>
-                        </fb:FilterGroupItem> 
-
-                        <fb:FilterGroupItem name="Commessa" label="Commessa" groupName="Group1" visibleInFilterBar="true">
-                            <fb:control>
-                                <MultiComboBox name="Commessa" selectionChange=".onSelectionChange" items="{
-                                    path: ''
-                                }">
-                                    <core:Item key="{Commessa}" text="{Commessa}" />
-                                </MultiComboBox>
-                            </fb:control>
-                        </fb:FilterGroupItem>
-
-                        <fb:FilterGroupItem name="CUP" label="Numero CUP" groupName="Group1" visibleInFilterBar="true">
-                            <fb:control>
-                                <Input name="CUP">
-                                    <core:Item key="{CUP}" text="{CUP}" />
-                                </Input>
-                            </fb:control>
-                        </fb:FilterGroupItem>
-
-                        <fb:FilterGroupItem name="SedeTecnica" label="Sede Tecnica" groupName="Group1" visibleInFilterBar="true">
-                            <fb:control>
-                                <MultiComboBox name="SedeTecnica" selectionChange=".onSelectionChange" items="{
-                                    path: ''
-                                }">
-                                    <core:Item key="{SedeTecnica}" text="{SedeTecnica}" />
-                                </MultiComboBox>
-                            </fb:control>
-                        </fb:FilterGroupItem>
-
-                        <fb:FilterGroupItem name="AutoreBEM" label="Autore BEM" groupName="Group1" visibleInFilterBar="true">
-                            <fb:control>
-                                <MultiComboBox name="AutoreBEM" selectionChange=".onSelectionChange" items="{
-                                        path: '',
-                                        templateShareable: true
-                                    }">
-                                    <core:Item key="{AutoreBEM}" text="{AutoreBEM}" />
-                                </MultiComboBox>
-                            </fb:control>
-                        </fb:FilterGroupItem>
-
-                        <fb:FilterGroupItem name="CodiceFor" label="Codice Fornitore" groupName="Group1" visibleInFilterBar="true">
-                            <fb:control>
-                                <MultiComboBox name="CodiceFor" selectionChange=".onSelectionChange" items="{
-                                    path: ''
-                                }">
-                                    <core:Item key="{CodiceFor}" text="{CodiceFor}" />
-                                </MultiComboBox>
-                            </fb:control>
-                        </fb:FilterGroupItem>
-
-                        <fb:FilterGroupItem name="NumeroCIG" label="Numero CIG" groupName="Group1" visibleInFilterBar="true">
-                            <fb:control>
-                                <MultiComboBox name="NumeroCIG" selectionChange=".onSelectionChange" items="{
-                                    path: ''
-                                }">
-                                    <core:Item key="{NumeroCIG}" text="{NumeroCIG}" />
-                                </MultiComboBox>
-                            </fb:control>
-                        </fb:FilterGroupItem>
-                        
-                        <fb:FilterGroupItem name="DataBEM" label="Data BEM" groupName="Group1" visibleInFilterBar="true">
-                            <fb:control>
-                                <DatePicker>
-                                </DatePicker>
-                            </fb:control>
-                        </fb:FilterGroupItem>
-
-                        <fb:FilterGroupItem name="Societa" label="Società" groupName="Group1" visibleInFilterBar="true">
-                            <fb:control>
-                                <MultiComboBox name="Societa" selectionChange=".onSelectionChange" items="{
-                                    path: ''
-                                }">
-                                    <core:Item key="{Societa}" text="{Societa}" />
-                                </MultiComboBox>
-                            </fb:control>
-                        </fb:FilterGroupItem>
-
-                        <fb:FilterGroupItem name="Area" label="Area" groupName="Group1" visibleInFilterBar="true">
-                            <fb:control>
-                                <MultiComboBox name="Area" selectionChange=".onSelectionChange" items="{
-                                    path: ''
-                                }">
-                                    <core:Item key="{Area}" text="{Area}" />
-                                </MultiComboBox>
-                            </fb:control>
-                        </fb:FilterGroupItem>
-
-                        <fb:FilterGroupItem name="NumeroODA" label="Numero ODA" groupName="Group1" visibleInFilterBar="true">
-                            <fb:control>
-                                <MultiComboBox name="NumeroODA" selectionChange=".onSelectionChange" items="{
-                                    path: ''
-                                }">
-                                    <core:Item key="{NumeroODA}" text="{NumeroODA}" />
-                                </MultiComboBox>
-                            </fb:control>
-                        </fb:FilterGroupItem>
-
-                        <fb:FilterGroupItem name="StatoBEM" label="Stato BEM" groupName="Group1" visibleInFilterBar="true">
-                            <fb:control>
-                                <MultiComboBox name="StatoBEM" selectionChange=".onSelectionChange" items="{
-                                    path: ''
-                                }">
-                                    <core:Item key="{StatoBEM}" text="{StatoBEM}" />
-                                </MultiComboBox>
-                            </fb:control>
-                        </fb:FilterGroupItem>
-
-                        <fb:FilterGroupItem name="CheckBoxEstrazione" label="Estrazione Parziale" groupName="Group1" visibleInFilterBar="true">
-                            <fb:control>
-                                <CheckBox text="" selected="{/CheckboxModel}" />
-                            </fb:control>
-                        </fb:FilterGroupItem>
-
-                        <fb:FilterGroupItem name="BEMBenestataria" label="BEM Benestataria" groupName="Group1" visibleInFilterBar="true">
-                            <fb:control>
-                                <MultiComboBox name="BEMBenestataria" selectionChange=".onSelectionChange" items="{
-                                    path: ''
-                                }">
-                                    <core:Item key="{BEMBenestataria}" text="{BEMBenestataria}" />
-                                </MultiComboBox>
-                            </fb:control>
-                        </fb:FilterGroupItem>
-
-                        <fb:FilterGroupItem name="NumeroBenessere" label="Numero Benessere" groupName="Group1" visibleInFilterBar="true">
-                            <fb:control>
-                                <Input name="NumeroBenessere">
-                                    <core:Item key="{NumeroBenessere}" text="{NumeroBenessere}" />
-                                </Input>
-                            </fb:control>
-                        </fb:FilterGroupItem>
-
-                    </fb:filterGroupItems>
+                                        </fb:control>
+                                    </fb:FilterGroupItem>
+                                    <fb:FilterGroupItem name="A" label="{i18n>A}" groupName="Group1" visibleInFilterBar="true">
+                                        <fb:control>
+                                            <DatePicker placeholder=" " value="{path: 'FilterModelFirstPage>/A', type: 'sap.ui.model.type.Date', formatOptions: {pattern: 'dd/MM/yyyy'}}">
+                                            </DatePicker>
+        
+                                        </fb:control>
+                                    </fb:FilterGroupItem>
+                                    <fb:FilterGroupItem name="Commessa" label="{i18n>Commessa}" groupName="Group1" visibleInFilterBar="true">
+                                        <fb:control>
+                                            <Input value="{FilterModelFirstPage>/Commessa}" showValueHelp="true"  valueHelpRequest="CommessaValueHelp" id="Commessa" maxLength="24"/>
+                                        </fb:control>
+                                    </fb:FilterGroupItem>
+                                    <fb:FilterGroupItem name="CUP" label="{i18n>NumeroCUP}" groupName="Group1" visibleInFilterBar="true">
+                                        <fb:control>
+                                            <Input name="CUP" value="{FilterModelFirstPage>/CUP}" maxLength="15"/>
+                                        </fb:control>
+                                    </fb:FilterGroupItem>
+                                    <fb:FilterGroupItem name="SedeTecnica" label="{i18n>SedeTecnica}" groupName="Group1" visibleInFilterBar="true">
+                                        <fb:control>
+                                            <Input value="{FilterModelFirstPage>/SedeTecnica}" showValueHelp="true"  valueHelpRequest="SedeTecnicaValueHelp" id="SedeTecnica" maxLength="40"/>
+                                        </fb:control>
+                                    </fb:FilterGroupItem>
+                                    <fb:FilterGroupItem name="AutoreBEM" label="{i18n>AutoreBEM}" groupName="Group1" visibleInFilterBar="true">
+                                        <fb:control>
+                                            <Input value="{FilterModelFirstPage>/AutoreBEM}" showValueHelp="false"  valueHelpRequest="AutoreBEMValueHelp" maxLength="12"/>
+                                        </fb:control>
+                                    </fb:FilterGroupItem>
+                                    <fb:FilterGroupItem name="CodiceFor" label="Codice Fornitore" groupName="Group1" visibleInFilterBar="true">
+                                        <fb:control>
+                                            <Input id="codicefornitoreinput" value="{FilterModelFirstPage>/CodiceFor}" name="CodiceFor"  showValueHelp="true" valueHelpRequest="Aprifornitori" maxLength="10"/>
+                                        </fb:control>
+                                    </fb:FilterGroupItem>
+                                    <fb:FilterGroupItem name="NumeroCIG" label="{i18n>NumeroCIG}" groupName="Group1" visibleInFilterBar="true">
+                                        <fb:control>
+                                            <Input value="{FilterModelFirstPage>/NumeroCIG}" showValueHelp="false"  valueHelpRequest="NumeroCIGValueHelp" maxLength="10"/>
+                                        </fb:control>
+                                    </fb:FilterGroupItem>
+                                    <fb:FilterGroupItem name="DataBEM" label="{i18n>DataBEM}" groupName="Group1" visibleInFilterBar="true">
+                                        <fb:control>
+                                            <DatePicker placeholder=" " value="{path: 'FilterModelFirstPage>/DataBEM', type: 'sap.ui.model.type.Date', formatOptions: {pattern: 'dd/MM/yyyy'}}"></DatePicker>
+                                        </fb:control>
+                                    </fb:FilterGroupItem>
+                                    <fb:FilterGroupItem name="Societa" label="{i18n>Societa}" groupName="Group1" visibleInFilterBar="true">
+                                        <fb:control>
+                                            <ComboBox selectedKey="{FilterModelFirstPage>/Societa}" id="SocietaComboBox" name="Societa" items="{path: 'societaModel>/societa'}">
+                                                <core:Item key="{societaModel>value}" text="{societaModel>description}" />
+                                            </ComboBox>
+                                        </fb:control>
+                                    </fb:FilterGroupItem>
+                                    <fb:FilterGroupItem name="Area" label="{i18n>Area}" groupName="Group1" visibleInFilterBar="true">
+                                        <fb:control>
+                                            <ComboBox  name="Area" selectedKey="{FilterModelFirstPage>/Area}" items="{path: 'societaModel2>/area'}">
+                                                <core:Item key="{societaModel2>description}" text="{societaModel2>description}" />
+                                            </ComboBox>
+                                        </fb:control>
+                                    </fb:FilterGroupItem>
+                                    <fb:FilterGroupItem name="NumeroODA" label="{i18n>NumeroODA}" groupName="Group1" visibleInFilterBar="true">
+                                        <fb:control>
+                                            <Input value="{FilterModelFirstPage>/NumeroODA}" showValueHelp="false"  valueHelpRequest="NumeroOdaValueHelp" maxLength="10"/>
+                                        </fb:control>
+                                    </fb:FilterGroupItem>
+                                    <fb:FilterGroupItem name="StatoBEM" label="{i18n>StatoBEM}" groupName="Group1" visibleInFilterBar="true">
+                                        <fb:control>
+                                            <ComboBox id="stato" selectedKey="{FilterModelFirstPage>/StatoBEM}" name="StatoBEM"  items="{path: 'societaModel2>/stato'}">
+                                                <core:Item key="{societaModel2>value}" text="{societaModel2>description}" />
+                                            </ComboBox>
+                                        </fb:control>
+                                    </fb:FilterGroupItem>
+                                    <fb:FilterGroupItem name="BEMBenestataria" label="{i18n>BEMBenestataria}" groupName="Group1" visibleInFilterBar="true">
+                                        <fb:control>
+                                            <ComboBox selectedKey="{FilterModelFirstPage>/BEMBenestataria}" name="BEMBenestataria" selectionChange=".onSelectionChange">
+                                                <core:Item key="X" text="si" />
+                                                <core:Item key="." text="no" />
+                                            </ComboBox>
+                                        </fb:control>
+                                    </fb:FilterGroupItem>
+                                    <fb:FilterGroupItem name="NumeroBenessere" label="Numero Benestare" groupName="Group1" visibleInFilterBar="true">
+                                        <fb:control>
+                                            <Input value="{FilterModelFirstPage>/NumeroBenessere}" name="NumeroBenessere"/>
+                                        </fb:control>
+                                    </fb:FilterGroupItem>
+                                </fb:filterGroupItems>
                             </fb:FilterBar>
                         </f:content>
                     </f:DynamicPageHeader>
                 </f:header>
-                
                 <f:content>
                  <VBox>
                     <Toolbar>
                         <Title text="Ricerca BEM"/>
                         <ToolbarSpacer></ToolbarSpacer>
-                        <Button text="Crea Nuova BEM" type="Accept" press="onOpenFragment" />
-                        <Button text="Annulla BEM" type="Reject" press="onDeletePress"/>
-                        <Button text="Esporta in Excel" type="Ghost" press="onExportPress"/>
+                        <!-- enabled="{modify>/enabled}" -->
+                        <Button text="Visualizza Dettaglio" press="Dettaglio" />
+                        <Button text="Crea Nuova BEM" type="Accept" press="onOpenFragment" icon="sap-icon://add"/>
+                        <Button text="Annulla BEM" type="Reject" press="onDeletePress" icon="sap-icon://decline"/>
+                        <Button text="Esporta in Excel" type="Transparent" press="onExcel"/>
                     </Toolbar>
 
-                    <t:Table id="BEMTable" rows="{/ProductCollection}" selectionMode="MultiToggle" rowMode="Auto">
+
+                    <t:Table  id="BEMTable" visibleRowCountMode="Interactive" rowSelectionChange="ChangeRow" rows="{DatiTabellaPrimaPagina>/Dati/0/LISTDOCSet/results}" selectionMode="Single"  >
                     <t:columns>
                         <t:Column width="11rem">
                             <Label text="Numero" />
                             <t:template>
-                                <Text text="{Numero}" wrapping="false" />
+                                <Text text="{DatiTabellaPrimaPagina>Znprot}" wrapping="false" />
                             </t:template>
                         </t:Column>
 
                         <t:Column width="11rem">
                             <Label text="Data Creazione BEM" />
                             <t:template>
-                                <Text text="{path: 'DataCreazioneBEM', type: 'sap.ui.model.type.Date', formatOptions: {pattern: 'dd/MM/yyyy'}}" wrapping="false" />
+                                <Text text="{path: 'DatiTabellaPrimaPagina>Zbldat', type: 'sap.ui.model.type.Date', formatOptions: {pattern: 'dd/MM/yyyy'}}" wrapping="false" />
                             </t:template>
                         </t:Column>
 
                         <t:Column width="11rem">
                             <Label text="Data Registrazione" />
                             <t:template>
-                                <Text text="{path: 'DataRegistrazione', type: 'sap.ui.model.type.Date', formatOptions: {pattern: 'dd/MM/yyyy'}}" wrapping="false" />
+                                <Text text="{path: 'DatiTabellaPrimaPagina>Zbudat', type: 'sap.ui.model.type.Date', formatOptions: {pattern: 'dd/MM/yyyy'}}" wrapping="false" />
                             </t:template>
                         </t:Column>
 
-                        <t:Column width="11rem">
+                        <t:Column width="250px">
                             <Label text="Stato" />
                             <t:template>
-                                <Text text="{Stato}" wrapping="false" />
+                                <Text text="{DatiTabellaPrimaPagina>Zdescst}" wrapping="false" />
                             </t:template>
                         </t:Column>
 
                         <t:Column width="11rem">
                             <Label text="Autore" />
                             <t:template>
-                                <Text text="{Autore}" wrapping="false" />
+                                <Text text="{DatiTabellaPrimaPagina>Zernam}" wrapping="false" />
                             </t:template>
                         </t:Column>
 
                         <t:Column width="11rem">
                             <Label text="Wbs/Cdc" />
                             <t:template>
-                                <Text text="{WbsCdc}" wrapping="false" />
+                                <Text text="{DatiTabellaPrimaPagina>Zpspnr}" wrapping="false"  />
                             </t:template>
                         </t:Column>
 
                         <t:Column width="11rem">
                             <Label text="Descriz. Wbs/Cdc" />
                             <t:template>
-                                <Text text="{DescWbsCdc}" wrapping="false" />
+                                <Text text="{DatiTabellaPrimaPagina>Zpost1}" wrapping="false" />
                             </t:template>
                         </t:Column>
 
                         <t:Column width="11rem">
                             <Label text="ID Fornitore" />
                             <t:template>
-                                <Text text="{IdFornitore}" wrapping="false" />
+                                <Text text="{DatiTabellaPrimaPagina>Zlifnr}" wrapping="false" />
                             </t:template>
                         </t:Column>
 
                         <t:Column width="11rem">
                             <Label text="Fornitore" />
                             <t:template>
-                                <Text text="{Fornitore}" wrapping="false" />
+                                <Text text="{DatiTabellaPrimaPagina>Zname1}" wrapping="false" />
                             </t:template>
                         </t:Column>
                         
                         <t:Column width="11rem">
                             <Label text="Importo Totale" />
                             <t:template>
-                                <Text text="{ImpTot}" wrapping="false" />
+                                <Text text="{path: 'DatiTabellaPrimaPagina>Zimportobdl', type: 'sap.m.bem.model.type.formatDecimal' }" wrapping="false" />
                             </t:template>
                         </t:Column>
 
                         <t:Column width="11rem">
                             <Label text="Importo Benestatario BEM" />
                             <t:template>
-                                <Text text="{ImpBEM}" wrapping="false" />
+                                <Text text="{path: 'DatiTabellaPrimaPagina>Znetwr', type: 'sap.m.bem.model.type.formatDecimal' }" wrapping="false" />
                             </t:template>
                         </t:Column>
 
                         <t:Column width="11rem">
                             <Label text="N. OdA" />
                             <t:template>
-                                <Text text="{Noda}" wrapping="false" />
+                                <Text text="{DatiTabellaPrimaPagina>Zebeln}" wrapping="false" />
                             </t:template>
                         </t:Column>
 
                         <t:Column width="11rem">
                             <Label text="Tipo OdA" />
                             <t:template>
-                                <Text text="{TipoOdA}" wrapping="false" />
+                                <Text text="{DatiTabellaPrimaPagina>Zdesctpoda}" wrapping="false" />
                             </t:template>
                         </t:Column>
 
                         <t:Column width="11rem">
                             <Label text="Codice CUP" />
                             <t:template>
-                                <Text text="{CodiceCUP}" wrapping="false" />
+                                <Text text="{DatiTabellaPrimaPagina>Zcup}" wrapping="false" />
                             </t:template>
                         </t:Column>
 
                         <t:Column width="11rem">
                             <Label text="Codice CIG" />
                             <t:template>
-                                <Text text="{CodiceCIG}" wrapping="false" />
+                                <Text text="{DatiTabellaPrimaPagina>Zcig}" wrapping="false" />
                             </t:template>
                         </t:Column>
 
                         <t:Column width="11rem">
                             <Label text="Descrizione CIG" />
                             <t:template>
-                                <Text text="{DescCIG}" wrapping="false" />
+                                <Text text="{DatiTabellaPrimaPagina>Zdesccig}" wrapping="false" />
                             </t:template>
                         </t:Column>
 
                         <t:Column width="11rem">
                             <Label text="BEM Benestariata" />
                             <t:template>
-                                <ObjectStatus class="greenIcon" icon="{= ${Benestariata} === 'true' ? 'sap-icon://accept' : 'sap-icon://decline'}" state="{= ${Benestariata} === 'true' ? 'Success' : 'Error'}"/>
+                                <CheckBox selected="{DatiTabellaPrimaPagina>Zbef}" enabled="false"/>
                             </t:template>
                         </t:Column>
 
                         <t:Column width="11rem">
                             <Label text="Data Annullamento" />
                             <t:template>
-                                <Text text="{path: 'DataAnnullamento', type: 'sap.ui.model.type.Date', formatOptions: {pattern: 'dd/MM/yyyy'}}" wrapping="false" />
+                                <Text text="{path: 'DatiTabellaPrimaPagina>Zdtannul', type: 'sap.ui.model.type.Date', formatOptions: {pattern: 'dd/MM/yyyy'}}" wrapping="false" />
                             </t:template>
                         </t:Column>
                         
                         <t:Column width="11rem">
                             <Label text="Utente Annullamento" />
                             <t:template>
-                                <Text text="{UtenteAnnullamento}" wrapping="false" />
+                                <Text text="{DatiTabellaPrimaPagina>Zusannul}" wrapping="false" />
                             </t:template>
                         </t:Column>
 

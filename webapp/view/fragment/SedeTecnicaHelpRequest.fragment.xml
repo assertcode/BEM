@@ -1,0 +1,102 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:ff="sap.ui.layout.form"
+    xmlns:f="sap.f"
+    xmlns:fb="sap.ui.comp.filterbar"
+    xmlns:t="sap.ui.table"
+>
+    <Dialog
+        id="IdHelpRequestSedeTecnica"
+        title="Sede tecnica"
+        draggable="true"
+        resizable="true"
+    >
+    <VBox class="sapUiMediumMargin">
+        <HBox>
+        <HBox class="sapUiSmallMargin">
+            <Label text="SedeTecnica:" />
+            <Input value="{SedeTecnicaFilterModel>/SedeTecnica}" width="200px" class="sapUiSmallMarginBegin" maxLength="40"/>
+            </HBox>
+            <HBox class="sapUiSmallMargin">
+            <Label text="Definizione:" />
+            <Input value="{SedeTecnicaFilterModel>/Descrizione}" width="200px" class="sapUiSmallMarginBegin"/>
+            </HBox>
+            <HBox class="sapUiSmallMargin">
+            <Label text="Società:" />
+            <Input value="{SedeTecnicaFilterModel>/Societa}" width="200px" class="sapUiSmallMarginBegin" maxLength="4"/>
+            </HBox>
+            <HBox class="sapUiSmallMargin">
+            <Label text="Elemento WBS:" />
+            <Input value="{SedeTecnicaFilterModel>/WBS}" width="200px" class="sapUiSmallMarginBegin" maxLength="24"/>
+            </HBox>
+        </HBox>
+        <HBox>
+        <Button text="Avvio" press="onSedeTecnicaSearch" />
+        <Button text="Seleziona" press="onSedeTecnicaSelect" class="sapUiSmallMarginBegin"/>
+        <Button text="Chiudi" press="ConfermaSedeTecnica" class="sapUiSmallMarginBegin"
+        />
+        </HBox>
+        <Table id="SedeTecnicaTable" growing="true" items="{MatchCode>/SedeTecnica/results}" mode="SingleSelectMaster" selectionChange="SedeTecnicaSelected">
+            <columns>
+                <Column>
+                    <Text text="Nome" />
+                </Column>
+                <Column>
+                    <Text text="Località" />
+                </Column>
+                <Column>
+                    <Text text="Definizione Sede" />
+                </Column>
+                <Column>
+                    <Text text="Sede Tecnica" />
+                </Column>
+                <Column>
+                    <Text text="Elemento WBS" />
+                </Column>
+                <Column>
+                    <Text text="Regione" />
+                </Column>
+                <Column>
+                    <Text text="Società" />
+                </Column>
+                                    <Column>
+                    <Text text="Indirizzo" />
+                </Column>
+                                    <Column>
+                    <Text text="Paese" />
+                </Column>
+                <Column>
+                    <Text text="CAP" />
+                </Column>
+                <Column>
+                    <Text text="Nome dipendente/candidato" />
+                </Column>
+                                    <Column>
+                    <Text text="C.I.D" />
+                </Column>
+
+            </columns>
+            <items>
+                <ColumnListItem>
+                    <cells>
+                        <Text text="{MatchCode>Name1}" />
+                        <Text text="{MatchCode>Ort01}" />
+                        <Text text="{MatchCode>Pltxt}" />
+                        <Text text="{MatchCode>Tplnr}" />
+                        <Text text="{MatchCode>Posid}" />
+                        <Text text="{MatchCode>Regio}" />
+                        <Text text="{MatchCode>Zbukrs}" />
+                        <Text text="{MatchCode>Stras}" />
+                        <Text text="{MatchCode>Land1}" />
+                        <Text text="{MatchCode>Pstlz}" />
+                        <Text text="{MatchCode>Ename}" />
+                        <Text text="{MatchCode>Pernr}" />
+                    </cells>
+                </ColumnListItem>
+            </items>
+        </Table>
+    </VBox>
+   
+</Dialog>
+</core:FragmentDefinition>

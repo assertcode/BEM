@@ -1,0 +1,39 @@
+<core:FragmentDefinition xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:p="sap.m.plugins"
+    xmlns:f="sap.f"
+    xmlns:core="sap.ui.core"
+    xmlns:mdc="sap.ui.mdc"
+    xmlns:mdct="sap.ui.mdc.table"
+    xmlns:vm="sap.ui.fl.variants"
+    xmlns:upload="sap.m.upload">
+
+    <Dialog id="FileUploadDialog" title="Seleziona Tipo Documento" draggable="false" showHeader="true" >
+
+           <HBox justifyContent="SpaceBetween" class="sapUiLargeMargin" alignItems="Center">
+        <!-- Campo di testo -->
+        <items>
+            <Text text="{FileUploadModel>/ItemName}" width="200px"/>
+
+            <!-- Combobox -->
+            <ComboBox selectedKey="{FileUploadModel>/SelectedCategory}"  items="{ path: 'FileUploadModel>/FileCategory' }">
+                <core:Item key="{FileUploadModel>categoryId}" text="{FileUploadModel>categoryText}"/>
+            </ComboBox>
+
+            <!-- Bottone 1 -->
+            <Button text="Upload" type="Accept" press="handleConfirmation" class="sapUiSmallMarginBegin" ></Button>
+
+            <!-- Bottone 2 -->
+            <Button text="Annulla" type="Reject" press="closeFileUplaodFragment" class="sapUiSmallMarginBegin"></Button>
+        </items>
+    </HBox>
+
+
+
+
+
+
+
+    </Dialog>
+
+</core:FragmentDefinition>

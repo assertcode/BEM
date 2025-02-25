@@ -1,206 +1,29 @@
-<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:ff="sap.ui.layout.form" xmlns:f="sap.f" xmlns:fb="sap.ui.comp.filterbar" xmlns:t="sap.ui.table">
-    <Dialog id="BEMFragment" title="Crea" draggable="true" resizable="true">
+<core:FragmentDefinition xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:ff="sap.ui.layout.form"
+    xmlns:f="sap.f"
+    xmlns:fb="sap.ui.comp.filterbar"
+    xmlns:t="sap.ui.table">
+    <Dialog id="BEMFragment" title="Crea" draggable="true" resizable="false" contentWidth="400px">
         <content>
-            <VBox class="sapUiSmallMargin">
-                <ff:SimpleForm
-                    layout="ResponsiveGridLayout"
-                    labelSpanL="3"
-                    labelSpanM="3"
-                    labelSpanS="12"
-                    adjustLabelSpan="false"
-                    emptySpanL="4"
-                    emptySpanM="4"
-                    emptySpanS="0"
-                    columnsL="1"
-                    columnsM="1">
-                    <Label text="Società"/>
-                    <MultiComboBox id="societaMultiComboBox" selectionChange="onSocietaMultiComboBoxChange"/>
-                    <Label text="Tipo protocollo"/>
-                    <MultiComboBox id="protocolloMultiComboBox" selectionChange="onProtocolloMultiComboBoxChange"/>
-                </ff:SimpleForm>
-                
-                <Title text="Selezione Ordine"/>
-                <fb:FilterBar id="SelezioneORFilterBar" persistencyKey="myPersKey" useToolbar="false" search=".onSearch" filterChange=".onFilterChange" afterVariantLoad=".onAfterVariantLoad">
-                    <fb:filterGroupItems>
-
-                        <fb:FilterGroupItem name="CodiceFornitore" label="Codice Fornitore" groupName="Group1" visibleInFilterBar="true">
-                            <fb:control>
-                                <MultiComboBox name="CodiceFornitoreMultiComboBox" selectionChange=".onSelectionChange" items="{ path: '' }">
-                                    <core:Item key="{CodiceFornitore}" text="{Codice Fornitore}" />
-                                </MultiComboBox>
-                            </fb:control>
-                        </fb:FilterGroupItem>
-
-                        <fb:FilterGroupItem name="CodiceODA" label="Codice OdA" groupName="Group1" visibleInFilterBar="true">
-                            <fb:control>
-                                <MultiComboBox name="CodiceODAMultiComboBox" selectionChange=".onSelectionChange" items="{ path: '' }">
-                                    <core:Item key="{CodiceODA}" text="{Codice OdA}" />
-                                </MultiComboBox>
-                            </fb:control>
-                        </fb:FilterGroupItem>
-
-                        <fb:FilterGroupItem name="ElementoWBS" label="Elemento WBS" groupName="Group1" visibleInFilterBar="true">
-                            <fb:control>
-                                <MultiComboBox name="ElementoWBS" selectionChange=".onSelectionChange" items="{ path: '' }">
-                                    <core:Item key="{ElementoWBS}" text="{Elemento WBS}" />
-                                </MultiComboBox>
-                            </fb:control>
-                        </fb:FilterGroupItem>
-                        
-                        <fb:FilterGroupItem name="nTicket" label="N. Ticket" groupName="Group1" visibleInFilterBar="true">
-                            <fb:control>
-                                <Input name="nTicket">
-                                    <core:Item key="{nTicket}" text="{N. Ticket}" />
-                                </Input>
-                            </fb:control>
-                        </fb:FilterGroupItem>
-
-                        <fb:FilterGroupItem name="SedeTecnica" label="Sede Tecnica" groupName="Group1" visibleInFilterBar="true">
-                            <fb:control>
-                                <Input name="SedeTecnica">
-                                    <core:Item key="{SedeTecnica}" text="{Sede Tecnica}" />
-                                </Input>
-                            </fb:control>
-                        </fb:FilterGroupItem>
-                        
-                    </fb:filterGroupItems>
-                </fb:FilterBar>
-            </VBox>
-        
-
-        
-                <VBox class="sapUiSmallMargin">
-                    <Toolbar>
-                        <Title text="Lista Ordini"/>
-                        <ToolbarSpacer></ToolbarSpacer>
-                        <Button text="Trasferisci su BEM" type="Attention" press="onExportTo"/>
-                        <Button text="Annulla" type="Reject" press="onCloseFragment"/>                    
-                    </Toolbar>
-
-                    <t:Table id="ListaOrdini" rows="{/ConsultCollection}" selectionMode="MultiToggle" rowMode="Auto">
-                    <t:columns>
-                        <t:Column width="11rem">
-                            <Label text="Doc. Acq." />
-                            <t:template>
-                                <Text text="{DocAcq}" wrapping="false" />
-                            </t:template>
-                        </t:Column>
-
-                        <t:Column width="11rem">
-                            <Label text="Pos." />
-                            <t:template>
-                                <Text text="{Pos}" wrapping="false" />
-                            </t:template>
-                        </t:Column>
-
-                        <t:Column width="11rem">
-                            <Label text="OdA Batch" />
-                            <t:template>
-                                <ObjectStatus class="greenIcon" icon="{= ${SubappaltoOK} === 'true' ? 'sap-icon://accept' : 'sap-icon://decline'}" state="{= ${SubappaltoOK} === 'true' ? 'Success' : 'Error'}"/>
-                            </t:template>
-                        </t:Column>
-
-                        <t:Column width="11rem">
-                            <Label text="Materiale" />
-                            <t:template>
-                                <Text text="{Materiale}" wrapping="false" />
-                            </t:template>
-                        </t:Column>
-
-                        <t:Column width="11rem">
-                            <Label text="Testo Breve" />
-                            <t:template>
-                                <Text text="{TestoBreve}" wrapping="false" />
-                            </t:template>
-                        </t:Column>
-
-                        <t:Column width="11rem">
-                            <Label text="Quantità" />
-                            <t:template>
-                                <Text text="{Quantita}" wrapping="false" />
-                            </t:template>
-                        </t:Column>
-
-                        <t:Column width="11rem">
-                            <Label text="Quantità Residua" />
-                            <t:template>
-                                <Text text="{QuantitaResidua}" wrapping="false" />
-                            </t:template>
-                        </t:Column>
-
-                        <t:Column width="11rem">
-                            <Label text="Valore" />
-                            <t:template>
-                                <Text text="{Valore}" wrapping="false" />
-                            </t:template>
-                        </t:Column>
-
-                        <t:Column width="11rem">
-                            <Label text="Valore Residuo" />
-                            <t:template>
-                                <Text text="{Valore Residuo}" wrapping="false" />
-                            </t:template>
-                        </t:Column>
-
-                        <t:Column width="11rem">
-                            <Label text="Imp. div. int." />
-                            <t:template>
-                                <Text text="{ImpDivInt}" wrapping="false" />
-                            </t:template>
-                        </t:Column>
-
-                        <t:Column width="11rem">
-                            <Label text="UMO" />
-                            <t:template>
-                                <Text text="{UMO}" wrapping="false" />
-                            </t:template>
-                        </t:Column>
-
-                        <t:Column width="11rem">
-                            <Label text="Prz. Netto" />
-                            <t:template>
-                                <Text text="{PrzNetto}" wrapping="false" />
-                            </t:template>
-                        </t:Column>
-
-                        <t:Column width="11rem">
-                            <Label text="Dettaglio Ticket" />
-                            <t:template>
-                                <ObjectStatus class="greenIcon" icon="{= ${DettaglioTicket} === 'true' ? 'sap-icon://accept' : 'sap-icon://decline'}" state="{= ${DettaglioTicket} === 'true' ? 'Success' : 'Error'}"/>
-                            </t:template>
-                        </t:Column>
-
-                        <t:Column width="11rem">
-                            <Label text="Data Inizio Attività" />
-                            <t:template>
-                                <Text text="{path: 'DataInizioAttivita', type: 'sap.ui.model.type.Date', formatOptions: {pattern: 'dd/MM/yyyy'}}" wrapping="false" />
-                            </t:template>
-                        </t:Column>
-
-                        <t:Column width="11rem">
-                            <Label text="Data Fine Attività" />
-                            <t:template>
-                                <Text text="{path: 'DataFineAttivita', type: 'sap.ui.model.type.Date', formatOptions: {pattern: 'dd/MM/yyyy'}}" wrapping="false" />
-                            </t:template>
-                        </t:Column>
-
-                        <t:Column width="11rem">
-                            <Label text="Sede Tecnica" />
-                            <t:template>
-                                <Text text="{SedeTecnica}" wrapping="false" />
-                            </t:template>
-                        </t:Column>
-
-                        <t:Column width="11rem">
-                            <Label text="Descrizione Sede Tecnica" />
-                            <t:template>
-                                <Text text="{DescSedeTecnica}" wrapping="false" />
-                            </t:template>
-                        </t:Column>
-                        
-                    </t:columns>
-                    </t:Table>
+            <ff:SimpleForm layout="ResponsiveGridLayout" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanL="4" emptySpanM="4" emptySpanS="0" columnsL="1" columnsM="1">
+                <VBox>
+                    <Label text="Società" />
+                    <ComboBox selectedKey="{CreazioneModel>/Societa}" items="{path: 'societaModel>/societa'}" selectionChange="getTpprot">
+                        <core:Item key="{societaModel>value}" text="{societaModel>description}" />
+                    </ComboBox>
+                    <Label text="Tipo protocollo" />
+                    <ComboBox selectedKey="{CreazioneModel>/Tipo}" items="{ path: 'TpprotModel>/Tp', sorter: { path: 'description' } }" width="300px">
+                        <core:Item key="{TpprotModel>value}" text="{TpprotModel>description}" />
+                    </ComboBox>
                 </VBox>
+            </ff:SimpleForm>
         </content>
+        <endButton>
+            <Button text="Chiudi" class="sapUiSmallMarginEnd" press="onClose" />
+        </endButton>
+        <beginButton>
+            <Button text="Crea" class="sapUiTinyMarginEnd" press="onSearchFragment" />
+        </beginButton>
     </Dialog>
 </core:FragmentDefinition>

@@ -1,0 +1,137 @@
+<core:FragmentDefinition xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m"
+    xmlns:p="sap.m.plugins"
+	xmlns:f="sap.f"
+	xmlns:core="sap.ui.core"
+	xmlns:mdc="sap.ui.mdc"
+	xmlns:mdct="sap.ui.mdc.table"
+	xmlns:vm="sap.ui.fl.variants"
+	xmlns:upload="sap.m.upload"
+>
+
+    <Dialog id="AllegatiDialog" draggable="false" showHeader="false" contentHeight="600px" contentWidth="900px">
+
+
+	<Table
+				id="UploadSetTable"
+				sticky="ColumnHeaders,HeaderToolbar"
+				width="auto"
+				mode="SingleSelectLeft"
+				fixedLayout="false"
+				inset="false"
+				autoPopinMode="true"
+				hiddenInPopin="None"
+				items="{path: 'AllegatiModel>/Allegati'}"
+                
+				selectionChange="onSelectionChangeA">
+
+    <headerToolbar>
+                <OverflowToolbar>
+                    <Title text="Lista Documenti Allegati Protocollo {CreazioneModel>/Nprot}" level="H2" />
+                    <ToolbarSpacer />
+                    <upload:ActionsPlaceholder id="uploadButton" placeholderFor="UploadButtonPlaceholder" />
+                    <Button
+                    id="downloadSelectedButton"
+                    text="Download"
+                    enabled="false"
+                    press="onDownloadFiles"
+                />
+                    
+                    <Button id="DeleteButtonA" text="Elimina" press="onDeleteAllegati" />
+                    <Button id="CloseButtonA" type="Back" text="Chiudi" press="onCloseAllegati" />
+                </OverflowToolbar>
+            </headerToolbar>
+
+
+
+
+				<dependents>
+						<p:UploadSetwithTable
+						multiple="false"
+                        beforeInitiatingItemUpload="onBeforeInitiatingItemUpload" 
+                        beforeUploadStarts="onBeforeUploadStarts" 
+                        uploadCompleted="onUploadCompleted"
+                        itemValidationHandler=".itemValidationCallback"
+                        actions="uploadButton"
+						>
+							<!-- <p:rowConfiguration>
+								<upload:UploadItemConfiguration
+								fileNamePath="fileName"
+								mediaTypePath="mediaType"
+								urlPath="url"
+								previewablePath="previewable"
+								fileSizePath="fileSize"
+                                isTrustedSourcePath="trustedSource"
+								/>
+							</p:rowConfiguration> -->
+						</p:UploadSetwithTable>
+				</dependents>
+
+				 <!-- Columns for UploadSetwithTable -->
+            <columns>
+                <Column id="fileName" importance="High">
+                    <header>
+                        <Label text="Nome File" />
+                    </header>
+                </Column>
+                <Column id="TypeDoc" importance="High">
+                    <header>
+                        <Label text="Tipo Documento" />
+                    </header>
+                </Column>
+                <Column id="AutoreDoc">
+                    <header>
+                        <Label text="Autore Documento" />
+                    </header>
+                </Column>
+
+                <Column id="DataUpload">
+                    <header>
+                        <Label text="Data Upload" />
+                    </header>
+                </Column>
+
+                <Column id="fileSize">
+                    <header>
+                        <Label text="Grandezza File" />
+                    </header>
+                </Column>
+
+            </columns>
+
+            <!-- Items aggregation with template UploadSetwithTableItem definition for each row -->
+
+            
+
+            
+
+
+			<items>
+                <ColumnListItem 
+                >
+
+  <cells>
+                        <HBox>
+                            <core:Icon src="sap-icon://document" color="white" class="sapMUSTItemImage sapMUSTItemIcon sapUiTinyMargin" />
+                            <VBox class="sapUiTinyMargin sapUiSmallMarginBegin">
+                                <Text text="{AllegatiModel>FileName}" class="sapUiTinyMarginBottom" />
+                                <Text text="{AllegatiModel>FileExtension}" />
+                            </VBox>
+                        </HBox>
+                        <Text text="{path: 'AllegatiModel>Metadata/AVA_PF_TipoAllegato', formatter: '.getCategoryText'}" />
+                        <Text text="{AllegatiModel>Metadata/AVA_PF_AutoreUpload}" />
+                        <Text text="{= ${AllegatiModel>Metadata/AVA_PF_DataProtocollo}.split(' ')[0] }" />
+                        <Text text="{AllegatiModel>FileSize} KB" />
+
+                        <Button class="sapUiTinyMarginBegin" type="Transparent" icon="sap-icon://decline" press="onRemoveHandler" />
+                    </cells>
+                </ColumnListItem>
+            </items>
+
+			</Table>
+
+
+
+    </Dialog>
+
+</core:FragmentDefinition>

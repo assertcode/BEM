@@ -1,0 +1,156 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:ff="sap.ui.layout.form"
+    xmlns:f="sap.f"
+    xmlns:fb="sap.ui.comp.filterbar"
+    xmlns:t="sap.ui.table"
+>
+    <Dialog
+        id="IdAutorebemHelpRequest"
+        title="Autore"
+        draggable="true"
+        resizable="true"
+    >
+        <content>
+            <ff:SimpleForm
+                layout="ResponsiveGridLayout"
+                labelSpanL="3"
+                labelSpanM="3"
+                labelSpanS="12"
+                adjustLabelSpan="false"
+                emptySpanL="4"
+                emptySpanM="4"
+                emptySpanS="0"
+                columnsL="1"
+                columnsM="1"
+            />
+            <fb:FilterBar
+                showClearOnFB="true"
+                showRestoreOnFB="true"
+                search=".onSearchFornitori"
+                clear="Cancel"
+                showFilterConfiguration="false"
+            >
+                <fb:filterGroupItems>
+                    <fb:FilterGroupItem
+                        name="Società"
+                        label="Società"
+                        groupName="Group1"
+                        visibleInFilterBar="true"
+                    >
+                        <fb:control>
+                            <Input
+                                name="Società"
+                                value="{>/}"
+                            />
+                        </fb:control>
+                    </fb:FilterGroupItem>
+                    <fb:FilterGroupItem
+                        name="fornitore"
+                        label="Fornitore"
+                        groupName="Group1"
+                        visibleInFilterBar="true"
+                    >
+                        <fb:control>
+                            <Input
+                                name="fornitore"
+                                value="{}"
+                            />
+                        </fb:control>
+                    </fb:FilterGroupItem>
+                    <fb:FilterGroupItem
+                        name="nome"
+                        label="Nome"
+                        groupName="Group1"
+                        visibleInFilterBar="true"
+                    >
+                        <fb:control>
+                            <Input
+                                name="nome"
+                                value="{}"
+                            />
+                        </fb:control>
+                    </fb:FilterGroupItem>
+                    <fb:FilterGroupItem
+                        name="località"
+                        label="Località"
+                        groupName="Group1"
+                        visibleInFilterBar="true"
+                    >
+                        <fb:control>
+                            <Input
+                                name="località"
+                                value="{}"
+                            />
+                        </fb:control>
+                    </fb:FilterGroupItem>
+                    <fb:FilterGroupItem
+                        name="cap"
+                        label="CAP"
+                        groupName="Group1"
+                        visibleInFilterBar="true"
+                    >
+                        <fb:control>
+                            <Input
+                                name="cap"
+                                value="{}"
+                            />
+                        </fb:control>
+                    </fb:FilterGroupItem>
+                </fb:filterGroupItems>
+            </fb:FilterBar>
+            <t:Table
+                rows="{MatchCode>/}"
+                selectionMode="Single"
+                rowSelectionChange="SelezioneSedeTecnica"
+            >
+                <t:columns>
+                    <t:Column>
+                        <t:label>
+                            <Label text="Società" />
+                        </t:label>
+                        <t:template>
+                            <Text text="{MatchCode>}" />
+                        </t:template>
+                    </t:Column>
+                    <t:Column>
+                        <t:label>
+                            <Label text="Fornitore" />
+                        </t:label>
+                        <t:template>
+                            <Text text="{MatchCode>}" />
+                        </t:template>
+                    </t:Column>
+                    <t:Column>
+                        <t:label>
+                            <Label text="Nome" />
+                        </t:label>
+                        <t:template>
+                            <Text text="{MatchCode>}" />
+                        </t:template>
+                    </t:Column>
+                    <t:Column>
+                        <t:label>
+                            <Label text="Località" />
+                        </t:label>
+                        <t:template>
+                            <Text text="{MatchCode>}" />
+                        </t:template>
+                    </t:Column>
+                    <t:Column>
+                        <t:label>
+                            <Label text="CAP" />
+                        </t:label>
+                        <t:template>
+                            <Text text="{MatchCode>}" />
+                        </t:template>
+                    </t:Column>
+                </t:columns>
+            </t:Table>
+            <HBox justifyContent="End">
+                <Button text="Conferma" type="Accept" press="ConfermaAutorebem" class="sapUiTinyMarginEnd"/>
+            </HBox>
+        </content>
+    </Dialog>
+</core:FragmentDefinition>

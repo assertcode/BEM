@@ -29,6 +29,10 @@ server:
       afterMiddleware: compression
       configuration:
         ignoreCertError: false # If set to true, certificate errors will be ignored. E.g. self-signed certificates will be accepted
+        backend:
+          - url: http://rkp-gwt-emb:8000
+            path: /sap
+            destination: ECCDev
     - name: fiori-tools-preview
       afterMiddleware: fiori-tools-appreload
       configuration:

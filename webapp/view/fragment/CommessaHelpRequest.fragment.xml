@@ -1,0 +1,80 @@
+<core:FragmentDefinition xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:ff="sap.ui.layout.form"
+    xmlns:f="sap.f"
+    xmlns:fb="sap.ui.comp.filterbar"
+    xmlns:t="sap.ui.table">
+    <Dialog id="IdCommessaHelpRequest" title="Commessa" draggable="true" resizable="true">
+        <content>
+            <ff:SimpleForm layout="ResponsiveGridLayout" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanL="4" emptySpanM="4" emptySpanS="0" columnsL="1" columnsM="1" />
+            <fb:FilterBar id="IdCommessaFilterBar" showClearOnFB="true" showRestoreOnFB="true" search=".onSearchCommessa" clear="Cancel" showFilterConfiguration="false">
+                <fb:filterGroupItems>
+                    <fb:FilterGroupItem name="Elemento wbs" label="Elemento wbs" groupName="Group1" visibleInFilterBar="true">
+                        <fb:control>
+                            <Input name="Elemento wbs" value="{CommessaFilterModel>/wbs}"  />
+                        </fb:control>
+                    </fb:FilterGroupItem>
+                    <fb:FilterGroupItem name="definizione" label="Definizione" groupName="Group1" visibleInFilterBar="true">
+                        <fb:control>
+                            <Input name="definizione" value="{CommessaFilterModel>/definizione}" />
+                        </fb:control>
+                    </fb:FilterGroupItem>
+                    <fb:FilterGroupItem name="commessa" label="Commessa" groupName="Group1" visibleInFilterBar="true">
+                        <fb:control>
+                            <Input name="commessa" value="{CommessaFilterModel>/commessa}" />
+                        </fb:control>
+                    </fb:FilterGroupItem>
+                    <fb:FilterGroupItem name="responsabile" label="Responsabile" groupName="Group1" visibleInFilterBar="true">
+                        <fb:control>
+                            <Input name="responsabile" value="{CommessaFilterModel>/responsabile}" />
+                        </fb:control>
+                    </fb:FilterGroupItem>
+                    <fb:FilterGroupItem name="mercato" label="Mercato" groupName="Group1" visibleInFilterBar="true">
+                        <fb:control>
+                            <ComboBox name="mercato" selectedKey="{CommessaFilterModel>/mercato}" change="ChangeMercatoCombobox">
+                                <items>
+                                    <core:ListItem key="S1" text="Sanità pubblica" />
+                                    <core:ListItem key="S2" text="Sanità Privata" />
+                                    <core:ListItem key="PU" text="Pubblica" />
+                                    <core:ListItem key="PR" text="Privata" />
+                                </items>
+                            </ComboBox>
+                        </fb:control>
+                    </fb:FilterGroupItem>
+                </fb:filterGroupItems>
+            </fb:FilterBar>
+            <t:Table rows="{MatchCode>/Commessa}" selectionMode="Single" rowSelectionChange="onRowSelectionChange" id="CommessaTable" selectionBehavior="RowOnly">
+                <t:columns>
+                    <t:Column>
+                        <t:label>
+                            <Label text="Elemento wbs" />
+                        </t:label>
+                        <t:template>
+                            <Text text="{MatchCode>Zposid}" />
+                        </t:template>
+                    </t:Column>
+                    <t:Column>
+                        <t:label>
+                            <Label text="Definizione" />
+                        </t:label>
+                        <t:template>
+                            <Text text="{MatchCode>Zpost1}" />
+                        </t:template>
+                    </t:Column>
+
+                    <t:Column>
+                        <t:label>
+                            <Label text="Mercato" />
+                        </t:label>
+                        <t:template>
+                            <Text text="{MatchCode>Zzvmercato}" />
+                        </t:template>
+                    </t:Column>
+                </t:columns>
+            </t:Table>
+            <HBox justifyContent="End">
+                <Button text="Conferma" type="Accept" press="ConfermaCommessa" class="sapUiTinyMarginEnd" />
+            </HBox>
+        </content>
+    </Dialog>
+</core:FragmentDefinition>
