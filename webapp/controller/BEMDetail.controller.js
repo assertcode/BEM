@@ -126,7 +126,7 @@ sap.ui.define([
             this.getOwnerComponent().getModel("DatiBemDetail").setProperty("/OTESTATASet/Zebeln", source.Zebeln);
 
 
-            this.getOwnerComponent().getModel("DatiBemDetail").setProperty("/OTESTATASet/ZpsPosid", source.ZpsPosid);
+            this.getOwnerComponent().getModel("DatiBemDetail").setProperty("/OTESTATASet/ZpsPosid", source.ZpsPosidT);
             this.getOwnerComponent().getModel("DatiBemDetail").setProperty("/OTESTATASet/Zareat", source.Zareat);
             this.getOwnerComponent().getModel("DatiBemDetail").setProperty("/OTESTATASet/Zaufnr", source.Zaufnr);
             this.getOwnerComponent().getModel("DatiBemDetail").setProperty("/OTESTATASet/ZdescrCdc", source.ZdescrCdc);
