@@ -86,7 +86,7 @@ sap.ui.define([
                         that.getOwnerComponent().getModel("DatiBemDetail").setProperty("/IDettaglioSet", data.results[0].DettagliSet.results);
                         that.getOwnerComponent().getModel("DatiBemDetail").setProperty("/ListaCampiSet", aStati);
                         that.getOwnerComponent().getModel("DatiBemDetail").setProperty("/ListaFunzioniSet", data.results[0].ListaFunzioniSet.results);
-                        
+
 
                         // logica per eliminazione mandt
                         // var aData = that.getView().getModel("DatiBemDetail").getProperty("/IDettaglioSet"); 
@@ -121,7 +121,7 @@ sap.ui.define([
 
                     }
                 });
-                
+
         },
 
         onFlowCalculator: function () {
@@ -642,7 +642,7 @@ sap.ui.define([
             });
         },
 
-        AggiornaImportoTotale: function(){
+        AggiornaImportoTotale: function () {
             var Dati = this.getView().getModel("DatiBemDetail").getData()
             var dettaglierr = []
 
@@ -653,9 +653,9 @@ sap.ui.define([
             for (var i = 0; i < dettagli.length; i++) {
                 var prezzo = parseFloat(dettagli[i].Zprzsconto);
                 prezzotot += prezzo;
-             
+
             }
-            this.getOwnerComponent().getModel("DatiBemDetail").setProperty("/OTESTATASet/ZnetwrAk" , prezzotot);
+            this.getOwnerComponent().getModel("DatiBemDetail").setProperty("/OTESTATASet/ZnetwrAk", prezzotot);
             return prezzotot
         },
 
@@ -709,12 +709,12 @@ sap.ui.define([
             }
 
             // var prezzotot = 0;
-             var prezzotot = this.AggiornaImportoTotale();
+            var prezzotot = this.AggiornaImportoTotale();
 
             // for (var i = 0; i < dettagli.length; i++) {
             //     var prezzo = parseFloat(dettagli[i].Zprzsconto);
             //     prezzotot += prezzo;
-             
+
             // }
             // this.getOwnerComponent().getModel("DatiBemDetail").setProperty("/OTESTATASet/ZnetwrAk" , prezzotot);
 
@@ -1519,7 +1519,14 @@ sap.ui.define([
 
                 }
             }
-        }
+        },
+        // S.Cannavale
+        onInputChange: function (oEvent) {
+            const oBinding = oEvent.getSource().getParent().getBindingContext("DatiBemDetail");
+            const oRow = oBinding.getObject();
 
+            const sSconto = (Number(oRow.ZmengeD) * Number(oRow.Zdmbtr)).toString();
+            oBinding.setProperty("Zprzsconto", sSconto);
+        }
     });
 });

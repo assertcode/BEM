@@ -188,11 +188,11 @@ sap.ui.define([
             }
             if (DataDABEM) {
                 DataDABEM.setHours(6)
-                aFilters.push(new Filter("IDataDa", FilterOperator.EQ, DataDABEM));
+                aFilters.push(new Filter("IDataDa", FilterOperator.EQ, DataDABEM.toJSON().split('.')[0]));
             }
             if (A) {
                 A.setHours(6)
-                aFilters.push(new Filter("IDataA", FilterOperator.EQ, A));
+                aFilters.push(new Filter("IDataA", FilterOperator.EQ, A.toJSON().split('.')[0]));
             }
             if (Commessa) {
                 aFilters.push(new Filter("ICommessa", FilterOperator.Contains, Commessa));
@@ -214,7 +214,7 @@ sap.ui.define([
             }
             if (DataBEM) {
                 DataBEM.setHours(6)
-                aFilters.push(new Filter("IDatabem", FilterOperator.EQ, DataBEM));
+                aFilters.push(new Filter("IDatabem", FilterOperator.EQ, DataBEM.toJSON().split('.')[0]));
             }
             if (Societa) {
                 aFilters.push(new Filter("ISocieta", FilterOperator.EQ, Societa));
@@ -232,7 +232,10 @@ sap.ui.define([
                 aFilters.push(new Filter("IStatobem", FilterOperator.EQ, StatoBEM));
             }
             if(BEMBenestataria){
-                aFilters.push(new Filter("BEMBenestataria", FilterOperator.EQ, BEMBenestataria));
+                // S.Cannavale
+                //aFilters.push(new Filter("BEMBenestataria", FilterOperator.EQ, BEMBenestataria));
+                const iBef = BEMBenestataria === 'X';
+                aFilters.push(new Filter("IBef", FilterOperator.EQ, iBef));
             }
             // if(NumeroBenessere){
             //     aFilters.push(new Filter("NumeroBenessere", FilterOperator.Contains, NumeroBenessere));

@@ -1,5 +1,7 @@
-<mvc:View controllerName="sap.m.bem.controller.AvanzamentoBem"
-    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+<mvc:View
+    controllerName="sap.m.bem.controller.AvanzamentoBem"
+    xmlns:mvc="sap.ui.core.mvc"
+    displayBlock="true"
     xmlns="sap.m"
     xmlns:core="sap.ui.core"
     xmlns:f="sap.ui.layout.form"
@@ -7,153 +9,438 @@
     xmlns:l="sap.ui.layout"
     xmlns:t="sap.ui.table"
     xmlns:p="sap.suite.ui.commons"
-    xmlns:d="sap.f">
+    xmlns:d="sap.f"
+>
     <Page id="AvanzamentoBemPage">
         <VBox fitContainer="true">
             <HBox class="sapUiSmallMargin">
                 <Title text="{i18n>title}" />
-
             </HBox>
             <Panel>
-                <p:ProcessFlow id="processFlow" scrollable="false" wheelZoomable="false" nodes="{modello>/nodes}" lanes="{modello>/lanes}">
+                <p:ProcessFlow
+                    id="processFlow"
+                    scrollable="false"
+                    wheelZoomable="false"
+                    nodes="{modello>/nodes}"
+                    lanes="{modello>/lanes}"
+                >
                     <p:nodes>
-                        <p:ProcessFlowNode laneId="{modello>lane}" nodeId="{modello>id}" state="{modello>state}" children="{modello>children}" title="{modello>title}" />
+                        <p:ProcessFlowNode
+                            laneId="{modello>lane}"
+                            nodeId="{modello>id}"
+                            state="{modello>state}"
+                            children="{modello>children}"
+                            title="{modello>title}"
+                        />
                     </p:nodes>
                     <p:lanes>
-                        <p:ProcessFlowLaneHeader laneId="{modello>id}" iconSrc="{modello>icon}" text="{modello>label}" position="{modello>position}" />
+                        <p:ProcessFlowLaneHeader
+                            laneId="{modello>id}"
+                            iconSrc="{modello>icon}"
+                            text="{modello>label}"
+                            position="{modello>position}"
+                        />
                     </p:lanes>
                 </p:ProcessFlow>
             </Panel>
             <OverflowToolbar>
-                <Button class="sapUiSmallMarginBegin sapUiTinyMarginEnd" press="ModificaButton" text="Modifica" visible="{EnabledButton>/Modifica}" type="{= ${VisibleButton>/Salva} === true ? 'Transparent' : 'Emphasized' }" />
-                <Button text="{SaveModel>/status1}" type="Emphasized" visible="{= ${SaveModel>/status1} === '' ? false  : true }" press="SalvaButton" />
-                <Button text="{SaveModel>/status2}" type="Emphasized" visible="{= ${SaveModel>/status2} === '' ? false  : true }" press="SalvaButton" />
+                <Button
+                    class="sapUiSmallMarginBegin sapUiTinyMarginEnd"
+                    press="ModificaButton"
+                    text="Modifica"
+                    visible="{EnabledButton>/Modifica}"
+                    type="{= ${VisibleButton>/Salva} === true ? 'Transparent' : 'Emphasized' }"
+                />
+                <Button
+                    text="{SaveModel>/status1}"
+                    type="Emphasized"
+                    visible="{= ${SaveModel>/status1} === '' ? false  : true }"
+                    press="SalvaButton"
+                />
+                <Button
+                    text="{SaveModel>/status2}"
+                    type="Emphasized"
+                    visible="{= ${SaveModel>/status2} === '' ? false  : true }"
+                    press="SalvaButton"
+                />
 
-                <Button class="sapUiTinyMarginEnd" press="onAllegatiGetDocument" text="Allegati" />
-                <Button class="sapUiTinyMarginEnd" press="onStampa" text="Stampa" visible="{= ${DatiBemDetail>/ListaCampiSet/PrintButton} ? ${DatiBemDetail>/ListaCampiSet/PrintButton/Zvisible} : false }"/>
-                <Button class="sapUiTinyMarginEnd" press="Chiudi" text="Chiudi" visible="false"/>
+                <Button
+                    class="sapUiTinyMarginEnd"
+                    press="onAllegatiGetDocument"
+                    text="Allegati"
+                />
+                <Button
+                    class="sapUiTinyMarginEnd"
+                    press="onStampa"
+                    text="Stampa"
+                    visible="{= ${DatiBemDetail>/ListaCampiSet/PrintButton} ? ${DatiBemDetail>/ListaCampiSet/PrintButton/Zvisible} : false }"
+                />
+                <Button
+                    class="sapUiTinyMarginEnd"
+                    press="Chiudi"
+                    text="Chiudi"
+                    visible="false"
+                />
             </OverflowToolbar>
             <Panel id="detailsPanel">
-                <MessageStrip text="{DetailErrorModel>/Message}" visible="{DetailErrorModel>/Visibility}" type="Information" showIcon="true" showCloseButton="true" class="sapUiSmallMarginTop" />
+                <MessageStrip
+                    text="{DetailErrorModel>/Message}"
+                    visible="{DetailErrorModel>/Visibility}"
+                    type="Information"
+                    showIcon="true"
+                    showCloseButton="true"
+                    class="sapUiSmallMarginTop"
+                />
 
                 <VBox fitContainer="true">
-                    <s:SimpleForm editable="true" layout="ColumnLayout" title="Informazioni Benestare" columnsM="2" columnsL="3" columnsXL="4">
+                    <s:SimpleForm
+                        editable="true"
+                        layout="ColumnLayout"
+                        title="Informazioni Benestare"
+                        columnsM="2"
+                        columnsL="3"
+                        columnsXL="4"
+                    >
                         <f:content>
                             <Label text="Numero Consuntivazione" />
-                            <Text text="{DatiBemDetail>/OTESTATASet/Znprot}"/>
+                            <Text text="{DatiBemDetail>/OTESTATASet/Znprot}" />
                             <Label text="Stato Consuntivazione" />
                             <Text text="{DatiBemDetail>/OTESTATASet/Zdescst}" />
 
-                            <Label text="Tipo Consuntivazione" visible="{= ${DatiBemDetail>/ListaCampiSet/Zdesctp} ? ${DatiBemDetail>/ListaCampiSet/Zdesctp/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"/>
-                            <Input value="{DatiBemDetail>/OTESTATASet/Zdesctp}" visible="{= ${DatiBemDetail>/ListaCampiSet/Zdesctp} ? ${DatiBemDetail>/ListaCampiSet/Zdesctp/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }" editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zdesctp} ? !${DatiBemDetail>/ListaCampiSet/Zdesctp/Zrdonly} : false)) }" required="{DatiBemDetail>/ListaCampiSet/Zdesctp/Zstate}"  maxLength="40"/>
+                            <Label
+                                text="Tipo Consuntivazione"
+                                visible="{= ${DatiBemDetail>/ListaCampiSet/Zdesctp} ? ${DatiBemDetail>/ListaCampiSet/Zdesctp/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
+                            />
+                            <Input
+                                value="{DatiBemDetail>/OTESTATASet/Zdesctp}"
+                                visible="{= ${DatiBemDetail>/ListaCampiSet/Zdesctp} ? ${DatiBemDetail>/ListaCampiSet/Zdesctp/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
+                                editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zdesctp} ? !${DatiBemDetail>/ListaCampiSet/Zdesctp/Zrdonly} : false)) }"
+                                required="{DatiBemDetail>/ListaCampiSet/Zdesctp/Zstate}"
+                                maxLength="40"
+                            />
 
-                            <Label text="Data Fine lavori" visible="{= ${DatiBemDetail>/ListaCampiSet/Zbldat} ? ${DatiBemDetail>/ListaCampiSet/Zbldat/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }" />
-                            <DatePicker placeholder=" " value="{path: 'DatiBemDetail>/OTESTATASet/Zbldat', type: 'sap.ui.model.type.Date', formatOptions: {pattern: 'dd/MM/yyyy'}}" visible="{= ${DatiBemDetail>/ListaCampiSet/Zbldat} ? ${DatiBemDetail>/ListaCampiSet/Zbldat/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }" editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zbldat} ? !${DatiBemDetail>/ListaCampiSet/Zbldat/Zrdonly} : false)) }" required="{DatiBemDetail>/ListaCampiSet/Zbldat/Zstate}" change=".onDateChange"  />
+                            <Label
+                                text="Data Fine lavori"
+                                visible="{= ${DatiBemDetail>/ListaCampiSet/Zbldat} ? ${DatiBemDetail>/ListaCampiSet/Zbldat/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
+                            />
+                            <DatePicker
+                                placeholder=" "
+                                value="{path: 'DatiBemDetail>/OTESTATASet/Zbldat', type: 'sap.ui.model.type.Date', formatOptions: {pattern: 'dd/MM/yyyy'}}"
+                                visible="{= ${DatiBemDetail>/ListaCampiSet/Zbldat} ? ${DatiBemDetail>/ListaCampiSet/Zbldat/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
+                                editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zbldat} ? !${DatiBemDetail>/ListaCampiSet/Zbldat/Zrdonly} : false)) }"
+                                required="{DatiBemDetail>/ListaCampiSet/Zbldat/Zstate}"
+                                change=".onDateChange"
+                            />
 
-                            <Label text="Acquistato il" visible="{= ${DatiBemDetail>/ListaCampiSet/Zbudat} ? ${DatiBemDetail>/ListaCampiSet/Zbudat/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }" />
-                            <DatePicker placeholder=" " value="{path: 'DatiBemDetail>/OTESTATASet/Zerdat', type: 'sap.ui.model.type.Date', formatOptions: {pattern: 'dd/MM/yyyy'}}" visible="{= ${DatiBemDetail>/ListaCampiSet/Zerdat} ? ${DatiBemDetail>/ListaCampiSet/Zerdat/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }" editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zerdat} ? !${DatiBemDetail>/ListaCampiSet/Zerdat/Zrdonly} : false)) }" required="{DatiBemDetail>/ListaCampiSet/Zerdat/Zstate}"/>
+                            <Label
+                                text="Acquistato il"
+                                visible="{= ${DatiBemDetail>/ListaCampiSet/Zbudat} ? ${DatiBemDetail>/ListaCampiSet/Zbudat/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
+                            />
+                            <DatePicker
+                                placeholder=" "
+                                value="{path: 'DatiBemDetail>/OTESTATASet/Zerdat', type: 'sap.ui.model.type.Date', formatOptions: {pattern: 'dd/MM/yyyy'}}"
+                                visible="{= ${DatiBemDetail>/ListaCampiSet/Zerdat} ? ${DatiBemDetail>/ListaCampiSet/Zerdat/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
+                                editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zerdat} ? !${DatiBemDetail>/ListaCampiSet/Zerdat/Zrdonly} : false)) }"
+                                required="{DatiBemDetail>/ListaCampiSet/Zerdat/Zstate}"
+                            />
 
-                            <Label text="Data Registrazione" visible="{= ${DatiBemDetail>/ListaCampiSet/Zbudat} ? ${DatiBemDetail>/ListaCampiSet/Zbudat/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }" />
-                            <DatePicker placeholder=" " value="{path: 'DatiBemDetail>/OTESTATASet/Zbudat', type: 'sap.ui.model.type.Date', formatOptions: {pattern: 'dd/MM/yyyy'}}" visible="{= ${DatiBemDetail>/ListaCampiSet/Zbudat} ? ${DatiBemDetail>/ListaCampiSet/Zbudat/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }" editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zbudat} ? !${DatiBemDetail>/ListaCampiSet/Zbudat/Zrdonly} : false)) }" required="{DatiBemDetail>/ListaCampiSet/Zbudat/Zstate}"/>
+                            <Label
+                                text="Data Registrazione"
+                                visible="{= ${DatiBemDetail>/ListaCampiSet/Zbudat} ? ${DatiBemDetail>/ListaCampiSet/Zbudat/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
+                            />
+                            <DatePicker
+                                placeholder=" "
+                                value="{path: 'DatiBemDetail>/OTESTATASet/Zbudat', type: 'sap.ui.model.type.Date', formatOptions: {pattern: 'dd/MM/yyyy'}}"
+                                visible="{= ${DatiBemDetail>/ListaCampiSet/Zbudat} ? ${DatiBemDetail>/ListaCampiSet/Zbudat/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
+                                editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zbudat} ? !${DatiBemDetail>/ListaCampiSet/Zbudat/Zrdonly} : false)) }"
+                                required="{DatiBemDetail>/ListaCampiSet/Zbudat/Zstate}"
+                            />
 
-                            <Label text="Autore Acquisizione" visible="{= ${DatiBemDetail>/ListaCampiSet/Zernam} ? ${DatiBemDetail>/ListaCampiSet/Zernam/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"/>
-                            <Input value="{DatiBemDetail>/OTESTATASet/Zernam}" visible="{= ${DatiBemDetail>/ListaCampiSet/Zernam} ? ${DatiBemDetail>/ListaCampiSet/Zernam/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }" editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zernam} ? !${DatiBemDetail>/ListaCampiSet/Zernam/Zrdonly} : false)) }" required="{DatiBemDetail>/ListaCampiSet/Zernam/Zstate}" maxLength="12"/>
+                            <Label
+                                text="Autore Acquisizione"
+                                visible="{= ${DatiBemDetail>/ListaCampiSet/Zernam} ? ${DatiBemDetail>/ListaCampiSet/Zernam/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
+                            />
+                            <Input
+                                value="{DatiBemDetail>/OTESTATASet/Zernam}"
+                                visible="{= ${DatiBemDetail>/ListaCampiSet/Zernam} ? ${DatiBemDetail>/ListaCampiSet/Zernam/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
+                                editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zernam} ? !${DatiBemDetail>/ListaCampiSet/Zernam/Zrdonly} : false)) }"
+                                required="{DatiBemDetail>/ListaCampiSet/Zernam/Zstate}"
+                                maxLength="12"
+                            />
 
-                            <Label text="Società" visible="{= ${DatiBemDetail>/ListaCampiSet/Zbukrs} ? ${DatiBemDetail>/ListaCampiSet/Zbukrs/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"/>
-                            <Input value="{DatiBemDetail>/OTESTATASet/Zbukrs}" visible="{= ${DatiBemDetail>/ListaCampiSet/Zbukrs} ? ${DatiBemDetail>/ListaCampiSet/Zbukrs/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }" editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zbukrs} ? !${DatiBemDetail>/ListaCampiSet/Zbukrs/Zrdonly} : false)) }" required="{DatiBemDetail>/ListaCampiSet/Zbukrs/Zstate}" maxLength="4"/>
+                            <Label
+                                text="Società"
+                                visible="{= ${DatiBemDetail>/ListaCampiSet/Zbukrs} ? ${DatiBemDetail>/ListaCampiSet/Zbukrs/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
+                            />
+                            <Input
+                                value="{DatiBemDetail>/OTESTATASet/Zbukrs}"
+                                visible="{= ${DatiBemDetail>/ListaCampiSet/Zbukrs} ? ${DatiBemDetail>/ListaCampiSet/Zbukrs/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
+                                editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zbukrs} ? !${DatiBemDetail>/ListaCampiSet/Zbukrs/Zrdonly} : false)) }"
+                                required="{DatiBemDetail>/ListaCampiSet/Zbukrs/Zstate}"
+                                maxLength="4"
+                            />
 
-                            <Label text="Commessa" visible="{= ${DatiBemDetail>/ListaCampiSet/Zps_posid} ? ${DatiBemDetail>/ListaCampiSet/Zps_posid/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }" />
-                            <Input value="{DatiBemDetail>/OTESTATASet/ZpsPosid}" visible="{= ${DatiBemDetail>/ListaCampiSet/Zps_posid} ? ${DatiBemDetail>/ListaCampiSet/Zps_posid/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }" editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zps_posid} ? !${DatiBemDetail>/ListaCampiSet/Zps_posid/Zrdonly} : false)) }" required="{DatiBemDetail>/ListaCampiSet/Zps_posid/Zstate}" maxLength="24"/>
-                            <Label text="Descrizione" visible="{= ${DatiBemDetail>/ListaCampiSet/ZpsPost1} ? ${DatiBemDetail>/ListaCampiSet/ZpsPost1/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }" />
-                            <Input value="{DatiBemDetail>/OTESTATASet/ZpsPost1}" visible="{= ${DatiBemDetail>/ListaCampiSet/ZpsPost1} ? ${DatiBemDetail>/ListaCampiSet/ZpsPost1/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }" editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/ZpsPost1} ? !${DatiBemDetail>/ListaCampiSet/ZpsPost1/Zrdonly} : false)) }" required="{DatiBemDetail>/ListaCampiSet/ZpsPost1/Zstate}" maxLength="40"/>
+                            <Label
+                                text="Commessa"
+                                visible="{= ${DatiBemDetail>/ListaCampiSet/Zps_posid} ? ${DatiBemDetail>/ListaCampiSet/Zps_posid/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
+                            />
+                            <Input
+                                value="{DatiBemDetail>/OTESTATASet/ZpsPosid}"
+                                visible="{= ${DatiBemDetail>/ListaCampiSet/Zps_posid} ? ${DatiBemDetail>/ListaCampiSet/Zps_posid/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
+                                editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zps_posid} ? !${DatiBemDetail>/ListaCampiSet/Zps_posid/Zrdonly} : false)) }"
+                                required="{DatiBemDetail>/ListaCampiSet/Zps_posid/Zstate}"
+                                maxLength="24"
+                            />
+                            <Label
+                                text="Descrizione"
+                                visible="{= ${DatiBemDetail>/ListaCampiSet/ZpsPost1} ? ${DatiBemDetail>/ListaCampiSet/ZpsPost1/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
+                            />
+                            <Input
+                                value="{DatiBemDetail>/OTESTATASet/ZpsPost1}"
+                                visible="{= ${DatiBemDetail>/ListaCampiSet/ZpsPost1} ? ${DatiBemDetail>/ListaCampiSet/ZpsPost1/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
+                                editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/ZpsPost1} ? !${DatiBemDetail>/ListaCampiSet/ZpsPost1/Zrdonly} : false)) }"
+                                required="{DatiBemDetail>/ListaCampiSet/ZpsPost1/Zstate}"
+                                maxLength="40"
+                            />
 
-                            <Label text="Ordinato da" visible="{= ${DatiBemDetail>/ListaCampiSet/Zuname} ? ${DatiBemDetail>/ListaCampiSet/Zuname/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }" />
-                            <Input value="{DatiBemDetail>/OTESTATASet/Zuname}" visible="{= ${DatiBemDetail>/ListaCampiSet/Zuname} ? ${DatiBemDetail>/ListaCampiSet/Zuname/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }" editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zuname} ? !${DatiBemDetail>/ListaCampiSet/Zuname/Zrdonly} : false)) }" required="{DatiBemDetail>/ListaCampiSet/Zuname/Zstate}" maxLength="12"/>
+                            <Label
+                                text="Ordinato da"
+                                visible="{= ${DatiBemDetail>/ListaCampiSet/Zuname} ? ${DatiBemDetail>/ListaCampiSet/Zuname/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
+                            />
+                            <Input
+                                value="{DatiBemDetail>/OTESTATASet/Zuname}"
+                                visible="{= ${DatiBemDetail>/ListaCampiSet/Zuname} ? ${DatiBemDetail>/ListaCampiSet/Zuname/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
+                                editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zuname} ? !${DatiBemDetail>/ListaCampiSet/Zuname/Zrdonly} : false)) }"
+                                required="{DatiBemDetail>/ListaCampiSet/Zuname/Zstate}"
+                                maxLength="12"
+                            />
 
+                            <Label
+                                text="Area"
+                                visible="{= ${DatiBemDetail>/ListaCampiSet/Zdscarea} ? ${DatiBemDetail>/ListaCampiSet/Zdscarea/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
+                            />
+                            <Input
+                                value="{DatiBemDetail>/OTESTATASet/Zdscarea}"
+                                visible="{= ${DatiBemDetail>/ListaCampiSet/Zdscarea} ? ${DatiBemDetail>/ListaCampiSet/Zdscarea/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
+                                editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zdscarea} ? !${DatiBemDetail>/ListaCampiSet/Zdscarea/Zrdonly} : false)) }"
+                                required="{DatiBemDetail>/ListaCampiSet/Zdscarea/Zstate}"
+                                maxLength="40"
+                            />
 
+                            <Label
+                                text="Importo Totale"
+                                visible="{= ${DatiBemDetail>/ListaCampiSet/Znetwr_ak} ? ${DatiBemDetail>/ListaCampiSet/Znetwr_ak/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
+                            />
+                            <Input
+                                value="{path: 'DatiBemDetail>/OTESTATASet/ZnetwrAk', type: 'sap.m.bem.model.type.formatDecimal' }"
+                                visible="{= ${DatiBemDetail>/ListaCampiSet/Znetwr_ak} ? ${DatiBemDetail>/ListaCampiSet/Znetwr_ak/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
+                                editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Znetwr_ak} ? !${DatiBemDetail>/ListaCampiSet/Znetwr_ak/Zrdonly} : false)) }"
+                                required="{DatiBemDetail>/ListaCampiSet/Znetwr_ak/Zstate}"
+                                maxLength="15"
+                            />
 
-                            <Label text="Area" visible="{= ${DatiBemDetail>/ListaCampiSet/Zdscarea} ? ${DatiBemDetail>/ListaCampiSet/Zdscarea/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }" />
-                            <Input value="{DatiBemDetail>/OTESTATASet/Zdscarea}" visible="{= ${DatiBemDetail>/ListaCampiSet/Zdscarea} ? ${DatiBemDetail>/ListaCampiSet/Zdscarea/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }" editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zdscarea} ? !${DatiBemDetail>/ListaCampiSet/Zdscarea/Zrdonly} : false)) }" required="{DatiBemDetail>/ListaCampiSet/Zdscarea/Zstate}" maxLength="40"/>
-
-                            <Label text="Importo Totale" visible="{= ${DatiBemDetail>/ListaCampiSet/Znetwr_ak} ? ${DatiBemDetail>/ListaCampiSet/Znetwr_ak/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }" />
-                            <Input value="{path: 'DatiBemDetail>/OTESTATASet/ZnetwrAk', type: 'sap.m.bem.model.type.formatDecimal' }" visible="{= ${DatiBemDetail>/ListaCampiSet/Znetwr_ak} ? ${DatiBemDetail>/ListaCampiSet/Znetwr_ak/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }" editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Znetwr_ak} ? !${DatiBemDetail>/ListaCampiSet/Znetwr_ak/Zrdonly} : false)) }" required="{DatiBemDetail>/ListaCampiSet/Znetwr_ak/Zstate}" maxLength="15"/>
-
-                            <Label text="Sotto-Area" visible="{= ${DatiBemDetail>/ListaCampiSet/Zdscareas} ? ${DatiBemDetail>/ListaCampiSet/Zdscareas/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }" />
-                            <Input value="{DatiBemDetail>/OTESTATASet/Zdscareas}" visible="{= ${DatiBemDetail>/ListaCampiSet/Zdscareas} ? ${DatiBemDetail>/ListaCampiSet/Zdscareas/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }" editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zdscareas} ? !${DatiBemDetail>/ListaCampiSet/Zdscareas/Zrdonly} : false)) }" required="{DatiBemDetail>/ListaCampiSet/Zdscareas/Zstate}" maxLength="80"/>
-
+                            <Label
+                                text="Sotto-Area"
+                                visible="{= ${DatiBemDetail>/ListaCampiSet/Zdscareas} ? ${DatiBemDetail>/ListaCampiSet/Zdscareas/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
+                            />
+                            <Input
+                                value="{DatiBemDetail>/OTESTATASet/Zdscareas}"
+                                visible="{= ${DatiBemDetail>/ListaCampiSet/Zdscareas} ? ${DatiBemDetail>/ListaCampiSet/Zdscareas/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
+                                editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zdscareas} ? !${DatiBemDetail>/ListaCampiSet/Zdscareas/Zrdonly} : false)) }"
+                                required="{DatiBemDetail>/ListaCampiSet/Zdscareas/Zstate}"
+                                maxLength="80"
+                            />
                         </f:content>
                     </s:SimpleForm>
                 </VBox>
             </Panel>
             <Panel>
                 <VBox>
-                    <s:SimpleForm editable="true" layout="ColumnLayout" columnsM="2" columnsL="3" columnsXL="4">
+                    <s:SimpleForm
+                        editable="true"
+                        layout="ColumnLayout"
+                        columnsM="2"
+                        columnsL="3"
+                        columnsXL="4"
+                    >
                         <f:content>
-                            <Label text="Fornitore" visible="{= ${DatiBemDetail>/ListaCampiSet/Zlifnr} ? ${DatiBemDetail>/ListaCampiSet/Zlifnr/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }" />
-                            <Input value="{DatiBemDetail>/OTESTATASet/Zlifnr}" visible="{= ${DatiBemDetail>/ListaCampiSet/Zlifnr} ? ${DatiBemDetail>/ListaCampiSet/Zlifnr/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }" editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zlifnr} ? !${DatiBemDetail>/ListaCampiSet/Zlifnr/Zrdonly} : false)) }" required="{DatiBemDetail>/ListaCampiSet/Zlifnr/Zstate}" maxLength="10"/>
+                            <Label
+                                text="Fornitore"
+                                visible="{= ${DatiBemDetail>/ListaCampiSet/Zlifnr} ? ${DatiBemDetail>/ListaCampiSet/Zlifnr/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
+                            />
+                            <Input
+                                value="{DatiBemDetail>/OTESTATASet/Zlifnr}"
+                                visible="{= ${DatiBemDetail>/ListaCampiSet/Zlifnr} ? ${DatiBemDetail>/ListaCampiSet/Zlifnr/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
+                                editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zlifnr} ? !${DatiBemDetail>/ListaCampiSet/Zlifnr/Zrdonly} : false)) }"
+                                required="{DatiBemDetail>/ListaCampiSet/Zlifnr/Zstate}"
+                                maxLength="10"
+                            />
 
-                            <Label text="Nome Fornitore" visible="{= ${DatiBemDetail>/ListaCampiSet/Zname1} ? ${DatiBemDetail>/ListaCampiSet/Zname1/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }" />
-                            <Input value="{DatiBemDetail>/OTESTATASet/Zname1}" visible="{= ${DatiBemDetail>/ListaCampiSet/Zname1} ? ${DatiBemDetail>/ListaCampiSet/Zname1/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }" editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zname1} ? !${DatiBemDetail>/ListaCampiSet/Zname1/Zrdonly} : false)) }" required="{DatiBemDetail>/ListaCampiSet/Zname1/Zstate}" maxLength="30"/>
+                            <Label
+                                text="Nome Fornitore"
+                                visible="{= ${DatiBemDetail>/ListaCampiSet/Zname1} ? ${DatiBemDetail>/ListaCampiSet/Zname1/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
+                            />
+                            <Input
+                                value="{DatiBemDetail>/OTESTATASet/Zname1}"
+                                visible="{= ${DatiBemDetail>/ListaCampiSet/Zname1} ? ${DatiBemDetail>/ListaCampiSet/Zname1/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
+                                editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zname1} ? !${DatiBemDetail>/ListaCampiSet/Zname1/Zrdonly} : false)) }"
+                                required="{DatiBemDetail>/ListaCampiSet/Zname1/Zstate}"
+                                maxLength="30"
+                            />
 
+                            <Label
+                                text="Gruppo acquisti"
+                                visible="{= ${DatiBemDetail>/ListaCampiSet/Zekgrp} ? ${DatiBemDetail>/ListaCampiSet/Zekgrp/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
+                            />
+                            <Input
+                                value="{DatiBemDetail>/OTESTATASet/Zekgrp}"
+                                maxLength="3"
+                                visible="{= ${DatiBemDetail>/ListaCampiSet/Zekgrp} ? ${DatiBemDetail>/ListaCampiSet/Zekgrp/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
+                                editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zekgrp} ? !${DatiBemDetail>/ListaCampiSet/Zekgrp/Zrdonly} : false)) }"
+                                required="{DatiBemDetail>/ListaCampiSet/Zekgrp/Zstate}"
+                            />
 
-                            <Label text="Gruppo acquisti" visible="{= ${DatiBemDetail>/ListaCampiSet/Zekgrp} ? ${DatiBemDetail>/ListaCampiSet/Zekgrp/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }" />
-                            <Input value="{DatiBemDetail>/OTESTATASet/Zekgrp}" maxLength="3" visible="{= ${DatiBemDetail>/ListaCampiSet/Zekgrp} ? ${DatiBemDetail>/ListaCampiSet/Zekgrp/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }" editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zekgrp} ? !${DatiBemDetail>/ListaCampiSet/Zekgrp/Zrdonly} : false)) }" required="{DatiBemDetail>/ListaCampiSet/Zekgrp/Zstate}"/>
+                            <Label
+                                text="Numero ODA"
+                                visible="{= ${DatiBemDetail>/ListaCampiSet/Zebeln} ? ${DatiBemDetail>/ListaCampiSet/Zebeln/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
+                            />
+                            <Input
+                                value="{DatiBemDetail>/OTESTATASet/Zebeln}"
+                                visible="{= ${DatiBemDetail>/ListaCampiSet/Zebeln} ? ${DatiBemDetail>/ListaCampiSet/Zebeln/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
+                                editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zebeln} ? !${DatiBemDetail>/ListaCampiSet/Zebeln/Zrdonly} : false)) }"
+                                required="{DatiBemDetail>/ListaCampiSet/Zebeln/Zstate}"
+                                maxLength="10"
+                            />
 
+                            <Label
+                                text="Bolla Consegna"
+                                visible="{= ${DatiBemDetail>/ListaCampiSet/Zfrbnr} ? ${DatiBemDetail>/ListaCampiSet/Zfrbnr/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
+                            />
+                            <Input
+                                value="{DatiBemDetail>/OTESTATASet/Zfrbnr}"
+                                maxLength="16"
+                                visible="{= ${DatiBemDetail>/ListaCampiSet/Zfrbnr} ? ${DatiBemDetail>/ListaCampiSet/Zfrbnr/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
+                                editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zfrbnr} ? !${DatiBemDetail>/ListaCampiSet/Zfrbnr/Zrdonly} : !${DatiBemDetail>/ListaCampiSet/*/Zrdonly})) }"
+                                required="{DatiBemDetail>/ListaCampiSet/Zfrbnr/Zstate}"
+                            />
 
-                            <Label text="Numero ODA" visible="{= ${DatiBemDetail>/ListaCampiSet/Zebeln} ? ${DatiBemDetail>/ListaCampiSet/Zebeln/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }" />
-                            <Input value="{DatiBemDetail>/OTESTATASet/Zebeln}" visible="{= ${DatiBemDetail>/ListaCampiSet/Zebeln} ? ${DatiBemDetail>/ListaCampiSet/Zebeln/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }" editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zebeln} ? !${DatiBemDetail>/ListaCampiSet/Zebeln/Zrdonly} : false)) }" required="{DatiBemDetail>/ListaCampiSet/Zebeln/Zstate}" maxLength="10"/>
+                            <Label
+                                text="Numero Progetto"
+                                visible="{= ${DatiBemDetail>/ListaCampiSet/Zprnum} ? ${DatiBemDetail>/ListaCampiSet/Zprnum/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
+                            />
+                            <Input
+                                value="{DatiBemDetail>/OTESTATASet/Zprnum}"
+                                visible="{= ${DatiBemDetail>/ListaCampiSet/Zprnum} ? ${DatiBemDetail>/ListaCampiSet/Zprnum/Zvisible} : false }"
+                                editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/*} ? !${DatiBemDetail>/ListaCampiSet/*/Zrdonly} : false)) }"
+                                required="{DatiBemDetail>/ListaCampiSet/Zprnum/Zstate}"
+                            />
 
-                            <Label text="Bolla Consegna" visible="{= ${DatiBemDetail>/ListaCampiSet/Zfrbnr} ? ${DatiBemDetail>/ListaCampiSet/Zfrbnr/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }" />
-                            <Input value="{DatiBemDetail>/OTESTATASet/Zfrbnr}" maxLength="16" visible="{= ${DatiBemDetail>/ListaCampiSet/Zfrbnr} ? ${DatiBemDetail>/ListaCampiSet/Zfrbnr/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }" editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zfrbnr} ? !${DatiBemDetail>/ListaCampiSet/Zfrbnr/Zrdonly} : !${DatiBemDetail>/ListaCampiSet/*/Zrdonly})) }" required="{DatiBemDetail>/ListaCampiSet/Zfrbnr/Zstate}"/>
-
-                            <Label text="Numero Progetto" visible="{= ${DatiBemDetail>/ListaCampiSet/Zprnum} ? ${DatiBemDetail>/ListaCampiSet/Zprnum/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }" />
-                            <Input value="{DatiBemDetail>/OTESTATASet/Zprnum}" visible="{= ${DatiBemDetail>/ListaCampiSet/Zprnum} ? ${DatiBemDetail>/ListaCampiSet/Zprnum/Zvisible} : false }" editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/*} ? !${DatiBemDetail>/ListaCampiSet/*/Zrdonly} : false)) }" required="{DatiBemDetail>/ListaCampiSet/Zprnum/Zstate}"/>
-
-                            <Label text="Lettera di Vettura" visible="{= ${DatiBemDetail>/ListaCampiSet/Zxblnr1} ? ${DatiBemDetail>/ListaCampiSet/Zxblnr1/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }" />
-                            <Input value="{DatiBemDetail>/OTESTATASet/Zxblnr1}" maxLength="16" visible="{= ${DatiBemDetail>/ListaCampiSet/Zxblnr1} ? ${DatiBemDetail>/ListaCampiSet/Zxblnr1/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }" editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zxblnr1} ? !${DatiBemDetail>/ListaCampiSet/Zxblnr1/Zrdonly} : !${DatiBemDetail>/ListaCampiSet/*/Zrdonly})) }" required="{DatiBemDetail>/ListaCampiSet/Zrfbnr/Zstate}"/>
-
+                            <Label
+                                text="Lettera di Vettura"
+                                visible="{= ${DatiBemDetail>/ListaCampiSet/Zxblnr1} ? ${DatiBemDetail>/ListaCampiSet/Zxblnr1/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
+                            />
+                            <Input
+                                value="{DatiBemDetail>/OTESTATASet/Zxblnr1}"
+                                maxLength="16"
+                                visible="{= ${DatiBemDetail>/ListaCampiSet/Zxblnr1} ? ${DatiBemDetail>/ListaCampiSet/Zxblnr1/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
+                                editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zxblnr1} ? !${DatiBemDetail>/ListaCampiSet/Zxblnr1/Zrdonly} : !${DatiBemDetail>/ListaCampiSet/*/Zrdonly})) }"
+                                required="{DatiBemDetail>/ListaCampiSet/Zrfbnr/Zstate}"
+                            />
                         </f:content>
                     </s:SimpleForm>
                 </VBox>
             </Panel>
             <Panel id="panelTabella">
                 <Toolbar style="Clear">
-                    <Button text="Seleziona da ordine acquisto" press="SelezioneOrdineAcquisto" class="sapUiTinyMarginEnd" type="Emphasized" enabled="{EnabledButton>/Modifica}" />
-                    <Button text="Cancella Posizione" press="onDeletePosition" class="sapUiTinyMarginEnd" type="Reject" enabled="{EnabledButton>/Modifica}" />
-                    <Button text="Crea Benestare" type="Emphasized" press="onNavigateBEF" class="sapUiTinyMarginEnd" visible="{= ${DatiBemDetail>/ListaCampiSet/ToolBarButtonBDL} ? ${DatiBemDetail>/ListaCampiSet/ToolBarButtonBDL/Zvisible} : false }"  enabled="true"/>
-                    <Button text="Dettaglio ticket" press="DettaglioTicket" class="sapUiTinyMarginEnd" />
-                    <Button text="Azzera importi ticket" press="AzzeraImportiTicket" class="sapUiTinyMarginEnd" enabled="{EnabledButton>/Modifica}"/>
-
+                    <Button
+                        text="Seleziona da ordine acquisto"
+                        press="SelezioneOrdineAcquisto"
+                        class="sapUiTinyMarginEnd"
+                        type="Emphasized"
+                        enabled="{EnabledButton>/Modifica}"
+                    />
+                    <Button
+                        text="Cancella Posizione"
+                        press="onDeletePosition"
+                        class="sapUiTinyMarginEnd"
+                        type="Reject"
+                        enabled="{EnabledButton>/Modifica}"
+                    />
+                    <Button
+                        text="Crea Benestare"
+                        type="Emphasized"
+                        press="onNavigateBEF"
+                        class="sapUiTinyMarginEnd"
+                        visible="{= ${DatiBemDetail>/ListaCampiSet/ToolBarButtonBDL} ? ${DatiBemDetail>/ListaCampiSet/ToolBarButtonBDL/Zvisible} : false }"
+                        enabled="true"
+                    />
+                    <Button
+                        text="Dettaglio ticket"
+                        press="DettaglioTicket"
+                        class="sapUiTinyMarginEnd"
+                    />
+                    <Button
+                        text="Azzera importi ticket"
+                        press="AzzeraImportiTicket"
+                        class="sapUiTinyMarginEnd"
+                        enabled="{EnabledButton>/Modifica}"
+                    />
                 </Toolbar>
-
-
             </Panel>
-            <t:Table rows="{DatiBemDetail>/IDettaglioSet}" rowMode="auto" selectionMode="Single" class="sapUiSmallMarginBottom" id="PositionTable">
+            <t:Table
+                rows="{DatiBemDetail>/IDettaglioSet}"
+                rowMode="auto"
+                selectionMode="Single"
+                class="sapUiSmallMarginBottom"
+                id="PositionTable"
+            >
                 <t:columns>
                     <t:Column width="250px">
                         <Label text="Testo breve materiale" />
                         <t:template>
-                            <Text text="{DatiBemDetail>Zmaktx}" wrapping="false" />
+                            <Text
+                                text="{DatiBemDetail>Zmaktx}"
+                                wrapping="false"
+                            />
                         </t:template>
                     </t:Column>
-                    <t:Column width="100px" visible="{= ${DatiBemDetail>/ListaCampiSet/Zsgtxt} ? ${DatiBemDetail>/ListaCampiSet/Zsgtxt/Zvisible} : false }">
+                    <t:Column
+                        width="100px"
+                        visible="{= ${DatiBemDetail>/ListaCampiSet/Zsgtxt} ? ${DatiBemDetail>/ListaCampiSet/Zsgtxt/Zvisible} : false }"
+                    >
                         <Label text="Contr. in ingresso" />
                         <t:template>
-                            <Button text="{DatiBemDetail>Zsgtxt}" press="onControlli" width="100%" icon="sap-icon://edit" enabled="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zsgtxt} ? !${DatiBemDetail>/ListaCampiSet/Zsgtxt/Zrdonly} : false)) }">
+                            <Button
+                                text="{DatiBemDetail>Zsgtxt}"
+                                press="onControlli"
+                                width="100%"
+                                icon="sap-icon://edit"
+                                enabled="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zsgtxt} ? !${DatiBemDetail>/ListaCampiSet/Zsgtxt/Zrdonly} : false)) }"
+                            >
                                 <customData>
-                                    <core:CustomData key="rowPath" value="{DatiBemDetail>}" />
+                                    <core:CustomData
+                                        key="rowPath"
+                                        value="{DatiBemDetail>}"
+                                    />
                                 </customData>
                             </Button>
                         </t:template>
                     </t:Column>
-                    <t:Column width="250px" visible="{= ${DatiBemDetail>/ListaCampiSet/Zps_Posid} ? ${DatiBemDetail>/ListaCampiSet/Zps_Posid/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }">
-
+                    <t:Column
+                        width="250px"
+                        visible="{= ${DatiBemDetail>/ListaCampiSet/Zps_Posid} ? ${DatiBemDetail>/ListaCampiSet/Zps_Posid/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
+                    >
                         <Label text="Elemento WBS" />
                         <t:template>
-
                             <!-- <Input value="{DatiBemDetail>ZpsPosid}" editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/*} ? !${DatiBemDetail>/ListaCampiSet/*/Zrdonly} : false)) }" /> -->
-                            <Input id="CommessaAvanzamento" value="{DatiBemDetail>ZpsPosid}"  maxLength="24" showValueHelp="true" valueHelpRequest="CommessaValueHelp" editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/*} ? !${DatiBemDetail>/ListaCampiSet/*/Zrdonly} : false)) }" />
-
+                            <Input
+                                id="CommessaAvanzamento"
+                                value="{DatiBemDetail>ZpsPosid}"
+                                maxLength="24"
+                                showValueHelp="true"
+                                valueHelpRequest="CommessaValueHelp"
+                                editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/*} ? !${DatiBemDetail>/ListaCampiSet/*/Zrdonly} : false)) }"
+                            />
                         </t:template>
                     </t:Column>
                     <!-- <t:Column >
@@ -165,93 +452,170 @@
                     <t:Column width="6rem">
                         <Label text="Quantità" />
                         <t:template>
-                            <Input value="{path: 'DatiBemDetail>ZmengeD', type: 'sap.m.bem.model.type.formatDecimal'}" editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/ZmengeD} ? !${DatiBemDetail>/ListaCampiSet/ZmengeD/Zrdonly} : !${DatiBemDetail>/ListaCampiSet/*/Zrdonly})) }" required="{DatiBemDetail>/ListaCampiSet/ZmengeD/Zstate}" maxLength="8" />
+                            <Input
+                                value="{path: 'DatiBemDetail>ZmengeD', type: 'sap.m.bem.model.type.formatDecimal'}"
+                                editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/ZmengeD} ? !${DatiBemDetail>/ListaCampiSet/ZmengeD/Zrdonly} : !${DatiBemDetail>/ListaCampiSet/*/Zrdonly})) }"
+                                required="{DatiBemDetail>/ListaCampiSet/ZmengeD/Zstate}"
+                                maxLength="8"
+                                change=".onInputChange"
+                            />
                         </t:template>
                     </t:Column>
                     <t:Column width="6rem">
                         <Label text="Imp Divisa" />
                         <t:template>
-                            <Input value="{path: 'DatiBemDetail>Zdmbtr', type: 'sap.m.bem.model.type.formatDecimal'}" editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zdmbtr} ? !${DatiBemDetail>/ListaCampiSet/Zdmbtr/Zrdonly} : !${DatiBemDetail>/ListaCampiSet/*/Zrdonly} )) }" required="{DatiBemDetail>/ListaCampiSet/Zdmbtr/Zstate}" maxLength="8"/>
+                            <Input
+                                value="{path: 'DatiBemDetail>Zdmbtr', type: 'sap.m.bem.model.type.formatDecimal'}"
+                                editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zdmbtr} ? !${DatiBemDetail>/ListaCampiSet/Zdmbtr/Zrdonly} : !${DatiBemDetail>/ListaCampiSet/*/Zrdonly} )) }"
+                                required="{DatiBemDetail>/ListaCampiSet/Zdmbtr/Zstate}"
+                                maxLength="8"
+                                change=".onInputChange"
+                            />
                         </t:template>
                     </t:Column>
                     <t:Column width="6rem">
                         <Label text="UMO" />
                         <t:template>
-                            <Text text="{DatiBemDetail>Zmeins}" wrapping="false" />
+                            <Text
+                                text="{DatiBemDetail>Zmeins}"
+                                wrapping="false"
+                            />
                         </t:template>
                     </t:Column>
                     <t:Column width="6rem">
                         <Label text="Prz. Netto" />
                         <t:template>
-                            <Text text="{path: 'DatiBemDetail>Zprzsconto', type: 'sap.m.bem.model.type.formatDecimal'}" wrapping="false" />
+                            <Text
+                                text="{path: 'DatiBemDetail>Zprzsconto', type: 'sap.m.bem.model.type.formatDecimal'}"
+                                wrapping="false"
+                            />
                         </t:template>
                     </t:Column>
-                    <t:Column width="150px" visible="{= ${DatiBemDetail>/ListaCampiSet/Zxblnr} ? ${DatiBemDetail>/ListaCampiSet/Zxblnr/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }">
+                    <t:Column
+                        width="150px"
+                        visible="{= ${DatiBemDetail>/ListaCampiSet/Zxblnr} ? ${DatiBemDetail>/ListaCampiSet/Zxblnr/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
+                    >
                         <Label text="Riferimento" />
                         <t:template>
-                            <Input value="{DatiBemDetail>Zxblnr}" maxLength="16"  editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zxblnr} ? !${DatiBemDetail>/ListaCampiSet/Zxblnr/Zrdonly} : !${DatiBemDetail>/ListaCampiSet/*/Zrdonly})) }" />
+                            <Input
+                                value="{DatiBemDetail>Zxblnr}"
+                                maxLength="16"
+                                editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zxblnr} ? !${DatiBemDetail>/ListaCampiSet/Zxblnr/Zrdonly} : !${DatiBemDetail>/ListaCampiSet/*/Zrdonly})) }"
+                            />
                         </t:template>
                     </t:Column>
-                    <t:Column width="6rem" visible="{= ${DatiBemDetail>/ListaCampiSet/Zsta_Stzahr} ? ${DatiBemDetail>/ListaCampiSet/Zsta_Stzahr/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }">
+                    <t:Column
+                        width="6rem"
+                        visible="{= ${DatiBemDetail>/ListaCampiSet/Zsta_Stzahr} ? ${DatiBemDetail>/ListaCampiSet/Zsta_Stzahr/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
+                    >
                         <Label text="Anno Stz." />
                         <t:template>
-                            <Input value="{DatiBemDetail>ZstaStzahr}" maxLength="4" editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zsta_Stzahr} ? !${DatiBemDetail>/ListaCampiSet/Zsta_Stzahr/Zrdonly} : !${DatiBemDetail>/ListaCampiSet/*/Zrdonly})) }" />
+                            <Input
+                                value="{DatiBemDetail>ZstaStzahr}"
+                                maxLength="4"
+                                editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zsta_Stzahr} ? !${DatiBemDetail>/ListaCampiSet/Zsta_Stzahr/Zrdonly} : !${DatiBemDetail>/ListaCampiSet/*/Zrdonly})) }"
+                            />
                         </t:template>
                     </t:Column>
-                    <t:Column width="6rem" visible="{= ${DatiBemDetail>/ListaCampiSet/Zsta_Prc_Stz} ? ${DatiBemDetail>/ListaCampiSet/Zsta_Prc_Stz/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }">
-                        <Label text="% Stz."/>
+                    <t:Column
+                        width="6rem"
+                        visible="{= ${DatiBemDetail>/ListaCampiSet/Zsta_Prc_Stz} ? ${DatiBemDetail>/ListaCampiSet/Zsta_Prc_Stz/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
+                    >
+                        <Label text="% Stz." />
                         <t:template>
-                            <Input value="{path: 'DatiBemDetail>ZstaPrcStz', type: 'sap.m.bem.model.type.formatDecimal'}" editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zsta_Prc_Stz} ? !${DatiBemDetail>/ListaCampiSet/Zsta_Prc_Stz/Zrdonly} : false)) }" maxLength="8"/>
+                            <Input
+                                value="{path: 'DatiBemDetail>ZstaPrcStz', type: 'sap.m.bem.model.type.formatDecimal'}"
+                                editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zsta_Prc_Stz} ? !${DatiBemDetail>/ListaCampiSet/Zsta_Prc_Stz/Zrdonly} : false)) }"
+                                maxLength="8"
+                            />
                         </t:template>
                     </t:Column>
-                    <t:Column width="6rem" visible="{= ${DatiBemDetail>/ListaCampiSet/Zsta_Belnr_Bm} ? ${DatiBemDetail>/ListaCampiSet/Zsta_Belnr_Bm/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }">
+                    <t:Column
+                        width="6rem"
+                        visible="{= ${DatiBemDetail>/ListaCampiSet/Zsta_Belnr_Bm} ? ${DatiBemDetail>/ListaCampiSet/Zsta_Belnr_Bm/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
+                    >
                         <Label text="N. Doc Stz" />
                         <t:template>
-                            <Input value="{DatiBemDetail>ZstaBelnrBm}" editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zsta_Belnr_Bm} ? !${DatiBemDetail>/ListaCampiSet/Zsta_Belnr_Bm/Zrdonly} : !${DatiBemDetail>/ListaCampiSet/*/Zrdonly})) }" />
+                            <Input
+                                value="{DatiBemDetail>ZstaBelnrBm}"
+                                editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zsta_Belnr_Bm} ? !${DatiBemDetail>/ListaCampiSet/Zsta_Belnr_Bm/Zrdonly} : !${DatiBemDetail>/ListaCampiSet/*/Zrdonly})) }"
+                            />
                         </t:template>
                     </t:Column>
-                    <t:Column width="6rem" visible="{= ${DatiBemDetail>/ListaCampiSet/Zsta_Buzei_Bm} ? ${DatiBemDetail>/ListaCampiSet/Zsta_Buzei_Bm/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }">
+                    <t:Column
+                        width="6rem"
+                        visible="{= ${DatiBemDetail>/ListaCampiSet/Zsta_Buzei_Bm} ? ${DatiBemDetail>/ListaCampiSet/Zsta_Buzei_Bm/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
+                    >
                         <Label text="Pos Stz." />
                         <t:template>
-                            <Input value="{DatiBemDetail>ZstaBuzeiBm}" editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zsta_Buzei_Bm} ? !${DatiBemDetail>/ListaCampiSet/Zsta_Buzei_Bm/Zrdonly} : false)) }" />
+                            <Input
+                                value="{DatiBemDetail>ZstaBuzeiBm}"
+                                editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zsta_Buzei_Bm} ? !${DatiBemDetail>/ListaCampiSet/Zsta_Buzei_Bm/Zrdonly} : false)) }"
+                            />
                         </t:template>
                     </t:Column>
 
-
-
-                    <t:Column width="6rem" visible="{= ${DatiBemDetail>/ListaCampiSet/Zotherdoc} ? ${DatiBemDetail>/ListaCampiSet/Zotherdoc/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }">
+                    <t:Column
+                        width="6rem"
+                        visible="{= ${DatiBemDetail>/ListaCampiSet/Zotherdoc} ? ${DatiBemDetail>/ListaCampiSet/Zotherdoc/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
+                    >
                         <Label text="altri doc." />
                         <t:template>
-                            <CheckBox selected="{DatiBemDetail>Zotherdoc}" editable="false"/>
+                            <CheckBox
+                                selected="{DatiBemDetail>Zotherdoc}"
+                                editable="false"
+                            />
                         </t:template>
                     </t:Column>
-                    <t:Column width="6rem" visible="{= ${DatiBemDetail>/ListaCampiSet/Zsta_Stz_Fin} ? ${DatiBemDetail>/ListaCampiSet/Zsta_Stz_Fin/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }">
+                    <t:Column
+                        width="6rem"
+                        visible="{= ${DatiBemDetail>/ListaCampiSet/Zsta_Stz_Fin} ? ${DatiBemDetail>/ListaCampiSet/Zsta_Stz_Fin/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
+                    >
                         <Label text="Stz finale" />
                         <t:template>
-                            <CheckBox selected="{DatiBemDetail>ZstaStzFin}" editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zsta_Stz_Fin} ? !${DatiBemDetail>/ListaCampiSet/Zsta_Stz_Fin/Zrdonly} : false)) }"/>
+                            <CheckBox
+                                selected="{DatiBemDetail>ZstaStzFin}"
+                                editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zsta_Stz_Fin} ? !${DatiBemDetail>/ListaCampiSet/Zsta_Stz_Fin/Zrdonly} : false)) }"
+                            />
                         </t:template>
                     </t:Column>
-                    <t:Column width="6rem" visible="{= ${DatiBemDetail>/ListaCampiSet/Zsta_Dm_Stz} ? ${DatiBemDetail>/ListaCampiSet/Zsta_Dm_Stz/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }">
+                    <t:Column
+                        width="6rem"
+                        visible="{= ${DatiBemDetail>/ListaCampiSet/Zsta_Dm_Stz} ? ${DatiBemDetail>/ListaCampiSet/Zsta_Dm_Stz/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
+                    >
                         <Label text="Importo stanziamento" />
                         <t:template>
-                            <Input value="{path: 'DatiBemDetail>ZstaDmStz', type: 'sap.m.bem.model.type.formatDecimal'}" editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/ZstaDmStz} ? !${DatiBemDetail>/ListaCampiSet/ZstaDmStz/Zrdonly} : false)) }" />
+                            <Input
+                                value="{path: 'DatiBemDetail>ZstaDmStz', type: 'sap.m.bem.model.type.formatDecimal'}"
+                                editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/ZstaDmStz} ? !${DatiBemDetail>/ListaCampiSet/ZstaDmStz/Zrdonly} : false)) }"
+                            />
                         </t:template>
                     </t:Column>
-                    <t:Column width="250px" visible="{= ${DatiBemDetail>/ListaCampiSet/Zsta_Note_Bm} ? ${DatiBemDetail>/ListaCampiSet/Zsta_Note_Bm/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }">
+                    <t:Column
+                        width="250px"
+                        visible="{= ${DatiBemDetail>/ListaCampiSet/Zsta_Note_Bm} ? ${DatiBemDetail>/ListaCampiSet/Zsta_Note_Bm/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
+                    >
                         <Label text="Osservazione stanziamento" />
                         <t:template>
-                            <Input value="{DatiBemDetail>ZstaNoteBm}" editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zsta_Note_Bm} ? !${DatiBemDetail>/ListaCampiSet/Zsta_Note_Bm/Zrdonly} : false)) }"/>
+                            <Input
+                                value="{DatiBemDetail>ZstaNoteBm}"
+                                editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zsta_Note_Bm} ? !${DatiBemDetail>/ListaCampiSet/Zsta_Note_Bm/Zrdonly} : false)) }"
+                            />
                         </t:template>
                     </t:Column>
 
-                    <t:Column width="6rem" visible="{= ${DatiBemDetail>/ListaCampiSet/Zsospeso} ? ${DatiBemDetail>/ListaCampiSet/Zsospeso/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible}}">
+                    <t:Column
+                        width="6rem"
+                        visible="{= ${DatiBemDetail>/ListaCampiSet/Zsospeso} ? ${DatiBemDetail>/ListaCampiSet/Zsospeso/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible}}"
+                    >
                         <Label text="Sospeso residuo" />
                         <t:template>
-                            <Input value="{DatiBemDetail>Zsospeso}" editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zsospeso} ? !${DatiBemDetail>/ListaCampiSet/Zsospeso/Zrdonly} : false)) }"/>
+                            <Input
+                                value="{DatiBemDetail>Zsospeso}"
+                                editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zsospeso} ? !${DatiBemDetail>/ListaCampiSet/Zsospeso/Zrdonly} : false)) }"
+                            />
                         </t:template>
                     </t:Column>
-
-
 
                     <t:Column width="6rem">
                         <Label text="Codice CUP" />
@@ -260,7 +624,10 @@
                         </t:template>
                     </t:Column>
 
-                    <t:Column width="6rem" visible="{= ${DatiBemDetail>/ListaCampiSet/Zcig} ? ${DatiBemDetail>/ListaCampiSet/Zcig/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible}}" >
+                    <t:Column
+                        width="6rem"
+                        visible="{= ${DatiBemDetail>/ListaCampiSet/Zcig} ? ${DatiBemDetail>/ListaCampiSet/Zcig/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible}}"
+                    >
                         <Label text="Codice CIG" />
                         <t:template>
                             <Text text="{DatiBemDetail>Zcig}" />
@@ -268,34 +635,64 @@
                     </t:Column>
 
                     <t:Column width="8rem">
-                        <Label text="Descrizione CIG" visible="{= ${DatiBemDetail>/ListaCampiSet/Zcig} ? ${DatiBemDetail>/ListaCampiSet/Zcig/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible}}"/>
+                        <Label
+                            text="Descrizione CIG"
+                            visible="{= ${DatiBemDetail>/ListaCampiSet/Zcig} ? ${DatiBemDetail>/ListaCampiSet/Zcig/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible}}"
+                        />
                         <t:template>
-                            <Text text="{DatiBemDetail>Zdesccig}" wrapping="false" />
+                            <Text
+                                text="{DatiBemDetail>Zdesccig}"
+                                wrapping="false"
+                            />
                         </t:template>
                     </t:Column>
-                    <t:Column width="6rem" visible="{= ${DatiBemDetail>/ListaCampiSet/*} ? ${DatiBemDetail>/ListaCampiSet/*/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible}}">
+                    <t:Column
+                        width="6rem"
+                        visible="{= ${DatiBemDetail>/ListaCampiSet/*} ? ${DatiBemDetail>/ListaCampiSet/*/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible}}"
+                    >
                         <Label text="D. ticket" />
                         <t:template>
-                            <CheckBox selected="{DatiBemDetail>ZticketExists}" editable="false"/>
+                            <CheckBox
+                                selected="{DatiBemDetail>ZticketExists}"
+                                editable="false"
+                            />
                         </t:template>
                     </t:Column>
-                    <t:Column width="7rem" visible="{= ${DatiBemDetail>/ListaCampiSet/Ztplnr} ? ${DatiBemDetail>/ListaCampiSet/Ztplnr/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible}}">
+                    <t:Column
+                        width="7rem"
+                        visible="{= ${DatiBemDetail>/ListaCampiSet/Ztplnr} ? ${DatiBemDetail>/ListaCampiSet/Ztplnr/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible}}"
+                    >
                         <Label text="Sede tecnica" />
                         <t:template>
-                            <Text text="{DatiBemDetail>Ztplnr}" wrapping="false" />
+                            <Text
+                                text="{DatiBemDetail>Ztplnr}"
+                                wrapping="false"
+                            />
                         </t:template>
                     </t:Column>
-                    <t:Column width="9rem" visible="{= ${DatiBemDetail>/ListaCampiSet/Ztplnr} ? ${DatiBemDetail>/ListaCampiSet/Ztplnr/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible}}">
+                    <t:Column
+                        width="9rem"
+                        visible="{= ${DatiBemDetail>/ListaCampiSet/Ztplnr} ? ${DatiBemDetail>/ListaCampiSet/Ztplnr/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible}}"
+                    >
                         <Label text="Descrizione Sede " />
                         <t:template>
-                            <Text text="{DatiBemDetail>Zpltxt}" wrapping="false"  />
+                            <Text
+                                text="{DatiBemDetail>Zpltxt}"
+                                wrapping="false"
+                            />
                         </t:template>
                     </t:Column>
-                      <!-- <t:Column width="7rem" visible="{= ${DatiBemDetail>/OTESTATASet/Ztpprot} === '74' || ${DatiBemDetail>/OTESTATASet/Ztpprot} === '75' }"> -->
-                      <t:Column width="7rem" visible="{= ${DatiBemDetail>/ListaCampiSet/Zelikz} ? ${DatiBemDetail>/ListaCampiSet/Zelikz/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible}}">
+                    <!-- <t:Column width="7rem" visible="{= ${DatiBemDetail>/OTESTATASet/Ztpprot} === '74' || ${DatiBemDetail>/OTESTATASet/Ztpprot} === '75' }"> -->
+                    <t:Column
+                        width="7rem"
+                        visible="{= ${DatiBemDetail>/ListaCampiSet/Zelikz} ? ${DatiBemDetail>/ListaCampiSet/Zelikz/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible}}"
+                    >
                         <Label text="Cod. Cons. Finale" />
                         <t:template>
-                            <CheckBox selected="{DatiBemDetail>Zelikz}"  editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/*} ? !${DatiBemDetail>/ListaCampiSet/*/Zrdonly} : false)) }"/>
+                            <CheckBox
+                                selected="{DatiBemDetail>Zelikz}"
+                                editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/*} ? !${DatiBemDetail>/ListaCampiSet/*/Zrdonly} : false)) }"
+                            />
                         </t:template>
                     </t:Column>
                 </t:columns>
