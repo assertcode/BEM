@@ -7,8 +7,8 @@ sap.ui.define([
     "sap/ui/comp/smartvariants/PersonalizableInfo",
     "sap/ui/core/Fragment",
     "sap/m/MessageToast",
-
-], function (Controller, JSONModel, Label, Filter, FilterOperator, PersonalizableInfo, Fragment, MessageToast) {
+    "sap/m/MessageBox"
+], function (Controller, JSONModel, Label, Filter, FilterOperator, PersonalizableInfo, Fragment, MessageToast, MessageBox) {
     "use strict";
 
     return Controller.extend("sap.m.bem.controller.BEMDetail", {
@@ -86,7 +86,6 @@ sap.ui.define([
                 Zzeile: "Zzeile"
             };
 
-
             if (aSelectedIndices.length > 0) {
 
                 var targetArray = that.getOwnerComponent().getModel("DatiBemDetail").getProperty("/IDettaglioSet");
@@ -102,12 +101,10 @@ sap.ui.define([
 
                 MessageToast.show("Operazione avvenuta con successo");
 
-                
-
                 var oHistory = sap.ui.core.routing.History.getInstance();
                 var sPreviousHash = oHistory.getPreviousHash();
                 if (sPreviousHash !== undefined) {
-                    
+
                     window.history.go(-1);
                 }
             } else {
@@ -433,14 +430,14 @@ sap.ui.define([
         },
 
         onOdaControl: function () {
-            
+
             var oTable = this.byId("ListaOrdini");
 
             var aSelectedIndices = oTable.getSelectedIndices();
 
             var oZebelnModel = this.getOwnerComponent().getModel("aZebelnValues");
             var aZebelnValues = oZebelnModel.getProperty("/ebeln");
-        
+
             // Svuota l'array per una nuova selezione
             aZebelnValues.splice(0, aZebelnValues.length);
 
@@ -450,17 +447,17 @@ sap.ui.define([
             if (sDefaultZebeln !== null && sDefaultZebeln !== undefined && aZebelnValues.indexOf(sDefaultZebeln) === -1 && sDefaultZebeln !== "") {
                 aZebelnValues.push(sDefaultZebeln);
             }
-        
+
             // Flag per verificare se i valori di Zebeln sono uguali
             var bValidSelection = true;
-        
+
             // Controlla i valori di Zebeln nelle righe selezionate
             aSelectedIndices.forEach(function (iIndex) {
                 var oContext = oTable.getContextByIndex(iIndex);
                 if (oContext) {
                     var oData = oContext.getObject();
                     var sZebeln = oData.Zebeln;
-        
+
                     // Aggiungi Zebeln all'array globale
                     if (aZebelnValues.length === 0) {
                         aZebelnValues.push(sZebeln);
@@ -469,19 +466,19 @@ sap.ui.define([
                     }
                 }
             });
-        
+
             // Aggiorna il modello con i valori selezionati
             oZebelnModel.setProperty("/ebeln", aZebelnValues);
-        
+
             // Se la selezione non è valida, mostra un messaggio e annulla la selezione
             if (!bValidSelection) {
-                sap.m.MessageBox.error("Non è possibile selezionare righe con Doc diversi.");
+                MessageBox.error("Non è possibile selezionare righe con Doc diversi.");
                 oTable.clearSelection();
-        
+
                 // Svuota l'array globale poiché la selezione è stata annullata
                 aZebelnValues.splice(0, aZebelnValues.length);
                 oZebelnModel.setProperty("/ebeln", aZebelnValues);
-        
+
                 return;
             }
         }

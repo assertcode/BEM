@@ -1,0 +1,157 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:ff="sap.ui.layout.form"
+    xmlns:f="sap.f"
+    xmlns:fb="sap.ui.comp.filterbar"
+    xmlns:t="sap.ui.table"
+>
+    <Dialog
+        id="DocStzHelpRequest"
+        title="Doc.Stanziamenti"
+        draggable="true"
+        resizable="true"
+    >
+        <content>
+            <ff:SimpleForm
+                layout="ResponsiveGridLayout"
+                labelSpanL="3"
+                labelSpanM="3"
+                labelSpanS="12"
+                adjustLabelSpan="false"
+                emptySpanL="4"
+                emptySpanM="4"
+                emptySpanS="0"
+                columnsL="1"
+                columnsM="1"
+            />
+            <fb:FilterBar
+                id="DocStzFilterBar"
+                showClearOnFB="true"
+                showRestoreOnFB="true"
+                search=".onSearchDocStz"
+                clear="Cancel"
+                showFilterConfiguration="false"
+            >
+                <fb:filterGroupItems>
+                    <fb:FilterGroupItem
+                        name="Elemento wbs"
+                        label="Elemento wbs"
+                        groupName="Group1"
+                        visibleInFilterBar="true"
+                    >
+                        <fb:control>
+                            <Input
+                                name="Elemento wbs"
+                                value="{DocStzFilterModel>/wbs}"
+                            />
+                        </fb:control>
+                    </fb:FilterGroupItem>
+                    <fb:FilterGroupItem
+                        name="Esercizio"
+                        label="Esercizio"
+                        groupName="Group1"
+                        visibleInFilterBar="true"
+                    >
+                        <fb:control>
+                            <DatePicker
+                                name="Esercizio"
+                                displayFormat="yyyy"
+                                valueFormat="yyyy"
+                                value="{DocStzFilterModel>/esercizio}"
+                            />
+                        </fb:control>
+                    </fb:FilterGroupItem>
+                    <fb:FilterGroupItem
+                        name="Fornitore"
+                        label="Fornitore"
+                        groupName="Group1"
+                        visibleInFilterBar="true"
+                    >
+                        <fb:control>
+                            <Input
+                                name="Fornitore"
+                                value="{DocStzFilterModel>/fornitore}"
+                            />
+                        </fb:control>
+                    </fb:FilterGroupItem>
+                </fb:filterGroupItems>
+            </fb:FilterBar>
+            <t:Table
+                rows="{MatchCodeDocStz>/OutputSet}"
+                selectionMode="Single"
+                id="DocStzTable"
+                selectionBehavior="RowOnly"
+            >
+                <t:columns>
+                    <t:Column>
+                        <t:label>
+                            <Label text="Esercizio" />
+                        </t:label>
+                        <t:template>
+                            <Text text="{MatchCodeDocStz>Gjahr}" />
+                        </t:template>
+                    </t:Column>
+                    <t:Column>
+                        <t:label>
+                            <Label text="Posizione" />
+                        </t:label>
+                        <t:template>
+                            <Text text="{MatchCodeDocStz>Buzei}" />
+                        </t:template>
+                    </t:Column>
+                    <t:Column>
+                        <t:label>
+                            <Label text="N.Doc" />
+                        </t:label>
+                        <t:template>
+                            <Text text="{MatchCodeDocStz>Belnr}" />
+                        </t:template>
+                    </t:Column>
+                    <t:Column>
+                        <t:label>
+                            <Label text="Residuo" />
+                        </t:label>
+                        <t:template>
+                            <Text text="{MatchCodeDocStz>Zsospeso}" />
+                        </t:template>
+                    </t:Column>
+                    <t:Column>
+                        <t:label>
+                            <Label text="Fornitore" />
+                        </t:label>
+                        <t:template>
+                            <Text text="{MatchCodeDocStz>Sgtxt}" />
+                        </t:template>
+                    </t:Column>
+                    <t:Column>
+                        <t:label>
+                            <Label text="Altri Doc." />
+                        </t:label>
+                        <t:template>
+                            <!-- <Text text="{MatchCodeDocStz>Zotherdoc}" /> -->
+                            <ObjectStatus
+                                icon="{= ${MatchCodeDocStz>Zotherdoc} ? 'sap-icon://accept' : 'sap-icon://decline'}"
+                                state="{= ${MatchCodeDocStz>Zotherdoc} ? 'Success' : 'Error'}"
+                            />
+                        </t:template>
+                    </t:Column>
+                </t:columns>
+            </t:Table>
+            <HBox justifyContent="End">
+                <Button
+                    text="Chiudi"
+                    type="Default"
+                    press="OnCloseStzDialog"
+                    class="sapUiTinyMarginEnd"
+                />
+                <Button
+                    text="Seleziona"
+                    type="Default"
+                    press="OnSelectStz"
+                    class="sapUiTinyMarginEnd"
+                />
+            </HBox>
+        </content>
+    </Dialog>
+</core:FragmentDefinition>

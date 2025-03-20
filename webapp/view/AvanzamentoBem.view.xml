@@ -129,7 +129,7 @@
                                 visible="{= ${DatiBemDetail>/ListaCampiSet/Zbldat} ? ${DatiBemDetail>/ListaCampiSet/Zbldat/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
                                 editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zbldat} ? !${DatiBemDetail>/ListaCampiSet/Zbldat/Zrdonly} : false)) }"
                                 required="{DatiBemDetail>/ListaCampiSet/Zbldat/Zstate}"
-                                change=".onDateChange"
+                                change=".onChangeAggiornaAnnoStaz"
                             />
 
                             <Label
@@ -154,6 +154,7 @@
                                 visible="{= ${DatiBemDetail>/ListaCampiSet/Zbudat} ? ${DatiBemDetail>/ListaCampiSet/Zbudat/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
                                 editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zbudat} ? !${DatiBemDetail>/ListaCampiSet/Zbudat/Zrdonly} : false)) }"
                                 required="{DatiBemDetail>/ListaCampiSet/Zbudat/Zstate}"
+                                change=".onChangeAggiornaAnnoStaz"
                             />
 
                             <Label
@@ -322,6 +323,7 @@
                                 visible="{= ${DatiBemDetail>/ListaCampiSet/Zfrbnr} ? ${DatiBemDetail>/ListaCampiSet/Zfrbnr/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
                                 editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zfrbnr} ? !${DatiBemDetail>/ListaCampiSet/Zfrbnr/Zrdonly} : !${DatiBemDetail>/ListaCampiSet/*/Zrdonly})) }"
                                 required="{DatiBemDetail>/ListaCampiSet/Zfrbnr/Zstate}"
+                                change=".onChangeAggiornaAnnoStaz"
                             />
 
                             <Label
@@ -510,11 +512,17 @@
                     >
                         <Label text="Anno Stz." />
                         <t:template>
-                            <Input
+                            <DatePicker
+                                displayFormat="yyyy"
+                                valueFormat="yyyy"
+                                editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zsta_Stzahr} ? !${DatiBemDetail>/ListaCampiSet/Zsta_Stzahr/Zrdonly} : !${DatiBemDetail>/ListaCampiSet/*/Zrdonly})) }"
+                                value="{DatiBemDetail>ZstaStzahr}"
+                            />
+                            <!-- <Input
                                 value="{DatiBemDetail>ZstaStzahr}"
                                 maxLength="4"
                                 editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zsta_Stzahr} ? !${DatiBemDetail>/ListaCampiSet/Zsta_Stzahr/Zrdonly} : !${DatiBemDetail>/ListaCampiSet/*/Zrdonly})) }"
-                            />
+                            /> -->
                         </t:template>
                     </t:Column>
                     <t:Column
@@ -536,10 +544,7 @@
                     >
                         <Label text="N. Doc Stz" />
                         <t:template>
-                            <Input
-                                value="{DatiBemDetail>ZstaBelnrBm}"
-                                editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zsta_Belnr_Bm} ? !${DatiBemDetail>/ListaCampiSet/Zsta_Belnr_Bm/Zrdonly} : !${DatiBemDetail>/ListaCampiSet/*/Zrdonly})) }"
-                            />
+                            <Input value="{DatiBemDetail>ZstaBelnrBm}" showValueHelp="true" valueHelpRequest="DocStazValueHelp" editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zsta_Belnr_Bm} ? !${DatiBemDetail>/ListaCampiSet/Zsta_Belnr_Bm/Zrdonly} : !${DatiBemDetail>/ListaCampiSet/*/Zrdonly})) }" />
                         </t:template>
                     </t:Column>
                     <t:Column

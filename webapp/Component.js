@@ -41,6 +41,8 @@ sap.ui.define([
 
                 this.setModel(new JSONModel({ Fornitori: [], Stato: [], Commessa: [], SedeTecnica: [] }), "MatchCode");
 
+                this.setModel(new JSONModel({ Fornitore: [],  descrizione: [], esercizio: [], stanziamenti: []}), "MatchCodeDocStz");
+
                 this.setModel(new JSONModel({societa:[
                     { value: '', description: '' },
                     { value: 'CGEF', description: 'CO.GE.F. soc.cons.r.l.' },
@@ -202,6 +204,14 @@ sap.ui.define([
                 this.setModel(models.FileUpload(), "FileUploadModel");
 
                 this.setModel(models.createAllegatiConfig(), "AllegatiConfig");    
+                this.setModel(models.createDocStz(), "DocStzModel"); 
+
+                this.setModel(new JSONModel({
+                    wbs:"",
+                    esercizio:"",
+                    fornitore:""
+                  
+                }), "DocStzFilterModel");
                 
                 
             }

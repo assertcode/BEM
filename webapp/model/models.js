@@ -48,6 +48,12 @@ function (JSONModel, Device) {
             ]);
             return oModel;
         },
+
+        createDocStz:function() {
+            var oModel = new JSONModel([]);
+            return oModel;
+
+        }
         
     };
 

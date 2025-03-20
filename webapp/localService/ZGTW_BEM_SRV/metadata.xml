@@ -1,0 +1,1426 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:sap="http://www.sap.com/Protocols/SAPData">
+    <edmx:DataServices m:DataServiceVersion="2.0">
+        <Schema Namespace="ZGTW_BEM_SRV" xml:lang="it" sap:schema-version="1" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+            <EntityType Name="Subscription" sap:semantics="subscriptions" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.String" Nullable="false" MaxLength="32" sap:label="Sub. ID" sap:creatable="false" sap:updatable="false" sap:filterable="false"/>
+                <Property Name="user" Type="Edm.String" MaxLength="12" m:FC_TargetPath="SyndicationAuthorName" m:FC_KeepInContent="false" sap:label="Nome utente" sap:creatable="false" sap:filterable="false"/>
+                <Property Name="updated" Type="Edm.DateTime" Precision="0" m:FC_TargetPath="SyndicationUpdated" m:FC_KeepInContent="false" sap:label="Timestamp" sap:creatable="false" sap:filterable="false"/>
+                <Property Name="title" Type="Edm.String" MaxLength="255" m:FC_TargetPath="SyndicationTitle" m:FC_KeepInContent="false" sap:label="Title" sap:filterable="false"/>
+                <Property Name="deliveryAddress" Type="Edm.String" sap:label="Delivery Address" sap:filterable="false"/>
+                <Property Name="persistNotifications" Type="Edm.Boolean" sap:label="Persist Notification" sap:filterable="false"/>
+                <Property Name="collection" Type="Edm.String" MaxLength="40" sap:label="Collection" sap:filterable="false"/>
+                <Property Name="filter" Type="Edm.String" sap:label="Filter" sap:filterable="false"/>
+                <Property Name="select" Type="Edm.String" MaxLength="255" sap:label="Select" sap:filterable="false"/>
+                <Property Name="changeType" Type="Edm.String" MaxLength="30" sap:label="Change Type"/>
+            </EntityType>
+            <EntityType Name="Notification" sap:semantics="notifications" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.String" Nullable="false" MaxLength="32" sap:label="Notification ID"/>
+                <Property Name="collection" Type="Edm.String" MaxLength="40" sap:label="Collection"/>
+                <Property Name="title" Type="Edm.String" m:FC_TargetPath="SyndicationTitle" m:FC_KeepInContent="false" sap:label="Notif. Text"/>
+                <Property Name="updated" Type="Edm.DateTime" Precision="0" m:FC_TargetPath="SyndicationUpdated" m:FC_KeepInContent="false" sap:label="Timestamp"/>
+                <Property Name="changeType" Type="Edm.String" MaxLength="30" sap:label="Change Type"/>
+                <Property Name="entriesOfInterest" Type="Edm.Int32" sap:label="No. of Entries"/>
+                <Property Name="recipient" Type="Edm.String" MaxLength="112" sap:label="Recipient" sap:creatable="false" sap:updatable="false"/>
+            </EntityType>
+            <EntityType Name="GETLIST" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="INumeroprotocollo"/>
+                </Key>
+                <Property Name="IUser" Type="Edm.String" MaxLength="12" sap:unicode="false" sap:label="Nome utente"/>
+                <Property Name="ITplnr" Type="Edm.String" MaxLength="40" sap:unicode="false" sap:label="Sede tecnica"/>
+                <Property Name="ITicket" Type="Edm.String" MaxLength="10" sap:unicode="false" sap:label="N.Ticket GET"/>
+                <Property Name="IStatobem" Type="Edm.String" MaxLength="3" sap:unicode="false" sap:label="Tipo Stato"/>
+                <Property Name="ISocieta" Type="Edm.String" MaxLength="4" sap:unicode="false" sap:label="Società"/>
+                <Property Name="INumBem" Type="Edm.String" MaxLength="10" sap:unicode="false" sap:label="N° Protocollo"/>
+                <Property Name="INumBef" Type="Edm.String" MaxLength="10" sap:unicode="false" sap:label="N° Protocollo"/>
+                <Property Name="INumeroprotocollo" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="N° Protocollo"/>
+                <Property Name="INumerooda" Type="Edm.String" MaxLength="10" sap:unicode="false" sap:label="Doc. d'acquisto"/>
+                <Property Name="INumerobem" Type="Edm.String" MaxLength="10" sap:unicode="false" sap:label="Doc. mat."/>
+                <Property Name="IModel" Type="Edm.String" MaxLength="3" sap:unicode="false" sap:label="Mod.contabiliz."/>
+                <Property Name="IKostl" Type="Edm.String" MaxLength="10" sap:unicode="false" sap:label="CdC"/>
+                <Property Name="IGruppoacquisti" Type="Edm.String" MaxLength="3" sap:unicode="false" sap:label="Gruppo acquisti"/>
+                <Property Name="IEstrpersonale" Type="Edm.Boolean" sap:unicode="false" sap:label="Casella di spunta"/>
+                <Property Name="IEstrparziale" Type="Edm.Boolean" sap:unicode="false" sap:label="Casella di spunta"/>
+                <Property Name="IDataDa" Type="Edm.DateTime" Precision="0" sap:unicode="false" sap:label="Data"/>
+                <Property Name="IDataA" Type="Edm.DateTime" Precision="0" sap:unicode="false" sap:label="Data"/>
+                <Property Name="IDatabem" Type="Edm.DateTime" Precision="0" sap:unicode="false" sap:label="Data documento"/>
+                <Property Name="ICup" Type="Edm.String" MaxLength="15" sap:unicode="false" sap:label="Numero CUP"/>
+                <Property Name="ICommessa" Type="Edm.String" MaxLength="24" sap:unicode="false" sap:label="Elemento WBS"/>
+                <Property Name="ICodicefornitore" Type="Edm.String" MaxLength="10" sap:unicode="false" sap:label="Fornitore"/>
+                <Property Name="ICig" Type="Edm.String" MaxLength="10" sap:unicode="false" sap:label="Numero CIG"/>
+                <Property Name="IBef" Type="Edm.Boolean" sap:unicode="false" sap:label="Flag tre stati"/>
+                <Property Name="IAutorebem" Type="Edm.String" MaxLength="12" sap:unicode="false" sap:label="Creato da"/>
+                <Property Name="IAufnr" Type="Edm.String" MaxLength="12" sap:unicode="false" sap:label="Ordine int."/>
+                <Property Name="IArea" Type="Edm.String" MaxLength="2" sap:unicode="false" sap:label="Area Territoriale"/>
+                <NavigationProperty Name="LISTDOCSet" Relationship="ZGTW_BEM_SRV.GETLIST_LISTDO" FromRole="FromRole_GETLIST_LISTDO" ToRole="ToRole_GETLIST_LISTDO"/>
+            </EntityType>
+            <EntityType Name="LISTDOC" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Znprot"/>
+                </Key>
+                <Property Name="Znprot" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="N° Protocollo"/>
+                <Property Name="Zbldat" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="Data documento"/>
+                <Property Name="Ztpstato" Type="Edm.String" MaxLength="3" sap:unicode="false" sap:label="Tipo Stato"/>
+                <Property Name="Zernam" Type="Edm.String" MaxLength="12" sap:unicode="false" sap:label="Creato da"/>
+                <Property Name="Zlifnr" Type="Edm.String" MaxLength="10" sap:unicode="false" sap:label="Fornitore"/>
+                <Property Name="Zebeln" Type="Edm.String" MaxLength="10" sap:unicode="false" sap:label="Doc. d'acquisto"/>
+                <Property Name="Ztpprot" Type="Edm.String" MaxLength="2" sap:unicode="false" sap:label="Tipo Protocollo"/>
+                <Property Name="Zdesctp" Type="Edm.String" MaxLength="40" sap:unicode="false" sap:label="Testo (40 posizioni)"/>
+                <Property Name="Zdescst" Type="Edm.String" MaxLength="40" sap:unicode="false" sap:label="Testo (40 posizioni)"/>
+                <Property Name="Zbudat" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="Data di reg."/>
+                <Property Name="Zname1" Type="Edm.String" MaxLength="30" sap:unicode="false" sap:label="Nome 1"/>
+                <Property Name="Znetwr" Type="Edm.Decimal" Precision="16" Scale="3" sap:unicode="false" sap:unit="Zwaers" sap:label="Valore netto"/>
+                <Property Name="Zcup" Type="Edm.String" MaxLength="15" sap:unicode="false" sap:label="Numero CUP"/>
+                <Property Name="Zcig" Type="Edm.String" MaxLength="10" sap:unicode="false" sap:label="Numero CIG"/>
+                <Property Name="Zwaers" Type="Edm.String" MaxLength="5" sap:unicode="false" sap:label="Divisa" sap:semantics="currency-code"/>
+                <Property Name="Zareat" Type="Edm.String" MaxLength="2" sap:unicode="false" sap:label="Area Territoriale"/>
+                <Property Name="Zdscarea" Type="Edm.String" MaxLength="40" sap:unicode="false" sap:label="Testo (40 posizioni)"/>
+                <Property Name="Zpspnr" Type="Edm.String" MaxLength="24" sap:unicode="false" sap:label="Elemento WBS"/>
+                <Property Name="Zpost1" Type="Edm.String" MaxLength="40" sap:unicode="false" sap:label="Definizione"/>
+                <Property Name="Ztpprotoda" Type="Edm.String" MaxLength="2" sap:unicode="false" sap:label="Tipo Protocollo"/>
+                <Property Name="Zdesctpoda" Type="Edm.String" MaxLength="40" sap:unicode="false" sap:label="Testo (40 posizioni)"/>
+                <Property Name="Zimportobdl" Type="Edm.Decimal" Precision="16" Scale="3" sap:unicode="false" sap:unit="Zwaers" sap:label="Imp.Benestariato BEM"/>
+                <Property Name="Zbef" Type="Edm.Boolean" sap:unicode="false" sap:label="Casella di spunta"/>
+                <Property Name="Zdtannul" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="Data Annullamento"/>
+                <Property Name="Zusannul" Type="Edm.String" MaxLength="12" sap:unicode="false" sap:label="Utente Annullamento"/>
+                <Property Name="Zlemin" Type="Edm.Boolean" sap:unicode="false" sap:label="Codice reso srv."/>
+                <Property Name="Zautobem" Type="Edm.Boolean" sap:unicode="false" sap:label="BEM Automatica"/>
+                <Property Name="Ztplnr" Type="Edm.String" MaxLength="40" sap:unicode="false" sap:label="Sede tecnica"/>
+                <Property Name="Zpltxt" Type="Edm.String" MaxLength="40" sap:unicode="false" sap:label="Definizione"/>
+                <Property Name="Zdesccig" Type="Edm.String" MaxLength="50" sap:unicode="false" sap:label="Descriz."/>
+                <Property Name="Zkostl" Type="Edm.String" MaxLength="10" sap:unicode="false" sap:label="CdC"/>
+                <Property Name="ZdescrCdc" Type="Edm.String" MaxLength="40" sap:unicode="false" sap:label="Descrizione"/>
+                <Property Name="Zaufnr" Type="Edm.String" MaxLength="12" sap:unicode="false" sap:label="Ordine int."/>
+                <Property Name="Zauftext" Type="Edm.String" MaxLength="40" sap:unicode="false" sap:label="Tsto br."/>
+                <Property Name="Zmodel" Type="Edm.String" MaxLength="3" sap:unicode="false" sap:label="Mod.contabiliz."/>
+            </EntityType>
+            <EntityType Name="BEM" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="ITpprot"/>
+                    <PropertyRef Name="IBukrs"/>
+                </Key>
+                <Property Name="ITpprot" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Tipo Protocollo" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="IBukrs" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Società" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="IUser" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="Nome utente" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ENprot" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="N° Protocollo" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="OdaForBem" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="ISocieta"/>
+                    <PropertyRef Name="ITipoprotocollo"/>
+                </Key>
+                <Property Name="IAufnr" Type="Edm.String" MaxLength="12" sap:unicode="false" sap:label="Ordine int."/>
+                <Property Name="IBatch" Type="Edm.Boolean" sap:unicode="false" sap:label="Casella di spunta"/>
+                <Property Name="ICommessa" Type="Edm.String" MaxLength="24" sap:unicode="false" sap:label="Elemento WBS"/>
+                <Property Name="IEbeln" Type="Edm.String" MaxLength="10" sap:unicode="false" sap:label="Doc. d'acquisto"/>
+                <Property Name="IGetTicketDetails" Type="Edm.Boolean" sap:unicode="false" sap:label="Casella di spunta"/>
+                <Property Name="IKostl" Type="Edm.String" MaxLength="10" sap:unicode="false" sap:label="CdC"/>
+                <Property Name="ILifnr" Type="Edm.String" MaxLength="10" sap:unicode="false" sap:label="Fornitore"/>
+                <Property Name="IModel" Type="Edm.String" MaxLength="3" sap:unicode="false" sap:label="Mod.contabiliz."/>
+                <Property Name="ISedeTecnica" Type="Edm.String" MaxLength="40" sap:unicode="false" sap:label="Sede tecnica"/>
+                <Property Name="ISocieta" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Società"/>
+                <Property Name="ITicket" Type="Edm.String" MaxLength="10" sap:unicode="false" sap:label="N.Ticket GET"/>
+                <Property Name="ITipoprotocollo" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Tipo Protocollo"/>
+                <NavigationProperty Name="to_OdaForBemEDettaglio" Relationship="ZGTW_BEM_SRV.OdaForBemToOdaForBemEDettaglio" FromRole="FromRole_OdaForBemToOdaForBemEDettaglio" ToRole="ToRole_OdaForBemToOdaForBemEDettaglio"/>
+            </EntityType>
+            <EntityType Name="OdaForBemEDettaglio" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Isocieta"/>
+                    <PropertyRef Name="Itipoprotocollo"/>
+                </Key>
+                <Property Name="Isocieta" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Cliente" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Itipoprotocollo" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Tipo Protocollo" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zebeln" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Doc. d'acquisto" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zebelp" Type="Edm.String" Nullable="false" MaxLength="5" sap:unicode="false" sap:label="Posizione" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zmatnr" Type="Edm.String" Nullable="false" MaxLength="18" sap:unicode="false" sap:label="Materiale" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Ztxz01" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Testo breve" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zmatkl" Type="Edm.String" Nullable="false" MaxLength="9" sap:unicode="false" sap:label="Gruppo merci" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zpstyp" Type="Edm.String" Nullable="false" MaxLength="1" sap:unicode="false" sap:label="Tipo posizione" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ZpsPosid" Type="Edm.String" Nullable="false" MaxLength="24" sap:unicode="false" sap:label="Elemento WBS" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zmenge" Type="Edm.Decimal" Nullable="false" Precision="13" Scale="3" sap:unicode="false" sap:label="Quantità" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zmeins" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Unità mis. base" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" sap:semantics="unit-of-measure"/>
+                <Property Name="Znetpr" Type="Edm.Decimal" Nullable="false" Precision="12" Scale="3" sap:unicode="false" sap:label="Prezzo netto" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ZpsPosidT" Type="Edm.String" Nullable="false" MaxLength="24" sap:unicode="false" sap:label="Elemento WBS" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ZpsPost1T" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Definizione" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ZlifnrT" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Fornitore" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zname1T" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Nome 1" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ZekgrpT" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Gruppo acquisti" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zeknam" Type="Edm.String" Nullable="false" MaxLength="18" sap:unicode="false" sap:label="Definizione" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zareat" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Area Territoriale" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zdscarea" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Testo (40 posizioni)" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zstarea" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Sotto Area" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zdscareas" Type="Edm.String" Nullable="false" MaxLength="80" sap:unicode="false" sap:label="Testo" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zernam" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="Nome utente" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zkbetr" Type="Edm.Decimal" Nullable="false" Precision="12" Scale="3" sap:unicode="false" sap:label="Importo" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zprzsconto" Type="Edm.Decimal" Nullable="false" Precision="12" Scale="3" sap:unicode="false" sap:label="Prezzo netto" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ZticketExists" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Dett. Ticket" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zpomenge" Type="Edm.Decimal" Nullable="false" Precision="13" Scale="3" sap:unicode="false" sap:label="Quantità" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zponetpr" Type="Edm.Decimal" Nullable="false" Precision="12" Scale="3" sap:unicode="false" sap:label="Prezzo netto" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zdtinatt" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="Data Inizio Attività" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zdtfiatt" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="Data Fine Attività" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ZstaStzahr" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Anno stanziam." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ZstaPrcStz" Type="Edm.Decimal" Nullable="false" Precision="6" Scale="3" sap:unicode="false" sap:label="Percent. stanz." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ZstaDmStz" Type="Edm.Decimal" Nullable="false" Precision="14" Scale="3" sap:unicode="false" sap:label="Importo stanziato" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ZstaStzFin" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Casella di spunta" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ZstaBelnrBm" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="N.doc Stz Prop.BM" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ZstaBuzeiBm" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Pos.Doc.Stz.Prop." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ZstaNoteBm" Type="Edm.String" Nullable="false" MaxLength="50" sap:unicode="false" sap:label="Note del BM" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zsconto1" Type="Edm.Decimal" Nullable="false" Precision="12" Scale="3" sap:unicode="false" sap:label="Importo" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zsconto2" Type="Edm.Decimal" Nullable="false" Precision="12" Scale="3" sap:unicode="false" sap:label="Importo" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zsconto3" Type="Edm.Decimal" Nullable="false" Precision="12" Scale="3" sap:unicode="false" sap:label="Importo" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zcup" Type="Edm.String" Nullable="false" MaxLength="15" sap:unicode="false" sap:label="Numero CUP" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zcig" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Numero CIG" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zodabatch" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="ODA Batch" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ZstaGjahrBm" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Anno Stz Prop" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Ztplnr" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Sede tecnica" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zpltxt" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Definizione" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zknttp" Type="Edm.String" Nullable="false" MaxLength="1" sap:unicode="false" sap:label="Cat.contab." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zdesccig" Type="Edm.String" Nullable="false" MaxLength="50" sap:unicode="false" sap:label="Descriz." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zpeinh" Type="Edm.Decimal" Nullable="false" Precision="5" Scale="0" sap:unicode="false" sap:label="Unità di prezzo" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zdisabled" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Casella di spunta" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zkostl" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="CdC" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ZdescrCdc" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Descrizione" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zaufnr" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="Ordine int." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zauftext" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Tsto br." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zmodel" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Mod.contabiliz." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="REJECT" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="INumeroprotocollo"/>
+                </Key>
+                <Property Name="IBudat" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="Data di reg."/>
+                <Property Name="ICommit" Type="Edm.String" MaxLength="1" sap:unicode="false" sap:label="Commit"/>
+                <Property Name="INumeroprotocollo" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="N° Protocollo"/>
+                <Property Name="IUser" Type="Edm.String" MaxLength="12" sap:unicode="false" sap:label="Nome utente"/>
+                <Property Name="Message" Type="Edm.String" Nullable="false" MaxLength="220" sap:unicode="false" sap:label="Testo mess." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="IDettaglio" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Znprot"/>
+                </Key>
+                <Property Name="Mandt" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Mandante" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Znprot" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="N° Protocollo" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zmblnr" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Doc. mat." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zmjahr" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Es. doc. mat." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zzeile" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Pos. doc. mat." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zebelp" Type="Edm.String" Nullable="false" MaxLength="5" sap:unicode="false" sap:label="Posizione" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zmatnr" Type="Edm.String" Nullable="false" MaxLength="18" sap:unicode="false" sap:label="Materiale" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zmaktx" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Definizione" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zmatkl" Type="Edm.String" Nullable="false" MaxLength="9" sap:unicode="false" sap:label="Gruppo merci" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zgsber" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Sett. cont." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ZpsPosid" Type="Edm.String" Nullable="false" MaxLength="24" sap:unicode="false" sap:label="Elemento WBS" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ZmengeD" Type="Edm.Decimal" Nullable="false" Precision="13" Scale="3" sap:unicode="false" sap:unit="Zmeins" sap:label="Quantità" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zmeins" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Unità mis. base" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" sap:semantics="unit-of-measure"/>
+                <Property Name="Zdmbtr" Type="Edm.Decimal" Nullable="false" Precision="14" Scale="3" sap:unicode="false" sap:label="Imp.div.int." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zsgtxt" Type="Edm.String" Nullable="false" MaxLength="50" sap:unicode="false" sap:label="Testo" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zxblnr" Type="Edm.String" Nullable="false" MaxLength="16" sap:unicode="false" sap:label="Riferimento" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zkbetr" Type="Edm.Decimal" Nullable="false" Precision="12" Scale="3" sap:unicode="false" sap:label="Importo" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zprzsconto" Type="Edm.Decimal" Nullable="false" Precision="12" Scale="3" sap:unicode="false" sap:label="Prezzo netto" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ZticketExists" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Dett. Ticket" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zelikz" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Consegna finale" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ZstaStzahr" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Anno stanziam." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ZstaPrcStz" Type="Edm.Decimal" Nullable="false" Precision="6" Scale="3" sap:unicode="false" sap:label="Percent. stanz." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ZstaDmStz" Type="Edm.Decimal" Nullable="false" Precision="14" Scale="3" sap:unicode="false" sap:label="Importo stanziato" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ZstaStzFin" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Casella di spunta" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ZstaBelnrBm" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="N.doc Stz Prop.BM" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ZstaBuzeiBm" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Pos.Doc.Stz.Prop." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ZstaNoteBm" Type="Edm.String" Nullable="false" MaxLength="50" sap:unicode="false" sap:label="Note del BM" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zcup" Type="Edm.String" Nullable="false" MaxLength="15" sap:unicode="false" sap:label="Numero CUP" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zcig" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Numero CIG" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ZglAccount" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Conto Co.Ge." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Znprotbemrif" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="N° Protocollo" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zposnrbemrif" Type="Edm.String" Nullable="false" MaxLength="5" sap:unicode="false" sap:label="Posizione" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zsospeso" Type="Edm.Decimal" Nullable="false" Precision="16" Scale="3" sap:unicode="false" sap:label="Valore netto" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zotherdoc" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Altri documenti" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ZstaGjahrBm" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Anno Stz Prop" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Ztplnr" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Sede tecnica" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zpltxt" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Definizione" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zknttp" Type="Edm.String" Nullable="false" MaxLength="1" sap:unicode="false" sap:label="Cat.contab." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zdesccig" Type="Edm.String" Nullable="false" MaxLength="50" sap:unicode="false" sap:label="Descriz." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="Fornitori" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Lifnr"/>
+                </Key>
+                <Property Name="Bukrs" Type="Edm.String" MaxLength="4" sap:unicode="false"/>
+                <Property Name="Lifnr" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false"/>
+                <Property Name="Name1" Type="Edm.String" MaxLength="35" sap:unicode="false"/>
+                <Property Name="Ort01" Type="Edm.String" MaxLength="35" sap:unicode="false"/>
+                <Property Name="Pstlz" Type="Edm.String" MaxLength="10" sap:unicode="false"/>
+            </EntityType>
+            <EntityType Name="Commessa" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="IPosid"/>
+                </Key>
+                <Property Name="IPosid" Type="Edm.String" Nullable="false" MaxLength="24" sap:unicode="false" sap:label="Elemento WBS"/>
+                <Property Name="IPost1" Type="Edm.String" MaxLength="40" sap:unicode="false" sap:label="Definizione"/>
+                <Property Name="IPspid" Type="Edm.String" MaxLength="24" sap:unicode="false" sap:label="Commessa"/>
+                <Property Name="IVerna" Type="Edm.String" MaxLength="25" sap:unicode="false" sap:label="Responsabile"/>
+                <Property Name="IWbsliv" Type="Edm.String" MaxLength="2" sap:unicode="false" sap:label="Livelli Wbs"/>
+                <Property Name="IWbspadre" Type="Edm.String" MaxLength="24" sap:unicode="false" sap:label="Elemento WBS"/>
+                <Property Name="IZztipocliente" Type="Edm.String" MaxLength="2" sap:unicode="false" sap:label="Mercato"/>
+                <NavigationProperty Name="EValoriSet" Relationship="ZGTW_BEM_SRV.CommessaValori" FromRole="FromRole_CommessaValori" ToRole="ToRole_CommessaValori"/>
+            </EntityType>
+            <EntityType Name="EValori" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Zposid"/>
+                </Key>
+                <Property Name="Zposid" Type="Edm.String" Nullable="false" MaxLength="24" sap:unicode="false" sap:label="Elemento WBS"/>
+                <Property Name="Zpost1" Type="Edm.String" MaxLength="40" sap:unicode="false" sap:label="Definizione"/>
+                <Property Name="Zzvmercato" Type="Edm.String" MaxLength="60" sap:unicode="false" sap:label="Mercato"/>
+            </EntityType>
+            <EntityType Name="BEM_CHANGE" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="INumeroprotocollo"/>
+                </Key>
+                <Property Name="INumeroprotocollo" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="N° Protocollo"/>
+                <Property Name="IStatusnew" Type="Edm.String" MaxLength="3" sap:unicode="false" sap:label="Stato Successivo"/>
+                <Property Name="IUser" Type="Edm.String" MaxLength="12" sap:unicode="false" sap:label="Nome utente"/>
+                <Property Name="ICommit" Type="Edm.String" MaxLength="1" sap:unicode="false" sap:label="Commit"/>
+                <Property Name="Message" Type="Edm.String" MaxLength="220" sap:unicode="false" sap:label="Testo mess."/>
+                <Property Name="Znprot" Type="Edm.String" MaxLength="10" sap:unicode="false" sap:label="N° Protocollo"/>
+                <Property Name="Zbldat" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="Data documento"/>
+                <Property Name="Zbudat" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="Data di reg."/>
+                <Property Name="Zebeln" Type="Edm.String" MaxLength="10" sap:unicode="false" sap:label="Doc. d'acquisto"/>
+                <Property Name="Zekgrp" Type="Edm.String" MaxLength="3" sap:unicode="false" sap:label="Gruppo acquisti"/>
+                <Property Name="ZpsPosid" Type="Edm.String" MaxLength="24" sap:unicode="false" sap:label="Elemento WBS"/>
+                <Property Name="ZpsPost1" Type="Edm.String" MaxLength="40" sap:unicode="false" sap:label="Definizione"/>
+                <Property Name="Zlifnr" Type="Edm.String" MaxLength="10" sap:unicode="false" sap:label="Fornitore"/>
+                <Property Name="Zname1" Type="Edm.String" MaxLength="30" sap:unicode="false" sap:label="Nome 1"/>
+                <Property Name="Zbukrs" Type="Edm.String" MaxLength="4" sap:unicode="false" sap:label="Società"/>
+                <Property Name="Zuname" Type="Edm.String" MaxLength="12" sap:unicode="false" sap:label="Nome utente"/>
+                <Property Name="ZnetwrAk" Type="Edm.Decimal" Precision="16" Scale="3" sap:unicode="false" sap:label="Valore netto"/>
+                <Property Name="Ztpprot" Type="Edm.String" MaxLength="2" sap:unicode="false" sap:label="Tipo Protocollo"/>
+                <Property Name="Zerdat" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="Data cr."/>
+                <Property Name="Zernam" Type="Edm.String" MaxLength="12" sap:unicode="false" sap:label="Creato da"/>
+                <Property Name="Ztpstato" Type="Edm.String" MaxLength="3" sap:unicode="false" sap:label="Tipo Stato"/>
+                <Property Name="Ztpsotst" Type="Edm.String" MaxLength="3" sap:unicode="false" sap:label="Tipo Sotto Stato"/>
+                <Property Name="Ztpogg" Type="Edm.String" MaxLength="2" sap:unicode="false" sap:label="Tipo Oggetto"/>
+                <Property Name="Zdescst" Type="Edm.String" MaxLength="40" sap:unicode="false" sap:label="Testo (40 posizioni)"/>
+                <Property Name="Zdesctp" Type="Edm.String" MaxLength="40" sap:unicode="false" sap:label="Testo (40 posizioni)"/>
+                <Property Name="Zareat" Type="Edm.String" MaxLength="2" sap:unicode="false" sap:label="Area Territoriale"/>
+                <Property Name="Zdscarea" Type="Edm.String" MaxLength="40" sap:unicode="false" sap:label="Testo (40 posizioni)"/>
+                <Property Name="Zstarea" Type="Edm.String" MaxLength="2" sap:unicode="false" sap:label="Sotto Area"/>
+                <Property Name="Zdscareas" Type="Edm.String" MaxLength="80" sap:unicode="false" sap:label="Testo"/>
+                <Property Name="Zxblnr1" Type="Edm.String" MaxLength="16" sap:unicode="false" sap:label="Riferimento"/>
+                <Property Name="Zfrbnr" Type="Edm.String" MaxLength="16" sap:unicode="false" sap:label="Lettera vettura"/>
+                <Property Name="Zeknam" Type="Edm.String" MaxLength="18" sap:unicode="false" sap:label="Definizione"/>
+                <Property Name="Zlemin" Type="Edm.Boolean" sap:unicode="false" sap:label="Codice reso srv."/>
+                <Property Name="Zautobem" Type="Edm.Boolean" sap:unicode="false" sap:label="BEM Automatica"/>
+                <Property Name="Zmotivsopravv" Type="Edm.String" MaxLength="255" sap:unicode="false" sap:label="Testo"/>
+                <Property Name="Zpernr" Type="Edm.String" MaxLength="8" sap:unicode="false" sap:label="C.I.D."/>
+                <Property Name="Zename" Type="Edm.String" MaxLength="40" sap:unicode="false" sap:label="Nome dip./cand."/>
+                <Property Name="Zkostl" Type="Edm.String" MaxLength="10" sap:unicode="false" sap:label="CdC"/>
+                <Property Name="ZdescrCdc" Type="Edm.String" MaxLength="40" sap:unicode="false" sap:label="Descrizione"/>
+                <Property Name="Zaufnr" Type="Edm.String" MaxLength="12" sap:unicode="false" sap:label="Ordine int."/>
+                <Property Name="Zauftext" Type="Edm.String" MaxLength="40" sap:unicode="false" sap:label="Tsto br."/>
+                <Property Name="Zmodel" Type="Edm.String" MaxLength="3" sap:unicode="false" sap:label="Mod.contabiliz."/>
+                <NavigationProperty Name="IGroupsSet" Relationship="ZGTW_BEM_SRV.HEADER_BEM_CHANGE_GROUPS" FromRole="FromRole_HEADER_BEM_CHANGE_GROUPS" ToRole="ToRole_HEADER_BEM_CHANGE_GROUPS"/>
+                <NavigationProperty Name="IDettaglioSet" Relationship="ZGTW_BEM_SRV.HEADER_BEM_CHANGE_DETTAGLIO" FromRole="FromRole_HEADER_BEM_CHANGE_DETTAGLIO" ToRole="ToRole_HEADER_BEM_CHANGE_DETTAGLIO"/>
+            </EntityType>
+            <EntityType Name="IGroups" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Znprot"/>
+                </Key>
+                <Property Name="Znprot" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="N° Protocollo" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zgroup" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Testo (40 posizioni)" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="GETBDLINFO" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="INumeroprotocollo"/>
+                </Key>
+                <Property Name="INumeroprotocollo" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="N° Protocollo" sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+                <NavigationProperty Name="E_BEM_GETBDLINFO" Relationship="ZGTW_BEM_SRV.GETBDLINFO_TO_E_BEM_GETBDLINFO" FromRole="FromRole_GETBDLINFO_TO_E_BEM_GETBDLINFO" ToRole="ToRole_GETBDLINFO_TO_E_BEM_GETBDLINFO"/>
+            </EntityType>
+            <EntityType Name="E_BEM_GETBDLINFO" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="INumeroprotocollo"/>
+                </Key>
+                <Property Name="ImportoBdl" Type="Edm.Decimal" Nullable="false" Precision="16" Scale="3" sap:unicode="false" sap:label="Valore netto" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="BefFinale" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="BEF Finale" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="INumeroprotocollo" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="N° Protocollo" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="ECqem" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="IBukrs"/>
+                </Key>
+                <Property Name="IBukrs" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Società" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zcodcq" Type="Edm.String" Nullable="false" MaxLength="1" sap:unicode="false" sap:label="Cod.CQ" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Ztxcq" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Des.cntr" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="GET_CTRL_QLTY" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="IBukrs"/>
+                </Key>
+                <Property Name="IBukrs" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Società" sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+                <Property Name="ITpprot" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Tipo Protocollo" sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+                <NavigationProperty Name="ECqemSet" Relationship="ZGTW_BEM_SRV.GET_CTRL_QLTY_TO_ECQEM" FromRole="FromRole_GET_CTRL_QLTY_TO_ECQEM" ToRole="ToRole_GET_CTRL_QLTY_TO_ECQEM"/>
+                <NavigationProperty Name="E_GET_CTRL_QLTYSet" Relationship="ZGTW_BEM_SRV.GET_CTRL_QLTY_TO_EGETQLTY" FromRole="FromRole_GET_CTRL_QLTY_TO_EGETQLTY" ToRole="ToRole_GET_CTRL_QLTY_TO_EGETQLTY"/>
+            </EntityType>
+            <EntityType Name="E_GET_CTRL_QLTY" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="IBukrs"/>
+                </Key>
+                <Property Name="ECodcq" Type="Edm.String" Nullable="false" MaxLength="1" sap:unicode="false" sap:label="Cod.CQ" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="EMaxSel" Type="Edm.String" Nullable="false" MaxLength="5" sap:unicode="false" sap:label="ZINT" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="IBukrs" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Società" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="ETab50001" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Bukrs"/>
+                </Key>
+                <Property Name="Lifnr" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Fornitore" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Bukrs" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Società" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Name1" Type="Edm.String" Nullable="false" MaxLength="35" sap:unicode="false" sap:label="Nome" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="FornAtt" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Attivazione Fornit." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="GET50001" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="ISocieta"/>
+                </Key>
+                <Property Name="ISocieta" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Società" sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+                <Property Name="IForn" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Fornitore" sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+                <NavigationProperty Name="ETab50001Set" Relationship="ZGTW_BEM_SRV.GET50001_TO_ETAB50001" FromRole="FromRole_GET50001_TO_ETAB50001" ToRole="ToRole_GET50001_TO_ETAB50001"/>
+            </EntityType>
+            <EntityType Name="EListdoc" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Zbukrs"/>
+                </Key>
+                <Property Name="Zebeln" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Doc. d'acquisto" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zebelp" Type="Edm.String" Nullable="false" MaxLength="5" sap:unicode="false" sap:label="Posizione" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zbsart" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Tp.OrdAcq." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zbukrs" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Società" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ZwerksD" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Divisione" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zlifnr" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Fornitore" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zvedat" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="Data contratto" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zpstyp" Type="Edm.String" Nullable="false" MaxLength="1" sap:unicode="false" sap:label="Tipo posizione" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zmatnr" Type="Edm.String" Nullable="false" MaxLength="18" sap:unicode="false" sap:label="Materiale" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zmatkl" Type="Edm.String" Nullable="false" MaxLength="9" sap:unicode="false" sap:label="Gruppo merci" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Ztxz01" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Testo breve" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zkdatb" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="Inizio validità" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zkdate" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="Fine validità" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Znetpr" Type="Edm.Decimal" Nullable="false" Precision="12" Scale="3" sap:unicode="false" sap:unit="Zwaers" sap:label="Prezzo netto" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zktmng" Type="Edm.Decimal" Nullable="false" Precision="13" Scale="3" sap:unicode="false" sap:unit="Zmeins" sap:label="Qtà prevista" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zmeins" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Unità mis. base" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" sap:semantics="unit-of-measure"/>
+                <Property Name="Zktwrtr" Type="Edm.Decimal" Nullable="false" Precision="16" Scale="3" sap:unicode="false" sap:unit="Zwaers" sap:label="Valore previsto" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zktwrta" Type="Edm.Decimal" Nullable="false" Precision="16" Scale="3" sap:unicode="false" sap:unit="Zwaers" sap:label="Valore previsto" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zwaers" Type="Edm.String" Nullable="false" MaxLength="5" sap:unicode="false" sap:label="Divisa" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" sap:semantics="currency-code"/>
+                <Property Name="Zmwskz" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Codice IVA" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="POS_CONTRATTO_GETLIST" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="ISocieta"/>
+                </Key>
+                <Property Name="ITipocontratto" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Tp.OrdAcq." sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+                <Property Name="INumerocontratto" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Doc. d'acquisto" sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+                <Property Name="ISocieta" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Società" sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+                <Property Name="IDivisione" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Divisione" sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+                <Property Name="IFornitore" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Fornitore" sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+                <Property Name="IDatacontratto" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="Data contratto" sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+                <Property Name="ICodicemateriale" Type="Edm.String" Nullable="false" MaxLength="18" sap:unicode="false" sap:label="Materiale" sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+                <Property Name="IGruppomerce" Type="Edm.String" Nullable="false" MaxLength="9" sap:unicode="false" sap:label="Gruppo merci" sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+                <Property Name="IIniziovalidita" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="Inizio validità" sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+                <Property Name="IFinevalidita" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="Fine validità" sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+                <Property Name="ITipoPosizione" Type="Edm.String" Nullable="false" MaxLength="1" sap:unicode="false" sap:label="Tipo posizione" sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+                <Property Name="IApplication" Type="Edm.String" Nullable="false" MaxLength="1" sap:unicode="false" sap:label="Pos. Contr. Appl." sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+                <NavigationProperty Name="EListdocSet" Relationship="ZGTW_BEM_SRV.POS_CONTRATTO_GETLIST_TO_ELISTDOC" FromRole="FromRole_POS_CONTRATTO_GETLIST_TO_ELISTDOC" ToRole="ToRole_POS_CONTRATTO_GETLIST_TO_ELISTDOC"/>
+            </EntityType>
+            <EntityType Name="POS_ODAPLAFOND_GETLIST" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="ISocieta"/>
+                </Key>
+                <Property Name="INumeroordine" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Doc. d'acquisto" sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+                <Property Name="IFornitore" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Fornitore" sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+                <Property Name="ICommessa" Type="Edm.String" Nullable="false" MaxLength="24" sap:unicode="false" sap:label="Elemento WBS" sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+                <Property Name="IDataordine" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="Data ord. acq." sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+                <Property Name="IGruppomerce" Type="Edm.String" Nullable="false" MaxLength="9" sap:unicode="false" sap:label="Gruppo merci" sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+                <Property Name="ICodicemateriale" Type="Edm.String" Nullable="false" MaxLength="18" sap:unicode="false" sap:label="Materiale" sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+                <Property Name="IGruppoacquisti" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Gruppo acquisti" sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+                <Property Name="IDivisione" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Divisione" sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+                <Property Name="ISocieta" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Società" sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+                <Property Name="ITprifavv" Type="Edm.String" Nullable="false" MaxLength="1" sap:unicode="false" sap:label="Tipo posizione OdA" sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+                <NavigationProperty Name="EListdocSet" Relationship="ZGTW_BEM_SRV.POS_ODAPLAFOND_GETLIST_TO_ELISTDOC" FromRole="FromRole_POS_ODAPLAFOND_GETLIST_TO_ELISTDOC" ToRole="ToRole_POS_ODAPLAFOND_GETLIST_TO_ELISTDOC"/>
+            </EntityType>
+            <EntityType Name="BEM_ROLES_UPDATE" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Znprot"/>
+                </Key>
+                <Property Name="Znprot" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="N° Protocollo" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zbldat" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="Data documento" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zbudat" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="Data di reg." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zebeln" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Doc. d'acquisto" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zekgrp" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Gruppo acquisti" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ZpsPosid" Type="Edm.String" Nullable="false" MaxLength="24" sap:unicode="false" sap:label="Elemento WBS" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ZpsPost1" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Definizione" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zlifnr" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Fornitore" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zname1" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Nome 1" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zbukrs" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Società" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zuname" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="Nome utente" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ZnetwrAk" Type="Edm.Decimal" Nullable="false" Precision="16" Scale="3" sap:unicode="false" sap:label="Valore netto" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Ztpprot" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Tipo Protocollo" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zerdat" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="Data cr." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zernam" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="Creato da" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Ztpstato" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Tipo Stato" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Ztpsotst" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Tipo Sotto Stato" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Ztpogg" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Tipo Oggetto" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zdescst" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Testo (40 posizioni)" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zdesctp" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Testo (40 posizioni)" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zareat" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Area Territoriale" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zdscarea" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Testo (40 posizioni)" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zstarea" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Sotto Area" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zdscareas" Type="Edm.String" Nullable="false" MaxLength="80" sap:unicode="false" sap:label="Testo" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zxblnr1" Type="Edm.String" Nullable="false" MaxLength="16" sap:unicode="false" sap:label="Riferimento" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zfrbnr" Type="Edm.String" Nullable="false" MaxLength="16" sap:unicode="false" sap:label="Lettera vettura" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zeknam" Type="Edm.String" Nullable="false" MaxLength="18" sap:unicode="false" sap:label="Definizione" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zlemin" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Codice reso srv." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zautobem" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="BEM Automatica" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zmotivsopravv" Type="Edm.String" Nullable="false" MaxLength="255" sap:unicode="false" sap:label="Testo" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <NavigationProperty Name="IDettaglioSet" Relationship="ZGTW_BEM_SRV.BME_ROLES_UPDATE_TO_DETTAGLIO" FromRole="FromRole_BME_ROLES_UPDATE_TO_DETTAGLIO" ToRole="ToRole_BME_ROLES_UPDATE_TO_DETTAGLIO"/>
+            </EntityType>
+            <EntityType Name="GETODAINFO" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="IOda"/>
+                </Key>
+                <Property Name="IOda" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Doc. d'acquisto" sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+                <Property Name="IOdaPos" Type="Edm.String" Nullable="false" MaxLength="5" sap:unicode="false" sap:label="Posizione" sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+                <Property Name="IMblnr" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Doc. mat." sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+                <Property Name="IMjahr" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Es. doc. mat." sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+                <Property Name="IZeile" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Pos. doc. mat." sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+                <NavigationProperty Name="E_IMPORTO_RESIDUO_ODA" Relationship="ZGTW_BEM_SRV.GETODAINFO_TO_IMPORTORESIDUOODA" FromRole="FromRole_GETODAINFO_TO_IMPORTORESIDUOODA" ToRole="ToRole_GETODAINFO_TO_IMPORTORESIDUOODA"/>
+            </EntityType>
+            <EntityType Name="E_IMPORTO_RESIDUO_ODA" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="IOda"/>
+                </Key>
+                <Property Name="ImportoResiduoOda" Type="Edm.Decimal" Nullable="false" Precision="16" Scale="3" sap:unicode="false" sap:label="Valore netto" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="IOda" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Doc. d'acquisto" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="GETBDLINFO_POS" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="INprotBef"/>
+                </Key>
+                <Property Name="INprotBem" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="N° Protocollo" sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+                <Property Name="IPosnrBem" Type="Edm.String" Nullable="false" MaxLength="5" sap:unicode="false" sap:label="Posizione" sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+                <Property Name="INprotBef" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="N° Protocollo" sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+                <Property Name="IPosnrBef" Type="Edm.String" Nullable="false" MaxLength="6" sap:unicode="false" sap:label="Posizione" sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+                <NavigationProperty Name="E_IMPORTO_RESIDUO" Relationship="ZGTW_BEM_SRV.GETBDLINFO_POS_TO_IMPORTO_RESIDUO" FromRole="FromRole_GETBDLINFO_POS_TO_IMPORTO_RESIDUO" ToRole="ToRole_GETBDLINFO_POS_TO_IMPORTO_RESIDUO"/>
+            </EntityType>
+            <EntityType Name="E_IMPORTO_RESIDUO" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="INprotBef"/>
+                </Key>
+                <Property Name="ImportoResiduo" Type="Edm.Decimal" Nullable="false" Precision="16" Scale="3" sap:unicode="false" sap:label="Valore netto" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="INprotBef" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="N° Protocollo" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="ORDACQ_MC_GET" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="IBukrs"/>
+                </Key>
+                <Property Name="IBukrs" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Società" sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+                <Property Name="IBedat" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="Data ord. acq." sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+                <Property Name="IEbeln" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Doc. d'acquisto" sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+                <Property Name="ILifnr" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Fornitore" sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+                <NavigationProperty Name="E_VALORI_MC_GETSet" Relationship="ZGTW_BEM_SRV.ORDACQ_MC_GET_TO_EVALORIMCGET" FromRole="FromRole_ORDACQ_MC_GET_TO_EVALORIMCGET" ToRole="ToRole_ORDACQ_MC_GET_TO_EVALORIMCGET"/>
+            </EntityType>
+            <EntityType Name="E_VALORI_MC_GET" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Zbukrs"/>
+                </Key>
+                <Property Name="Zbukrs" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Società" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zekorg" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Org. acquisti" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zbedat" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="Data ord. acq." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zebeln" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Doc. d'acquisto" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zlifnr" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Fornitore" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zname1" Type="Edm.String" Nullable="false" MaxLength="35" sap:unicode="false" sap:label="Nome" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="SEDETECNICA_MC_GET" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="IBukrs"/>
+                </Key>
+                <Property Name="ITplnr" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+                <Property Name="IPltxt" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+                <Property Name="IBukrs" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+                <Property Name="IPosid" Type="Edm.String" Nullable="false" MaxLength="24" sap:unicode="false" sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+                <Property Name="IAreat" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+                <NavigationProperty Name="E_VALORI_SEDTECSet" Relationship="ZGTW_BEM_SRV.SEDETECNICA_MC_GET_TO_E_VALORI" FromRole="FromRole_SEDETECNICA_MC_GET_TO_E_VALORI" ToRole="ToRole_SEDETECNICA_MC_GET_TO_E_VALORI"/>
+            </EntityType>
+            <EntityType Name="E_VALORI_SEDTEC" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Zbukrs"/>
+                </Key>
+                <Property Name="Tplnr" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Sede tecnica" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Pltxt" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Definizione" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zbukrs" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Società" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Posid" Type="Edm.String" Nullable="false" MaxLength="24" sap:unicode="false" sap:label="Elemento WBS" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Name1" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Nome 1" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Stras" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Via/n. civico" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Ort01" Type="Edm.String" Nullable="false" MaxLength="25" sap:unicode="false" sap:label="Località" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Pstlz" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="CAP" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Land1" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Paese" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Regio" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Provincia" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Pernr" Type="Edm.String" Nullable="false" MaxLength="8" sap:unicode="false" sap:label="C.I.D." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Ename" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Nome dip./cand." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="E_VALORI_STATO" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="IZtpflux"/>
+                </Key>
+                <Property Name="Ztpstato" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Tipo Stato" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zdescst" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Testo (40 posizioni)" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="IZtpflux" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Tipo Flusso" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="STATO_LV_GET" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="IZtpflux"/>
+                </Key>
+                <Property Name="IZtpflux" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Tipo Flusso" sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+                <NavigationProperty Name="E_VALORI_STATO" Relationship="ZGTW_BEM_SRV.STATO_LV_GET_TO_EVALORI" FromRole="FromRole_STATO_LV_GET_TO_EVALORI" ToRole="ToRole_STATO_LV_GET_TO_EVALORI"/>
+            </EntityType>
+            <EntityType Name="AREA_MC_GET" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="IBukrs"/>
+                </Key>
+                <Property Name="IBukrs" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Società" sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+                <NavigationProperty Name="E_VALORI_AREA" Relationship="ZGTW_BEM_SRV.AREA_MC_GET_TO_EVALORI" FromRole="FromRole_AREA_MC_GET_TO_EVALORI" ToRole="ToRole_AREA_MC_GET_TO_EVALORI"/>
+            </EntityType>
+            <EntityType Name="E_VALORI_AREA" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="IBukrs"/>
+                </Key>
+                <Property Name="Zareat" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Area Territoriale" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zdscarea" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Testo (40 posizioni)" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="IBukrs" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Società" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="BEM_PRESAVE" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Znprot"/>
+                </Key>
+                <Property Name="Znprot" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="N° Protocollo"/>
+                <Property Name="IUser" Type="Edm.String" MaxLength="12" sap:unicode="false" sap:label="Nome utente"/>
+                <NavigationProperty Name="IDettaglioSet" Relationship="ZGTW_BEM_SRV.BEM_PRESAVE_TO_I_DETTAGLI" FromRole="FromRole_BEM_PRESAVE_TO_I_DETTAGLI" ToRole="ToRole_BEM_PRESAVE_TO_I_DETTAGLI"/>
+                <NavigationProperty Name="E_POS_RIEPILOGOSet" Relationship="ZGTW_BEM_SRV.BEM_PRESAVE_TO_E_POS_RIEPILOGO" FromRole="FromRole_BEM_PRESAVE_TO_E_POS_RIEPILOGO" ToRole="ToRole_BEM_PRESAVE_TO_E_POS_RIEPILOGO"/>
+                <NavigationProperty Name="E_RIEPILOGOSet" Relationship="ZGTW_BEM_SRV.BEM_PRESAVE_TO_E_RIEPILOGO" FromRole="FromRole_BEM_PRESAVE_TO_E_RIEPILOGO" ToRole="ToRole_BEM_PRESAVE_TO_E_RIEPILOGO"/>
+                <NavigationProperty Name="I_TESTATASet" Relationship="ZGTW_BEM_SRV.BEM_PRESAVE_TO_ITESTATTA" FromRole="FromRole_BEM_PRESAVE_TO_ITESTATTA" ToRole="ToRole_BEM_PRESAVE_TO_ITESTATTA"/>
+            </EntityType>
+            <EntityType Name="I_TESTATA" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Znprot"/>
+                </Key>
+                <Property Name="Mandt" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Mandante" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Znprot" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="N° Protocollo" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zbldat" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="Data documento" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zbudat" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="Data di reg." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zebeln" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Doc. d'acquisto" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zekgrp" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Gruppo acquisti" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ZpsPosid" Type="Edm.String" Nullable="false" MaxLength="24" sap:unicode="false" sap:label="Elemento WBS" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ZpsPost1" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Definizione" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zlifnr" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Fornitore" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zname1" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Nome 1" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zbukrs" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Società" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zuname" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="Nome utente" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ZnetwrAk" Type="Edm.Decimal" Nullable="false" Precision="16" Scale="3" sap:unicode="false" sap:label="Valore netto" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Ztpprot" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Tipo Protocollo" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zerdat" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="Data cr." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zernam" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="Creato da" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Ztpstato" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Tipo Stato" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Ztpsotst" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Tipo Sotto Stato" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Ztpogg" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Tipo Oggetto" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zdescst" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Testo (40 posizioni)" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zdesctp" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Testo (40 posizioni)" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zareat" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Area Territoriale" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zdscarea" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Testo (40 posizioni)" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zstarea" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Sotto Area" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zdscareas" Type="Edm.String" Nullable="false" MaxLength="80" sap:unicode="false" sap:label="Testo" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zxblnr1" Type="Edm.String" Nullable="false" MaxLength="16" sap:unicode="false" sap:label="Riferimento" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zfrbnr" Type="Edm.String" Nullable="false" MaxLength="16" sap:unicode="false" sap:label="Lettera vettura" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zeknam" Type="Edm.String" Nullable="false" MaxLength="18" sap:unicode="false" sap:label="Definizione" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zlemin" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Codice reso srv." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zautobem" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="BEM Automatica" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zmotivsopravv" Type="Edm.String" Nullable="false" MaxLength="255" sap:unicode="false" sap:label="Testo" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zpernr" Type="Edm.String" Nullable="false" MaxLength="8" sap:unicode="false" sap:label="C.I.D." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zename" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Nome dip./cand." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zkostl" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="CdC" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ZdescrCdc" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Descrizione" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zaufnr" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="Ordine int." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zauftext" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Tsto br." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zmodel" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Mod.contabiliz." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="E_RIEPILOGO" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Znprot"/>
+                </Key>
+                <Property Name="Znprot" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="N° Protocollo" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zposnr" Type="Edm.String" Nullable="false" MaxLength="5" sap:unicode="false" sap:label="Posizione" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zsopravattiva" Type="Edm.Decimal" Nullable="false" Precision="16" Scale="3" sap:unicode="false" sap:label="Sopravv. attiva" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zsopravpassiva" Type="Edm.Decimal" Nullable="false" Precision="16" Scale="3" sap:unicode="false" sap:label="Sopravv. Passiva" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zresiduo" Type="Edm.Decimal" Nullable="false" Precision="16" Scale="3" sap:unicode="false" sap:label="Residuo" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zshow" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Casella di spunta" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="E_POS_RIEPILOGO" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Znprot"/>
+                </Key>
+                <Property Name="Znprot" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="N° Protocollo" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zposnr" Type="Edm.String" Nullable="false" MaxLength="5" sap:unicode="false" sap:label="Posizione" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zsopravattiva" Type="Edm.Decimal" Nullable="false" Precision="16" Scale="3" sap:unicode="false" sap:label="Sopravv. attiva" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zsopravpassiva" Type="Edm.Decimal" Nullable="false" Precision="16" Scale="3" sap:unicode="false" sap:label="Sopravv. Passiva" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zresiduo" Type="Edm.Decimal" Nullable="false" Precision="16" Scale="3" sap:unicode="false" sap:label="Residuo" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zshow" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Casella di spunta" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="GetDetail" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Znprot"/>
+                </Key>
+                <Property Name="Znprot" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <NavigationProperty Name="Testata" Relationship="ZGTW_BEM_SRV.GetDetailTestata" FromRole="FromRole_GetDetailTestata" ToRole="ToRole_GetDetailTestata"/>
+                <NavigationProperty Name="DettagliSet" Relationship="ZGTW_BEM_SRV.GetDetailDettagli" FromRole="FromRole_GetDetailDettagli" ToRole="ToRole_GetDetailDettagli"/>
+                <NavigationProperty Name="ListaCampiSet" Relationship="ZGTW_BEM_SRV.GetDetailListaCampi" FromRole="FromRole_GetDetailListaCampi" ToRole="ToRole_GetDetailListaCampi"/>
+                <NavigationProperty Name="ListaFunzioniSet" Relationship="ZGTW_BEM_SRV.GetDetailListaFunzioni" FromRole="FromRole_GetDetailListaFunzioni" ToRole="ToRole_GetDetailListaFunzioni"/>
+            </EntityType>
+            <EntityType Name="Testata" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Znprot"/>
+                </Key>
+                <Property Name="Mandt" Type="Edm.String" MaxLength="3" sap:unicode="false" sap:label="Mandante"/>
+                <Property Name="Znprot" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="N° Protocollo"/>
+                <Property Name="Zbldat" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="Data documento"/>
+                <Property Name="Zbudat" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="Data di reg."/>
+                <Property Name="Zebeln" Type="Edm.String" MaxLength="10" sap:unicode="false" sap:label="Doc. d'acquisto"/>
+                <Property Name="Zekgrp" Type="Edm.String" MaxLength="3" sap:unicode="false" sap:label="Gruppo acquisti"/>
+                <Property Name="ZpsPosid" Type="Edm.String" MaxLength="24" sap:unicode="false" sap:label="Elemento WBS"/>
+                <Property Name="ZpsPost1" Type="Edm.String" MaxLength="40" sap:unicode="false" sap:label="Definizione"/>
+                <Property Name="Zlifnr" Type="Edm.String" MaxLength="10" sap:unicode="false" sap:label="Fornitore"/>
+                <Property Name="Zname1" Type="Edm.String" MaxLength="30" sap:unicode="false" sap:label="Nome 1"/>
+                <Property Name="Zbukrs" Type="Edm.String" MaxLength="4" sap:unicode="false" sap:label="Società"/>
+                <Property Name="Zuname" Type="Edm.String" MaxLength="12" sap:unicode="false" sap:label="Nome utente"/>
+                <Property Name="ZnetwrAk" Type="Edm.Decimal" Precision="16" Scale="3" sap:unicode="false" sap:label="Valore netto"/>
+                <Property Name="Ztpprot" Type="Edm.String" MaxLength="2" sap:unicode="false" sap:label="Tipo Protocollo"/>
+                <Property Name="Zerdat" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="Data cr."/>
+                <Property Name="Zernam" Type="Edm.String" MaxLength="12" sap:unicode="false" sap:label="Creato da"/>
+                <Property Name="Ztpstato" Type="Edm.String" MaxLength="3" sap:unicode="false" sap:label="Tipo Stato"/>
+                <Property Name="Ztpsotst" Type="Edm.String" MaxLength="3" sap:unicode="false" sap:label="Tipo Sotto Stato"/>
+                <Property Name="Ztpogg" Type="Edm.String" MaxLength="2" sap:unicode="false" sap:label="Tipo Oggetto"/>
+                <Property Name="Zdescst" Type="Edm.String" MaxLength="40" sap:unicode="false" sap:label="Testo (40 posizioni)"/>
+                <Property Name="Zdesctp" Type="Edm.String" MaxLength="40" sap:unicode="false" sap:label="Testo (40 posizioni)"/>
+                <Property Name="Zareat" Type="Edm.String" MaxLength="2" sap:unicode="false" sap:label="Area Territoriale"/>
+                <Property Name="Zdscarea" Type="Edm.String" MaxLength="40" sap:unicode="false" sap:label="Testo (40 posizioni)"/>
+                <Property Name="Zstarea" Type="Edm.String" MaxLength="2" sap:unicode="false" sap:label="Sotto Area"/>
+                <Property Name="Zdscareas" Type="Edm.String" MaxLength="80" sap:unicode="false" sap:label="Testo"/>
+                <Property Name="Zxblnr1" Type="Edm.String" MaxLength="16" sap:unicode="false" sap:label="Riferimento"/>
+                <Property Name="Zfrbnr" Type="Edm.String" MaxLength="16" sap:unicode="false" sap:label="Lettera vettura"/>
+                <Property Name="Zeknam" Type="Edm.String" MaxLength="18" sap:unicode="false" sap:label="Definizione"/>
+                <Property Name="Zlemin" Type="Edm.Boolean" sap:unicode="false" sap:label="Codice reso srv."/>
+                <Property Name="Zautobem" Type="Edm.Boolean" sap:unicode="false" sap:label="BEM Automatica"/>
+                <Property Name="Zmotivsopravv" Type="Edm.String" MaxLength="255" sap:unicode="false" sap:label="Testo"/>
+                <Property Name="Zpernr" Type="Edm.String" MaxLength="8" sap:unicode="false" sap:label="C.I.D."/>
+                <Property Name="Zename" Type="Edm.String" MaxLength="40" sap:unicode="false" sap:label="Nome dip./cand."/>
+                <Property Name="Zkostl" Type="Edm.String" MaxLength="10" sap:unicode="false" sap:label="CdC"/>
+                <Property Name="ZdescrCdc" Type="Edm.String" MaxLength="40" sap:unicode="false" sap:label="Descrizione"/>
+                <Property Name="Zaufnr" Type="Edm.String" MaxLength="12" sap:unicode="false" sap:label="Ordine int."/>
+                <Property Name="Zauftext" Type="Edm.String" MaxLength="40" sap:unicode="false" sap:label="Tsto br."/>
+                <Property Name="Zmodel" Type="Edm.String" MaxLength="3" sap:unicode="false" sap:label="Mod.contabiliz."/>
+            </EntityType>
+            <EntityType Name="Dettagli" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Znprot"/>
+                </Key>
+                <Property Name="Mandt" Type="Edm.String" MaxLength="3" sap:unicode="false" sap:label="Mandante"/>
+                <Property Name="Znprot" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="N° Protocollo"/>
+                <Property Name="Zmblnr" Type="Edm.String" MaxLength="10" sap:unicode="false" sap:label="Doc. mat."/>
+                <Property Name="Zmjahr" Type="Edm.String" MaxLength="4" sap:unicode="false" sap:label="Es. doc. mat."/>
+                <Property Name="Zzeile" Type="Edm.String" MaxLength="4" sap:unicode="false" sap:label="Pos. doc. mat."/>
+                <Property Name="Zebelp" Type="Edm.String" MaxLength="5" sap:unicode="false" sap:label="Posizione"/>
+                <Property Name="Zmatnr" Type="Edm.String" MaxLength="18" sap:unicode="false" sap:label="Materiale"/>
+                <Property Name="Zmaktx" Type="Edm.String" MaxLength="40" sap:unicode="false" sap:label="Definizione"/>
+                <Property Name="Zmatkl" Type="Edm.String" MaxLength="9" sap:unicode="false" sap:label="Gruppo merci"/>
+                <Property Name="Zgsber" Type="Edm.String" MaxLength="4" sap:unicode="false" sap:label="Sett. cont."/>
+                <Property Name="ZpsPosid" Type="Edm.String" MaxLength="24" sap:unicode="false" sap:label="Elemento WBS"/>
+                <Property Name="ZmengeD" Type="Edm.Decimal" Precision="13" Scale="3" sap:unicode="false" sap:unit="Zmeins" sap:label="Quantità"/>
+                <Property Name="Zmeins" Type="Edm.String" MaxLength="3" sap:unicode="false" sap:label="Unità mis. base" sap:semantics="unit-of-measure"/>
+                <Property Name="Zdmbtr" Type="Edm.Decimal" Precision="14" Scale="3" sap:unicode="false" sap:label="Imp.div.int."/>
+                <Property Name="Zsgtxt" Type="Edm.String" MaxLength="50" sap:unicode="false" sap:label="Testo"/>
+                <Property Name="Zxblnr" Type="Edm.String" MaxLength="16" sap:unicode="false" sap:label="Riferimento"/>
+                <Property Name="Zkbetr" Type="Edm.Decimal" Precision="12" Scale="3" sap:unicode="false" sap:label="Importo"/>
+                <Property Name="Zprzsconto" Type="Edm.Decimal" Precision="12" Scale="3" sap:unicode="false" sap:label="Prezzo netto"/>
+                <Property Name="ZticketExists" Type="Edm.Boolean" sap:unicode="false" sap:label="Dett. Ticket"/>
+                <Property Name="Zelikz" Type="Edm.Boolean" sap:unicode="false" sap:label="Consegna finale"/>
+                <Property Name="ZstaStzahr" Type="Edm.String" MaxLength="4" sap:unicode="false" sap:label="Anno stanziam."/>
+                <Property Name="ZstaPrcStz" Type="Edm.Decimal" Precision="6" Scale="3" sap:unicode="false" sap:label="Percent. stanz."/>
+                <Property Name="ZstaDmStz" Type="Edm.Decimal" Precision="14" Scale="3" sap:unicode="false" sap:label="Importo stanziato"/>
+                <Property Name="ZstaStzFin" Type="Edm.Boolean" sap:unicode="false" sap:label="Casella di spunta"/>
+                <Property Name="ZstaBelnrBm" Type="Edm.String" MaxLength="10" sap:unicode="false" sap:label="N.doc Stz Prop.BM"/>
+                <Property Name="ZstaBuzeiBm" Type="Edm.String" MaxLength="3" sap:unicode="false" sap:label="Pos.Doc.Stz.Prop."/>
+                <Property Name="ZstaNoteBm" Type="Edm.String" MaxLength="50" sap:unicode="false" sap:label="Note del BM"/>
+                <Property Name="Zcup" Type="Edm.String" MaxLength="15" sap:unicode="false" sap:label="Numero CUP"/>
+                <Property Name="Zcig" Type="Edm.String" MaxLength="10" sap:unicode="false" sap:label="Numero CIG"/>
+                <Property Name="ZglAccount" Type="Edm.String" MaxLength="10" sap:unicode="false" sap:label="Conto Co.Ge."/>
+                <Property Name="Znprotbemrif" Type="Edm.String" MaxLength="10" sap:unicode="false" sap:label="N° Protocollo"/>
+                <Property Name="Zposnrbemrif" Type="Edm.String" MaxLength="5" sap:unicode="false" sap:label="Posizione"/>
+                <Property Name="Zsospeso" Type="Edm.Decimal" Precision="16" Scale="3" sap:unicode="false" sap:label="Valore netto"/>
+                <Property Name="Zotherdoc" Type="Edm.Boolean" sap:unicode="false" sap:label="Altri documenti"/>
+                <Property Name="ZstaGjahrBm" Type="Edm.String" MaxLength="4" sap:unicode="false" sap:label="Anno Stz Prop"/>
+                <Property Name="Ztplnr" Type="Edm.String" MaxLength="40" sap:unicode="false" sap:label="Sede tecnica"/>
+                <Property Name="Zpltxt" Type="Edm.String" MaxLength="40" sap:unicode="false" sap:label="Definizione"/>
+                <Property Name="Zknttp" Type="Edm.String" MaxLength="1" sap:unicode="false" sap:label="Cat.contab."/>
+                <Property Name="Zdesccig" Type="Edm.String" MaxLength="50" sap:unicode="false" sap:label="Descriz."/>
+            </EntityType>
+            <EntityType Name="ListaCampi" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Zobjname"/>
+                </Key>
+                <Property Name="Zobjname" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Nome Oggetto"/>
+                <Property Name="Znprot" Type="Edm.String" MaxLength="10" sap:unicode="false"/>
+                <Property Name="Zrdonly" Type="Edm.Boolean" sap:unicode="false" sap:label="Read Only"/>
+                <Property Name="Zvisible" Type="Edm.String" MaxLength="2" sap:unicode="false" sap:label="Visible"/>
+                <Property Name="Zstate" Type="Edm.String" MaxLength="2" sap:unicode="false" sap:label="State"/>
+            </EntityType>
+            <EntityType Name="ListaFunzioni" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Ztpfunz"/>
+                </Key>
+                <Property Name="Ztpstsu" Type="Edm.String" MaxLength="3" sap:unicode="false" sap:label="Stato Successivo"/>
+                <Property Name="Znprot" Type="Edm.String" MaxLength="10" sap:unicode="false"/>
+                <Property Name="Ztpfunz" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Tipo Funzione"/>
+                <Property Name="Zdescst" Type="Edm.String" MaxLength="40" sap:unicode="false" sap:label="Testo (40 posizioni)"/>
+            </EntityType>
+            <EntityType Name="Stampa" m:HasStream="true" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="INprot"/>
+                </Key>
+                <Property Name="INprot" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="N° Protocollo" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="IUser" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="Nome utente" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Message" Type="Edm.String" Nullable="false" MaxLength="220" sap:unicode="false" sap:label="Testo mess." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="PdfFile" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="PDF_FILE" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ECode" Type="Edm.String" Nullable="false" MaxLength="1" sap:unicode="false" sap:label="E_CODE" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <NavigationProperty Name="Pdf_DataSet" Relationship="ZGTW_BEM_SRV.StampaToPdfData" FromRole="FromRole_StampaToPdfData" ToRole="ToRole_StampaToPdfData"/>
+                <NavigationProperty Name="Pdf_RawSet" Relationship="ZGTW_BEM_SRV.StampaToPdfRaw" FromRole="FromRole_StampaToPdfRaw" ToRole="ToRole_StampaToPdfRaw"/>
+            </EntityType>
+            <EntityType Name="Pdf_Data" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="INprot"/>
+                    <PropertyRef Name="Tdformat"/>
+                </Key>
+                <Property Name="INprot" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="N° Protocollo" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Tdformat" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Colonna formato" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Tdline" Type="Edm.String" Nullable="false" MaxLength="132" sap:unicode="false" sap:label="Riga testo" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="Pdf_Raw" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="INprot"/>
+                    <PropertyRef Name="Line"/>
+                </Key>
+                <Property Name="INprot" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="N° Protocollo" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Line" Type="Edm.Binary" Nullable="false" sap:unicode="false" sap:label="Dati binari" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="SedeTecnica" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Tplnr"/>
+                </Key>
+                <Property Name="Tplnr" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Sede tecnica" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Pltxt" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Definizione" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zbukrs" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Società" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Posid" Type="Edm.String" Nullable="false" MaxLength="24" sap:unicode="false" sap:label="Elemento WBS" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Name1" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Nome 1" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Stras" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Via/n. civico" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Ort01" Type="Edm.String" Nullable="false" MaxLength="25" sap:unicode="false" sap:label="Località" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Pstlz" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="CAP" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Land1" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Paese" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Regio" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Provincia" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Pernr" Type="Edm.String" Nullable="false" MaxLength="8" sap:unicode="false" sap:label="C.I.D." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Ename" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Nome dip./cand." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="ESoc" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Zbukrs"/>
+                </Key>
+                <Property Name="Zbukrs" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Società" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zltext" Type="Edm.String" Nullable="false" MaxLength="50" sap:unicode="false" sap:label="Utilizzo" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="SYNAME" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="IUser"/>
+                </Key>
+                <Property Name="IUser" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="Nome utente"/>
+            </EntityType>
+            <EntityType Name="Tpprot" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Ztpprot"/>
+                </Key>
+                <Property Name="ICall" Type="Edm.String" MaxLength="1" sap:unicode="false" sap:label="Indicatore a una posizione"/>
+                <Property Name="ISocieta" Type="Edm.String" MaxLength="4" sap:unicode="false" sap:label="Società"/>
+                <Property Name="ISpras" Type="Edm.String" MaxLength="2" sap:unicode="false" sap:label="Lingua"/>
+                <Property Name="ITipoflusso" Type="Edm.String" MaxLength="2" sap:unicode="false" sap:label="Tipo Flusso"/>
+                <Property Name="Ztpprot" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Tipo Protocollo"/>
+                <Property Name="Zdesctp" Type="Edm.String" MaxLength="40" sap:unicode="false" sap:label="Testo (40 posizioni)"/>
+            </EntityType>
+            <EntityType Name="DocStzInput" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="IBelnr"/>
+                    <PropertyRef Name="IBuzei"/>
+                    <PropertyRef Name="IGjahr"/>
+                </Key>
+                <Property Name="IBelnr" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="N. documento"/>
+                <Property Name="IBukrs" Type="Edm.String" MaxLength="4" sap:unicode="false" sap:label="Società"/>
+                <Property Name="IBuzei" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Posizione"/>
+                <Property Name="IDmbtr" Type="Edm.Decimal" Precision="14" Scale="3" sap:unicode="false" sap:label="Importo Stanziamento"/>
+                <Property Name="IGjahr" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Esercizio"/>
+                <Property Name="IHkont" Type="Edm.String" MaxLength="10" sap:unicode="false" sap:label="Cont.gen."/>
+                <Property Name="IKostl" Type="Edm.String" MaxLength="10" sap:unicode="false" sap:label="CdC"/>
+                <Property Name="ILifnr" Type="Edm.String" MaxLength="50" sap:unicode="false" sap:label="Fornitore"/>
+                <Property Name="IPosid" Type="Edm.String" MaxLength="24" sap:unicode="false" sap:label="Elemento WBS"/>
+                <Property Name="ISegno" Type="Edm.String" MaxLength="1" sap:unicode="false" sap:label="Caratt. 01"/>
+                <Property Name="ISingle" Type="Edm.Boolean" sap:unicode="false" sap:label="Casella di spunta"/>
+                <NavigationProperty Name="to_DocStzOutput" Relationship="ZGTW_BEM_SRV.DocStzInput_to_DocStzOutput" FromRole="FromRole_DocStzInput_to_DocStzOutput" ToRole="ToRole_DocStzInput_to_DocStzOutput"/>
+            </EntityType>
+            <EntityType Name="DocStzOutput" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Belnr"/>
+                    <PropertyRef Name="Gjahr"/>
+                    <PropertyRef Name="Buzei"/>
+                </Key>
+                <Property Name="Belnr" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="N. documento"/>
+                <Property Name="Gjahr" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Esercizio"/>
+                <Property Name="Buzei" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Posizione"/>
+                <Property Name="Zsospeso" Type="Edm.Decimal" Precision="16" Scale="3" sap:unicode="false" sap:label="Residuo"/>
+                <Property Name="Sgtxt" Type="Edm.String" MaxLength="50" sap:unicode="false" sap:label="Fornitore"/>
+                <Property Name="Zotherdoc" Type="Edm.Boolean" sap:unicode="false" sap:label="Altri documenti"/>
+            </EntityType>
+            <Association Name="GETODAINFO_TO_IMPORTORESIDUOODA" sap:content-version="1">
+                <End Type="ZGTW_BEM_SRV.GETODAINFO" Multiplicity="1" Role="FromRole_GETODAINFO_TO_IMPORTORESIDUOODA"/>
+                <End Type="ZGTW_BEM_SRV.E_IMPORTO_RESIDUO_ODA" Multiplicity="*" Role="ToRole_GETODAINFO_TO_IMPORTORESIDUOODA"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_GETODAINFO_TO_IMPORTORESIDUOODA">
+                        <PropertyRef Name="IOda"/>
+                    </Principal>
+                    <Dependent Role="ToRole_GETODAINFO_TO_IMPORTORESIDUOODA">
+                        <PropertyRef Name="IOda"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="POS_CONTRATTO_GETLIST_TO_ELISTDOC" sap:content-version="1">
+                <End Type="ZGTW_BEM_SRV.POS_CONTRATTO_GETLIST" Multiplicity="*" Role="FromRole_POS_CONTRATTO_GETLIST_TO_ELISTDOC"/>
+                <End Type="ZGTW_BEM_SRV.EListdoc" Multiplicity="*" Role="ToRole_POS_CONTRATTO_GETLIST_TO_ELISTDOC"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_POS_CONTRATTO_GETLIST_TO_ELISTDOC">
+                        <PropertyRef Name="ISocieta"/>
+                    </Principal>
+                    <Dependent Role="ToRole_POS_CONTRATTO_GETLIST_TO_ELISTDOC">
+                        <PropertyRef Name="Zbukrs"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="GetDetailTestata" sap:content-version="1">
+                <End Type="ZGTW_BEM_SRV.GetDetail" Multiplicity="1" Role="FromRole_GetDetailTestata"/>
+                <End Type="ZGTW_BEM_SRV.Testata" Multiplicity="1" Role="ToRole_GetDetailTestata"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_GetDetailTestata">
+                        <PropertyRef Name="Znprot"/>
+                    </Principal>
+                    <Dependent Role="ToRole_GetDetailTestata">
+                        <PropertyRef Name="Znprot"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="GetDetailDettagli" sap:content-version="1">
+                <End Type="ZGTW_BEM_SRV.GetDetail" Multiplicity="1" Role="FromRole_GetDetailDettagli"/>
+                <End Type="ZGTW_BEM_SRV.Dettagli" Multiplicity="*" Role="ToRole_GetDetailDettagli"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_GetDetailDettagli">
+                        <PropertyRef Name="Znprot"/>
+                    </Principal>
+                    <Dependent Role="ToRole_GetDetailDettagli">
+                        <PropertyRef Name="Znprot"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="GetDetailListaCampi" sap:content-version="1">
+                <End Type="ZGTW_BEM_SRV.GetDetail" Multiplicity="1" Role="FromRole_GetDetailListaCampi"/>
+                <End Type="ZGTW_BEM_SRV.ListaCampi" Multiplicity="*" Role="ToRole_GetDetailListaCampi"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_GetDetailListaCampi">
+                        <PropertyRef Name="Znprot"/>
+                    </Principal>
+                    <Dependent Role="ToRole_GetDetailListaCampi">
+                        <PropertyRef Name="Znprot"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="GetDetailListaFunzioni" sap:content-version="1">
+                <End Type="ZGTW_BEM_SRV.GetDetail" Multiplicity="1" Role="FromRole_GetDetailListaFunzioni"/>
+                <End Type="ZGTW_BEM_SRV.ListaFunzioni" Multiplicity="*" Role="ToRole_GetDetailListaFunzioni"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_GetDetailListaFunzioni">
+                        <PropertyRef Name="Znprot"/>
+                    </Principal>
+                    <Dependent Role="ToRole_GetDetailListaFunzioni">
+                        <PropertyRef Name="Znprot"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="AREA_MC_GET_TO_EVALORI" sap:content-version="1">
+                <End Type="ZGTW_BEM_SRV.AREA_MC_GET" Multiplicity="1" Role="FromRole_AREA_MC_GET_TO_EVALORI"/>
+                <End Type="ZGTW_BEM_SRV.E_VALORI_AREA" Multiplicity="*" Role="ToRole_AREA_MC_GET_TO_EVALORI"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_AREA_MC_GET_TO_EVALORI">
+                        <PropertyRef Name="IBukrs"/>
+                    </Principal>
+                    <Dependent Role="ToRole_AREA_MC_GET_TO_EVALORI">
+                        <PropertyRef Name="IBukrs"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="GETLIST_LISTDO" sap:content-version="1">
+                <End Type="ZGTW_BEM_SRV.GETLIST" Multiplicity="1" Role="FromRole_GETLIST_LISTDO"/>
+                <End Type="ZGTW_BEM_SRV.LISTDOC" Multiplicity="*" Role="ToRole_GETLIST_LISTDO"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_GETLIST_LISTDO">
+                        <PropertyRef Name="INumeroprotocollo"/>
+                    </Principal>
+                    <Dependent Role="ToRole_GETLIST_LISTDO">
+                        <PropertyRef Name="Znprot"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="STATO_LV_GET_TO_EVALORI" sap:content-version="1">
+                <End Type="ZGTW_BEM_SRV.STATO_LV_GET" Multiplicity="0..1" Role="FromRole_STATO_LV_GET_TO_EVALORI"/>
+                <End Type="ZGTW_BEM_SRV.E_VALORI_STATO" Multiplicity="*" Role="ToRole_STATO_LV_GET_TO_EVALORI"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_STATO_LV_GET_TO_EVALORI">
+                        <PropertyRef Name="IZtpflux"/>
+                    </Principal>
+                    <Dependent Role="ToRole_STATO_LV_GET_TO_EVALORI">
+                        <PropertyRef Name="IZtpflux"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="SEDETECNICA_MC_GET_TO_E_VALORI" sap:content-version="1">
+                <End Type="ZGTW_BEM_SRV.SEDETECNICA_MC_GET" Multiplicity="1" Role="FromRole_SEDETECNICA_MC_GET_TO_E_VALORI"/>
+                <End Type="ZGTW_BEM_SRV.E_VALORI_SEDTEC" Multiplicity="*" Role="ToRole_SEDETECNICA_MC_GET_TO_E_VALORI"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_SEDETECNICA_MC_GET_TO_E_VALORI">
+                        <PropertyRef Name="IBukrs"/>
+                    </Principal>
+                    <Dependent Role="ToRole_SEDETECNICA_MC_GET_TO_E_VALORI">
+                        <PropertyRef Name="Zbukrs"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="ORDACQ_MC_GET_TO_EVALORIMCGET" sap:content-version="1">
+                <End Type="ZGTW_BEM_SRV.ORDACQ_MC_GET" Multiplicity="1" Role="FromRole_ORDACQ_MC_GET_TO_EVALORIMCGET"/>
+                <End Type="ZGTW_BEM_SRV.E_VALORI_MC_GET" Multiplicity="*" Role="ToRole_ORDACQ_MC_GET_TO_EVALORIMCGET"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_ORDACQ_MC_GET_TO_EVALORIMCGET">
+                        <PropertyRef Name="IBukrs"/>
+                    </Principal>
+                    <Dependent Role="ToRole_ORDACQ_MC_GET_TO_EVALORIMCGET">
+                        <PropertyRef Name="Zbukrs"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="BEM_PRESAVE_TO_ITESTATTA" sap:content-version="1">
+                <End Type="ZGTW_BEM_SRV.BEM_PRESAVE" Multiplicity="1" Role="FromRole_BEM_PRESAVE_TO_ITESTATTA"/>
+                <End Type="ZGTW_BEM_SRV.Testata" Multiplicity="1" Role="ToRole_BEM_PRESAVE_TO_ITESTATTA"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_BEM_PRESAVE_TO_ITESTATTA">
+                        <PropertyRef Name="Znprot"/>
+                    </Principal>
+                    <Dependent Role="ToRole_BEM_PRESAVE_TO_ITESTATTA">
+                        <PropertyRef Name="Znprot"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="BEM_PRESAVE_TO_E_RIEPILOGO" sap:content-version="1">
+                <End Type="ZGTW_BEM_SRV.BEM_PRESAVE" Multiplicity="1" Role="FromRole_BEM_PRESAVE_TO_E_RIEPILOGO"/>
+                <End Type="ZGTW_BEM_SRV.E_RIEPILOGO" Multiplicity="*" Role="ToRole_BEM_PRESAVE_TO_E_RIEPILOGO"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_BEM_PRESAVE_TO_E_RIEPILOGO">
+                        <PropertyRef Name="Znprot"/>
+                    </Principal>
+                    <Dependent Role="ToRole_BEM_PRESAVE_TO_E_RIEPILOGO">
+                        <PropertyRef Name="Znprot"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="BEM_PRESAVE_TO_E_POS_RIEPILOGO" sap:content-version="1">
+                <End Type="ZGTW_BEM_SRV.BEM_PRESAVE" Multiplicity="1" Role="FromRole_BEM_PRESAVE_TO_E_POS_RIEPILOGO"/>
+                <End Type="ZGTW_BEM_SRV.E_POS_RIEPILOGO" Multiplicity="*" Role="ToRole_BEM_PRESAVE_TO_E_POS_RIEPILOGO"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_BEM_PRESAVE_TO_E_POS_RIEPILOGO">
+                        <PropertyRef Name="Znprot"/>
+                    </Principal>
+                    <Dependent Role="ToRole_BEM_PRESAVE_TO_E_POS_RIEPILOGO">
+                        <PropertyRef Name="Znprot"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="BEM_PRESAVE_TO_I_DETTAGLI" sap:content-version="1">
+                <End Type="ZGTW_BEM_SRV.BEM_PRESAVE" Multiplicity="1" Role="FromRole_BEM_PRESAVE_TO_I_DETTAGLI"/>
+                <End Type="ZGTW_BEM_SRV.IDettaglio" Multiplicity="*" Role="ToRole_BEM_PRESAVE_TO_I_DETTAGLI"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_BEM_PRESAVE_TO_I_DETTAGLI">
+                        <PropertyRef Name="Znprot"/>
+                    </Principal>
+                    <Dependent Role="ToRole_BEM_PRESAVE_TO_I_DETTAGLI">
+                        <PropertyRef Name="Znprot"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="OdaForBemToOdaForBemEDettaglio" sap:content-version="1">
+                <End Type="ZGTW_BEM_SRV.OdaForBem" Multiplicity="1" Role="FromRole_OdaForBemToOdaForBemEDettaglio"/>
+                <End Type="ZGTW_BEM_SRV.OdaForBemEDettaglio" Multiplicity="*" Role="ToRole_OdaForBemToOdaForBemEDettaglio"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_OdaForBemToOdaForBemEDettaglio">
+                        <PropertyRef Name="ITipoprotocollo"/>
+                        <PropertyRef Name="ISocieta"/>
+                    </Principal>
+                    <Dependent Role="ToRole_OdaForBemToOdaForBemEDettaglio">
+                        <PropertyRef Name="Itipoprotocollo"/>
+                        <PropertyRef Name="Isocieta"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="HEADER_BEM_CHANGE_GROUPS" sap:content-version="1">
+                <End Type="ZGTW_BEM_SRV.BEM_CHANGE" Multiplicity="*" Role="FromRole_HEADER_BEM_CHANGE_GROUPS"/>
+                <End Type="ZGTW_BEM_SRV.IGroups" Multiplicity="*" Role="ToRole_HEADER_BEM_CHANGE_GROUPS"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_HEADER_BEM_CHANGE_GROUPS">
+                        <PropertyRef Name="INumeroprotocollo"/>
+                    </Principal>
+                    <Dependent Role="ToRole_HEADER_BEM_CHANGE_GROUPS">
+                        <PropertyRef Name="Znprot"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="HEADER_BEM_CHANGE_DETTAGLIO" sap:content-version="1">
+                <End Type="ZGTW_BEM_SRV.BEM_CHANGE" Multiplicity="*" Role="FromRole_HEADER_BEM_CHANGE_DETTAGLIO"/>
+                <End Type="ZGTW_BEM_SRV.IDettaglio" Multiplicity="*" Role="ToRole_HEADER_BEM_CHANGE_DETTAGLIO"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_HEADER_BEM_CHANGE_DETTAGLIO">
+                        <PropertyRef Name="INumeroprotocollo"/>
+                    </Principal>
+                    <Dependent Role="ToRole_HEADER_BEM_CHANGE_DETTAGLIO">
+                        <PropertyRef Name="Znprot"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="GET50001_TO_ETAB50001" sap:content-version="1">
+                <End Type="ZGTW_BEM_SRV.GET50001" Multiplicity="*" Role="FromRole_GET50001_TO_ETAB50001"/>
+                <End Type="ZGTW_BEM_SRV.ETab50001" Multiplicity="*" Role="ToRole_GET50001_TO_ETAB50001"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_GET50001_TO_ETAB50001">
+                        <PropertyRef Name="ISocieta"/>
+                    </Principal>
+                    <Dependent Role="ToRole_GET50001_TO_ETAB50001">
+                        <PropertyRef Name="Bukrs"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="POS_ODAPLAFOND_GETLIST_TO_ELISTDOC" sap:content-version="1">
+                <End Type="ZGTW_BEM_SRV.POS_ODAPLAFOND_GETLIST" Multiplicity="*" Role="FromRole_POS_ODAPLAFOND_GETLIST_TO_ELISTDOC"/>
+                <End Type="ZGTW_BEM_SRV.EListdoc" Multiplicity="*" Role="ToRole_POS_ODAPLAFOND_GETLIST_TO_ELISTDOC"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_POS_ODAPLAFOND_GETLIST_TO_ELISTDOC">
+                        <PropertyRef Name="ISocieta"/>
+                    </Principal>
+                    <Dependent Role="ToRole_POS_ODAPLAFOND_GETLIST_TO_ELISTDOC">
+                        <PropertyRef Name="Zbukrs"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="StampaToPdfData" sap:content-version="1">
+                <End Type="ZGTW_BEM_SRV.Stampa" Multiplicity="1" Role="FromRole_StampaToPdfData"/>
+                <End Type="ZGTW_BEM_SRV.Pdf_Data" Multiplicity="*" Role="ToRole_StampaToPdfData"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_StampaToPdfData">
+                        <PropertyRef Name="INprot"/>
+                    </Principal>
+                    <Dependent Role="ToRole_StampaToPdfData">
+                        <PropertyRef Name="INprot"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="StampaToPdfRaw" sap:content-version="1">
+                <End Type="ZGTW_BEM_SRV.Stampa" Multiplicity="1" Role="FromRole_StampaToPdfRaw"/>
+                <End Type="ZGTW_BEM_SRV.Pdf_Raw" Multiplicity="*" Role="ToRole_StampaToPdfRaw"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_StampaToPdfRaw">
+                        <PropertyRef Name="INprot"/>
+                    </Principal>
+                    <Dependent Role="ToRole_StampaToPdfRaw">
+                        <PropertyRef Name="INprot"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="BME_ROLES_UPDATE_TO_DETTAGLIO" sap:content-version="1">
+                <End Type="ZGTW_BEM_SRV.BEM_ROLES_UPDATE" Multiplicity="*" Role="FromRole_BME_ROLES_UPDATE_TO_DETTAGLIO"/>
+                <End Type="ZGTW_BEM_SRV.IDettaglio" Multiplicity="*" Role="ToRole_BME_ROLES_UPDATE_TO_DETTAGLIO"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_BME_ROLES_UPDATE_TO_DETTAGLIO">
+                        <PropertyRef Name="Znprot"/>
+                    </Principal>
+                    <Dependent Role="ToRole_BME_ROLES_UPDATE_TO_DETTAGLIO">
+                        <PropertyRef Name="Znprot"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="GET_CTRL_QLTY_TO_ECQEM" sap:content-version="1">
+                <End Type="ZGTW_BEM_SRV.GET_CTRL_QLTY" Multiplicity="*" Role="FromRole_GET_CTRL_QLTY_TO_ECQEM"/>
+                <End Type="ZGTW_BEM_SRV.ECqem" Multiplicity="*" Role="ToRole_GET_CTRL_QLTY_TO_ECQEM"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_GET_CTRL_QLTY_TO_ECQEM">
+                        <PropertyRef Name="IBukrs"/>
+                    </Principal>
+                    <Dependent Role="ToRole_GET_CTRL_QLTY_TO_ECQEM">
+                        <PropertyRef Name="IBukrs"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="GET_CTRL_QLTY_TO_EGETQLTY" sap:content-version="1">
+                <End Type="ZGTW_BEM_SRV.GET_CTRL_QLTY" Multiplicity="1" Role="FromRole_GET_CTRL_QLTY_TO_EGETQLTY"/>
+                <End Type="ZGTW_BEM_SRV.E_GET_CTRL_QLTY" Multiplicity="*" Role="ToRole_GET_CTRL_QLTY_TO_EGETQLTY"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_GET_CTRL_QLTY_TO_EGETQLTY">
+                        <PropertyRef Name="IBukrs"/>
+                    </Principal>
+                    <Dependent Role="ToRole_GET_CTRL_QLTY_TO_EGETQLTY">
+                        <PropertyRef Name="IBukrs"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="GETBDLINFO_POS_TO_IMPORTO_RESIDUO" sap:content-version="1">
+                <End Type="ZGTW_BEM_SRV.GETBDLINFO_POS" Multiplicity="0..1" Role="FromRole_GETBDLINFO_POS_TO_IMPORTO_RESIDUO"/>
+                <End Type="ZGTW_BEM_SRV.E_IMPORTO_RESIDUO" Multiplicity="0..1" Role="ToRole_GETBDLINFO_POS_TO_IMPORTO_RESIDUO"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_GETBDLINFO_POS_TO_IMPORTO_RESIDUO">
+                        <PropertyRef Name="INprotBef"/>
+                    </Principal>
+                    <Dependent Role="ToRole_GETBDLINFO_POS_TO_IMPORTO_RESIDUO">
+                        <PropertyRef Name="INprotBef"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="CommessaValori" sap:content-version="1">
+                <End Type="ZGTW_BEM_SRV.Commessa" Multiplicity="1" Role="FromRole_CommessaValori"/>
+                <End Type="ZGTW_BEM_SRV.EValori" Multiplicity="*" Role="ToRole_CommessaValori"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_CommessaValori">
+                        <PropertyRef Name="IPosid"/>
+                    </Principal>
+                    <Dependent Role="ToRole_CommessaValori">
+                        <PropertyRef Name="Zposid"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="GETBDLINFO_TO_E_BEM_GETBDLINFO" sap:content-version="1">
+                <End Type="ZGTW_BEM_SRV.GETBDLINFO" Multiplicity="0..1" Role="FromRole_GETBDLINFO_TO_E_BEM_GETBDLINFO"/>
+                <End Type="ZGTW_BEM_SRV.E_BEM_GETBDLINFO" Multiplicity="0..1" Role="ToRole_GETBDLINFO_TO_E_BEM_GETBDLINFO"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_GETBDLINFO_TO_E_BEM_GETBDLINFO">
+                        <PropertyRef Name="INumeroprotocollo"/>
+                    </Principal>
+                    <Dependent Role="ToRole_GETBDLINFO_TO_E_BEM_GETBDLINFO">
+                        <PropertyRef Name="INumeroprotocollo"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="DocStzInput_to_DocStzOutput" sap:content-version="1">
+                <End Type="ZGTW_BEM_SRV.DocStzInput" Multiplicity="1" Role="FromRole_DocStzInput_to_DocStzOutput"/>
+                <End Type="ZGTW_BEM_SRV.DocStzOutput" Multiplicity="*" Role="ToRole_DocStzInput_to_DocStzOutput"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_DocStzInput_to_DocStzOutput">
+                        <PropertyRef Name="IBelnr"/>
+                        <PropertyRef Name="IBuzei"/>
+                        <PropertyRef Name="IGjahr"/>
+                    </Principal>
+                    <Dependent Role="ToRole_DocStzInput_to_DocStzOutput">
+                        <PropertyRef Name="Belnr"/>
+                        <PropertyRef Name="Buzei"/>
+                        <PropertyRef Name="Gjahr"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <EntityContainer Name="ZGTW_BEM_SRV_Entities" m:IsDefaultEntityContainer="true" sap:supported-formats="atom json xlsx">
+                <EntitySet Name="SubscriptionCollection" EntityType="ZGTW_BEM_SRV.Subscription" sap:content-version="1"/>
+                <EntitySet Name="NotificationCollection" EntityType="ZGTW_BEM_SRV.Notification" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:addressable="false" sap:content-version="1"/>
+                <EntitySet Name="GETLISTSet" EntityType="ZGTW_BEM_SRV.GETLIST" sap:searchable="true" sap:requires-filter="true" sap:content-version="1"/>
+                <EntitySet Name="LISTDOCSet" EntityType="ZGTW_BEM_SRV.LISTDOC" sap:searchable="true" sap:requires-filter="true" sap:content-version="1"/>
+                <EntitySet Name="BEMSet" EntityType="ZGTW_BEM_SRV.BEM" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
+                <EntitySet Name="OdaForBemSet" EntityType="ZGTW_BEM_SRV.OdaForBem" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="OdaForBemEDettaglioSet" EntityType="ZGTW_BEM_SRV.OdaForBemEDettaglio" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="REJECTSet" EntityType="ZGTW_BEM_SRV.REJECT" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="IDettaglioCollection" EntityType="ZGTW_BEM_SRV.IDettaglio" sap:content-version="1"/>
+                <EntitySet Name="FornitoriSet" EntityType="ZGTW_BEM_SRV.Fornitori" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
+                <EntitySet Name="CommessaSet" EntityType="ZGTW_BEM_SRV.Commessa" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
+                <EntitySet Name="EValoriSet" EntityType="ZGTW_BEM_SRV.EValori" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
+                <EntitySet Name="BEM_CHANGESet" EntityType="ZGTW_BEM_SRV.BEM_CHANGE" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="IGroupsSet" EntityType="ZGTW_BEM_SRV.IGroups" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="GETBDLINFOSet" EntityType="ZGTW_BEM_SRV.GETBDLINFO" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="E_BEM_GETBDLINFOSet" EntityType="ZGTW_BEM_SRV.E_BEM_GETBDLINFO" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="ECqemSet" EntityType="ZGTW_BEM_SRV.ECqem" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="GET_CTRL_QLTYSet" EntityType="ZGTW_BEM_SRV.GET_CTRL_QLTY" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="E_GET_CTRL_QLTYSet" EntityType="ZGTW_BEM_SRV.E_GET_CTRL_QLTY" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="ETab50001Set" EntityType="ZGTW_BEM_SRV.ETab50001" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="GET50001Set" EntityType="ZGTW_BEM_SRV.GET50001" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="EListdocSet" EntityType="ZGTW_BEM_SRV.EListdoc" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="POS_CONTRATTO_GETLISTSet" EntityType="ZGTW_BEM_SRV.POS_CONTRATTO_GETLIST" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="POS_ODAPLAFOND_GETLISTSet" EntityType="ZGTW_BEM_SRV.POS_ODAPLAFOND_GETLIST" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="BEM_ROLES_UPDATESet" EntityType="ZGTW_BEM_SRV.BEM_ROLES_UPDATE" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="GETODAINFOSet" EntityType="ZGTW_BEM_SRV.GETODAINFO" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="E_IMPORTO_RESIDUO_ODASet" EntityType="ZGTW_BEM_SRV.E_IMPORTO_RESIDUO_ODA" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="GETBDLINFO_POSSet" EntityType="ZGTW_BEM_SRV.GETBDLINFO_POS" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="E_IMPORTO_RESIDUOSet" EntityType="ZGTW_BEM_SRV.E_IMPORTO_RESIDUO" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="ORDACQ_MC_GETSet" EntityType="ZGTW_BEM_SRV.ORDACQ_MC_GET" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="E_VALORI_MC_GETSet" EntityType="ZGTW_BEM_SRV.E_VALORI_MC_GET" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="SEDETECNICA_MC_GETSet" EntityType="ZGTW_BEM_SRV.SEDETECNICA_MC_GET" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="E_VALORI_SEDTECSet" EntityType="ZGTW_BEM_SRV.E_VALORI_SEDTEC" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="E_VALORI_STATOSet" EntityType="ZGTW_BEM_SRV.E_VALORI_STATO" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="STATO_LV_GETSet" EntityType="ZGTW_BEM_SRV.STATO_LV_GET" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="AREA_MC_GETSet" EntityType="ZGTW_BEM_SRV.AREA_MC_GET" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="E_VALORI_AREASet" EntityType="ZGTW_BEM_SRV.E_VALORI_AREA" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="BEM_PRESAVESet" EntityType="ZGTW_BEM_SRV.BEM_PRESAVE" sap:searchable="true" sap:requires-filter="true" sap:content-version="1"/>
+                <EntitySet Name="I_TESTATASet" EntityType="ZGTW_BEM_SRV.I_TESTATA" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="E_RIEPILOGOSet" EntityType="ZGTW_BEM_SRV.E_RIEPILOGO" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="E_POS_RIEPILOGOSet" EntityType="ZGTW_BEM_SRV.E_POS_RIEPILOGO" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="GetDetailSet" EntityType="ZGTW_BEM_SRV.GetDetail" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
+                <EntitySet Name="TestataSet" EntityType="ZGTW_BEM_SRV.Testata" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="DettagliSet" EntityType="ZGTW_BEM_SRV.Dettagli" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="ListaCampiSet" EntityType="ZGTW_BEM_SRV.ListaCampi" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="ListaFunzioniSet" EntityType="ZGTW_BEM_SRV.ListaFunzioni" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="StampaSet" EntityType="ZGTW_BEM_SRV.Stampa" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="Pdf_DataSet" EntityType="ZGTW_BEM_SRV.Pdf_Data" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="Pdf_RawSet" EntityType="ZGTW_BEM_SRV.Pdf_Raw" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="SedeTecnicaSet" EntityType="ZGTW_BEM_SRV.SedeTecnica" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
+                <EntitySet Name="ESocSet" EntityType="ZGTW_BEM_SRV.ESoc" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="SYNAMESet" EntityType="ZGTW_BEM_SRV.SYNAME" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
+                <EntitySet Name="TpprotSet" EntityType="ZGTW_BEM_SRV.Tpprot" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="DocStzInputSet" EntityType="ZGTW_BEM_SRV.DocStzInput" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="DocStzOutputSet" EntityType="ZGTW_BEM_SRV.DocStzOutput" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <AssociationSet Name="GetDetailTestataSet" Association="ZGTW_BEM_SRV.GetDetailTestata" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="GetDetailSet" Role="FromRole_GetDetailTestata"/>
+                    <End EntitySet="TestataSet" Role="ToRole_GetDetailTestata"/>
+                </AssociationSet>
+                <AssociationSet Name="StampaToPdfRawSet" Association="ZGTW_BEM_SRV.StampaToPdfRaw" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="StampaSet" Role="FromRole_StampaToPdfRaw"/>
+                    <End EntitySet="Pdf_RawSet" Role="ToRole_StampaToPdfRaw"/>
+                </AssociationSet>
+                <AssociationSet Name="POS_CONTRATTO_GETLIST_TO_ELISTDOCSet" Association="ZGTW_BEM_SRV.POS_CONTRATTO_GETLIST_TO_ELISTDOC" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="POS_CONTRATTO_GETLISTSet" Role="FromRole_POS_CONTRATTO_GETLIST_TO_ELISTDOC"/>
+                    <End EntitySet="EListdocSet" Role="ToRole_POS_CONTRATTO_GETLIST_TO_ELISTDOC"/>
+                </AssociationSet>
+                <AssociationSet Name="GET_CTRL_QLTY_TO_EGETQLTYSet" Association="ZGTW_BEM_SRV.GET_CTRL_QLTY_TO_EGETQLTY" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="GET_CTRL_QLTYSet" Role="FromRole_GET_CTRL_QLTY_TO_EGETQLTY"/>
+                    <End EntitySet="E_GET_CTRL_QLTYSet" Role="ToRole_GET_CTRL_QLTY_TO_EGETQLTY"/>
+                </AssociationSet>
+                <AssociationSet Name="SEDETECNICA_MC_GET_TO_E_VALORISet" Association="ZGTW_BEM_SRV.SEDETECNICA_MC_GET_TO_E_VALORI" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="SEDETECNICA_MC_GETSet" Role="FromRole_SEDETECNICA_MC_GET_TO_E_VALORI"/>
+                    <End EntitySet="E_VALORI_SEDTECSet" Role="ToRole_SEDETECNICA_MC_GET_TO_E_VALORI"/>
+                </AssociationSet>
+                <AssociationSet Name="GET50001_TO_ETAB50001Set" Association="ZGTW_BEM_SRV.GET50001_TO_ETAB50001" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="GET50001Set" Role="FromRole_GET50001_TO_ETAB50001"/>
+                    <End EntitySet="ETab50001Set" Role="ToRole_GET50001_TO_ETAB50001"/>
+                </AssociationSet>
+                <AssociationSet Name="GetDetailListaCampiSet" Association="ZGTW_BEM_SRV.GetDetailListaCampi" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="GetDetailSet" Role="FromRole_GetDetailListaCampi"/>
+                    <End EntitySet="ListaCampiSet" Role="ToRole_GetDetailListaCampi"/>
+                </AssociationSet>
+                <AssociationSet Name="BEM_PRESAVE_TO_I_DETTAGLI_AssocSet" Association="ZGTW_BEM_SRV.BEM_PRESAVE_TO_I_DETTAGLI" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="BEM_PRESAVESet" Role="FromRole_BEM_PRESAVE_TO_I_DETTAGLI"/>
+                    <End EntitySet="IDettaglioCollection" Role="ToRole_BEM_PRESAVE_TO_I_DETTAGLI"/>
+                </AssociationSet>
+                <AssociationSet Name="BEM_PRESAVE_TO_E_POS_RIEPILOGOSet" Association="ZGTW_BEM_SRV.BEM_PRESAVE_TO_E_POS_RIEPILOGO" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="BEM_PRESAVESet" Role="FromRole_BEM_PRESAVE_TO_E_POS_RIEPILOGO"/>
+                    <End EntitySet="E_POS_RIEPILOGOSet" Role="ToRole_BEM_PRESAVE_TO_E_POS_RIEPILOGO"/>
+                </AssociationSet>
+                <AssociationSet Name="GETODAINFO_TO_IMPORTORESIDUOODASet" Association="ZGTW_BEM_SRV.GETODAINFO_TO_IMPORTORESIDUOODA" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="GETODAINFOSet" Role="FromRole_GETODAINFO_TO_IMPORTORESIDUOODA"/>
+                    <End EntitySet="E_IMPORTO_RESIDUO_ODASet" Role="ToRole_GETODAINFO_TO_IMPORTORESIDUOODA"/>
+                </AssociationSet>
+                <AssociationSet Name="GET_CTRL_QLTY_TO_ECQEMSet" Association="ZGTW_BEM_SRV.GET_CTRL_QLTY_TO_ECQEM" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="GET_CTRL_QLTYSet" Role="FromRole_GET_CTRL_QLTY_TO_ECQEM"/>
+                    <End EntitySet="ECqemSet" Role="ToRole_GET_CTRL_QLTY_TO_ECQEM"/>
+                </AssociationSet>
+                <AssociationSet Name="BME_ROLES_UPDATE_TO_DETTAGLIO_AssocSet" Association="ZGTW_BEM_SRV.BME_ROLES_UPDATE_TO_DETTAGLIO" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="BEM_ROLES_UPDATESet" Role="FromRole_BME_ROLES_UPDATE_TO_DETTAGLIO"/>
+                    <End EntitySet="IDettaglioCollection" Role="ToRole_BME_ROLES_UPDATE_TO_DETTAGLIO"/>
+                </AssociationSet>
+                <AssociationSet Name="StampaToPdfDataSet" Association="ZGTW_BEM_SRV.StampaToPdfData" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="StampaSet" Role="FromRole_StampaToPdfData"/>
+                    <End EntitySet="Pdf_DataSet" Role="ToRole_StampaToPdfData"/>
+                </AssociationSet>
+                <AssociationSet Name="ORDACQ_MC_GET_TO_EVALORIMCGETSet" Association="ZGTW_BEM_SRV.ORDACQ_MC_GET_TO_EVALORIMCGET" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="ORDACQ_MC_GETSet" Role="FromRole_ORDACQ_MC_GET_TO_EVALORIMCGET"/>
+                    <End EntitySet="E_VALORI_MC_GETSet" Role="ToRole_ORDACQ_MC_GET_TO_EVALORIMCGET"/>
+                </AssociationSet>
+                <AssociationSet Name="HEADER_BEM_CHANGE_DETTAGLIO_AssocSet" Association="ZGTW_BEM_SRV.HEADER_BEM_CHANGE_DETTAGLIO" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="BEM_CHANGESet" Role="FromRole_HEADER_BEM_CHANGE_DETTAGLIO"/>
+                    <End EntitySet="IDettaglioCollection" Role="ToRole_HEADER_BEM_CHANGE_DETTAGLIO"/>
+                </AssociationSet>
+                <AssociationSet Name="BEM_PRESAVE_TO_ITESTATTASet" Association="ZGTW_BEM_SRV.BEM_PRESAVE_TO_ITESTATTA" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="BEM_PRESAVESet" Role="FromRole_BEM_PRESAVE_TO_ITESTATTA"/>
+                    <End EntitySet="TestataSet" Role="ToRole_BEM_PRESAVE_TO_ITESTATTA"/>
+                </AssociationSet>
+                <AssociationSet Name="GETBDLINFO_TO_E_BEM_GETBDLINFOSet" Association="ZGTW_BEM_SRV.GETBDLINFO_TO_E_BEM_GETBDLINFO" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="GETBDLINFOSet" Role="FromRole_GETBDLINFO_TO_E_BEM_GETBDLINFO"/>
+                    <End EntitySet="E_BEM_GETBDLINFOSet" Role="ToRole_GETBDLINFO_TO_E_BEM_GETBDLINFO"/>
+                </AssociationSet>
+                <AssociationSet Name="HEADER_BEM_CHANGE_GROUPSSet" Association="ZGTW_BEM_SRV.HEADER_BEM_CHANGE_GROUPS" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="BEM_CHANGESet" Role="FromRole_HEADER_BEM_CHANGE_GROUPS"/>
+                    <End EntitySet="IGroupsSet" Role="ToRole_HEADER_BEM_CHANGE_GROUPS"/>
+                </AssociationSet>
+                <AssociationSet Name="DocStzInput_to_DocStzOutputSet" Association="ZGTW_BEM_SRV.DocStzInput_to_DocStzOutput" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="DocStzInputSet" Role="FromRole_DocStzInput_to_DocStzOutput"/>
+                    <End EntitySet="DocStzOutputSet" Role="ToRole_DocStzInput_to_DocStzOutput"/>
+                </AssociationSet>
+                <AssociationSet Name="OdaForBemToOdaForBemEDettaglioSet" Association="ZGTW_BEM_SRV.OdaForBemToOdaForBemEDettaglio" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="OdaForBemSet" Role="FromRole_OdaForBemToOdaForBemEDettaglio"/>
+                    <End EntitySet="OdaForBemEDettaglioSet" Role="ToRole_OdaForBemToOdaForBemEDettaglio"/>
+                </AssociationSet>
+                <AssociationSet Name="GetDetailListaFunzioniSet" Association="ZGTW_BEM_SRV.GetDetailListaFunzioni" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="GetDetailSet" Role="FromRole_GetDetailListaFunzioni"/>
+                    <End EntitySet="ListaFunzioniSet" Role="ToRole_GetDetailListaFunzioni"/>
+                </AssociationSet>
+                <AssociationSet Name="GetDetailDettagliSet" Association="ZGTW_BEM_SRV.GetDetailDettagli" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="GetDetailSet" Role="FromRole_GetDetailDettagli"/>
+                    <End EntitySet="DettagliSet" Role="ToRole_GetDetailDettagli"/>
+                </AssociationSet>
+                <AssociationSet Name="GETBDLINFO_POS_TO_IMPORTO_RESIDUOSet" Association="ZGTW_BEM_SRV.GETBDLINFO_POS_TO_IMPORTO_RESIDUO" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="GETBDLINFO_POSSet" Role="FromRole_GETBDLINFO_POS_TO_IMPORTO_RESIDUO"/>
+                    <End EntitySet="E_IMPORTO_RESIDUOSet" Role="ToRole_GETBDLINFO_POS_TO_IMPORTO_RESIDUO"/>
+                </AssociationSet>
+                <AssociationSet Name="CommessaValoriSet" Association="ZGTW_BEM_SRV.CommessaValori" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="CommessaSet" Role="FromRole_CommessaValori"/>
+                    <End EntitySet="EValoriSet" Role="ToRole_CommessaValori"/>
+                </AssociationSet>
+                <AssociationSet Name="AREA_MC_GET_TO_EVALORISet" Association="ZGTW_BEM_SRV.AREA_MC_GET_TO_EVALORI" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="AREA_MC_GETSet" Role="FromRole_AREA_MC_GET_TO_EVALORI"/>
+                    <End EntitySet="E_VALORI_AREASet" Role="ToRole_AREA_MC_GET_TO_EVALORI"/>
+                </AssociationSet>
+                <AssociationSet Name="STATO_LV_GET_TO_EVALORISet" Association="ZGTW_BEM_SRV.STATO_LV_GET_TO_EVALORI" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="STATO_LV_GETSet" Role="FromRole_STATO_LV_GET_TO_EVALORI"/>
+                    <End EntitySet="E_VALORI_STATOSet" Role="ToRole_STATO_LV_GET_TO_EVALORI"/>
+                </AssociationSet>
+                <AssociationSet Name="GETLIST_LISTDOSet" Association="ZGTW_BEM_SRV.GETLIST_LISTDO" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="GETLISTSet" Role="FromRole_GETLIST_LISTDO"/>
+                    <End EntitySet="LISTDOCSet" Role="ToRole_GETLIST_LISTDO"/>
+                </AssociationSet>
+                <AssociationSet Name="BEM_PRESAVE_TO_E_RIEPILOGOSet" Association="ZGTW_BEM_SRV.BEM_PRESAVE_TO_E_RIEPILOGO" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="BEM_PRESAVESet" Role="FromRole_BEM_PRESAVE_TO_E_RIEPILOGO"/>
+                    <End EntitySet="E_RIEPILOGOSet" Role="ToRole_BEM_PRESAVE_TO_E_RIEPILOGO"/>
+                </AssociationSet>
+                <AssociationSet Name="POS_ODAPLAFOND_GETLIST_TO_ELISTDOCSet" Association="ZGTW_BEM_SRV.POS_ODAPLAFOND_GETLIST_TO_ELISTDOC" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="POS_ODAPLAFOND_GETLISTSet" Role="FromRole_POS_ODAPLAFOND_GETLIST_TO_ELISTDOC"/>
+                    <End EntitySet="EListdocSet" Role="ToRole_POS_ODAPLAFOND_GETLIST_TO_ELISTDOC"/>
+                </AssociationSet>
+            </EntityContainer>
+            <atom:link rel="self" href="http://rkp-gwt-emb:8000/sap/opu/odata/sap/ZGTW_BEM_SRV/$metadata" xmlns:atom="http://www.w3.org/2005/Atom"/>
+            <atom:link rel="latest-version" href="http://rkp-gwt-emb:8000/sap/opu/odata/sap/ZGTW_BEM_SRV/$metadata" xmlns:atom="http://www.w3.org/2005/Atom"/>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>
