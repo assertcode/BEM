@@ -18,7 +18,7 @@ sap.ui.define([
     return Controller.extend("sap.m.bem.controller.BEM", {
         onInit: function () {
 
-            jQuery.sap.includeScript("https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.2/xlsx.full.min.js", "xlsx", function() {
+            jQuery.sap.includeScript("https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.2/xlsx.full.min.js", "xlsx", function () {
             });
 
             this._oRouter = sap.ui.core.UIComponent.getRouterFor(this);
@@ -45,84 +45,106 @@ sap.ui.define([
                 control: this.oFilterBar
             });
             // this.oSmartVariantManagement.addPersonalizableControl(oPersInfo);
-            
 
-            
+
+
             var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
             oRouter.getRoute("RouteBEM").attachPatternMatched(this.clearData, this);
 
-		},
-
-        clearData: function (){
-            this.getOwnerComponent().getModel("CreazioneModel").setProperty("/Addposition", false)
-            this.onGetSoc()
         },
 
-        getTpprot: function (oEvent){
+        clearData: function () {
+            this.getOwnerComponent().getModel("CreazioneModel").setProperty("/Addposition", false)
+            this.onGetSoc()
+            this.onGetAreaFilter();
+        },
+
+        getTpprot: function (oEvent) {
 
             var that = this
             var Filters = []
             var ISocieta = oEvent.getParameter("selectedItem").getKey();
 
-     
+
             if (ISocieta) {
                 Filters.push(new Filter("ISocieta", FilterOperator.EQ, ISocieta));
             }
 
-			this.getOwnerComponent().getModel().read("/TpprotSet", {
+            this.getOwnerComponent().getModel().read("/TpprotSet", {
                 filters: Filters,
-				success: function (data) {
-					 
-					var aEnumerationValues = data.results.map(function(item) {
-						return {
-							value: item.Ztpprot,
-							description: item.Zdesctp
-						};
-					});
+                success: function (data) {
 
-					var oTpprotModel = new sap.ui.model.json.JSONModel({
-						Tp: aEnumerationValues
-					});
-					
-					that.getOwnerComponent().setModel(oTpprotModel, "TpprotModel");
- 
-				},
-				error: function (oError) {
-				
-					
-				}
-			});
+                    var aEnumerationValues = data.results.map(function (item) {
+                        return {
+                            value: item.Ztpprot,
+                            description: item.Zdesctp
+                        };
+                    });
+
+                    var oTpprotModel = new sap.ui.model.json.JSONModel({
+                        Tp: aEnumerationValues
+                    });
+
+                    that.getOwnerComponent().setModel(oTpprotModel, "TpprotModel");
+
+                },
+                error: function (oError) {
+
+
+                }
+            });
         },
 
-		onGetSoc: function (){
-			var that = this
-			this.getOwnerComponent().getModel().read("/ESocSet", {
+        onGetSoc: function () {
+            var that = this
+            this.getOwnerComponent().getModel().read("/ESocSet", {
 
-				success: function (data) {
-					
-					var aEnumerationValues = data.results.map(function(item) {
-						return {
-							value: item.Zbukrs,
-							description: item.Zltext
-						};
-					});
+                success: function (data) {
 
-				    // Creazione del modello JSON con i dati mappati
-					var oSocietaModel = new sap.ui.model.json.JSONModel({
-						societa: aEnumerationValues
-					});
-					// Imposta il modello globale con il nome "SocietaModel"
-					that.getOwnerComponent().setModel(oSocietaModel, "societaModel");
- 
-				},
-				error: function (oError) {
-				
-					
-				}
-			});
-		},
+                    var aEnumerationValues = data.results.map(function (item) {
+                        return {
+                            value: item.Zbukrs,
+                            description: item.Zltext
+                        };
+                    });
+
+                    // Creazione del modello JSON con i dati mappati
+                    var oSocietaModel = new sap.ui.model.json.JSONModel({
+                        societa: aEnumerationValues
+                    });
+                    // Imposta il modello globale con il nome "SocietaModel"
+                    that.getOwnerComponent().setModel(oSocietaModel, "societaModel");
+
+                },
+                error: function (oError) {
 
 
+                }
+            });
+        },
+
+        onGetAreaFilter: function () {
+            var that = this;
+
+            const aFilters = [];
+
+            aFilters.push(new Filter("Zvisualizzazione", FilterOperator.EQ, true));
+
+            this.getOwnerComponent().getModel().read("/AreaTSet", {
+                filters: aFilters,
+                success: function (data) {
+
+                    const aAree = data.results.map((oArea) => ({ value: oArea.Zareat, description: oArea.Zdscarea }));
+
+                    that.getOwnerComponent().getModel("AreaFModel").setProperty("/enumerationValues", aAree.filter((oArea) => oArea.description !== ""));
+
+                },
+                error: function (oError) {
+                    MessageToast.show('Errore recupero filtri Aree');
+
+                }
+            });
+        },
 
         handleRouteMatched: function () {
             // var that = this
@@ -200,7 +222,7 @@ sap.ui.define([
             if (CUP) {
                 aFilters.push(new Filter("CUP", FilterOperator.Contains, CUP));
             }
-            if(SedeTecnica){
+            if (SedeTecnica) {
                 aFilters.push(new Filter("SedeTecnica", FilterOperator.Contains, SedeTecnica));
             }
             if (AutoreBEM) {
@@ -231,7 +253,7 @@ sap.ui.define([
             if (StatoBEM) {
                 aFilters.push(new Filter("IStatobem", FilterOperator.EQ, StatoBEM));
             }
-            if(BEMBenestataria){
+            if (BEMBenestataria) {
                 // S.Cannavale
                 //aFilters.push(new Filter("BEMBenestataria", FilterOperator.EQ, BEMBenestataria));
                 const iBef = BEMBenestataria === 'X';
@@ -272,11 +294,11 @@ sap.ui.define([
 
             var that = this;
             const oModel = this.getOwnerComponent().getModel();
-            var nprot = this.getOwnerComponent().getModel("RowSelect").getProperty("/Znprot")        
+            var nprot = this.getOwnerComponent().getModel("RowSelect").getProperty("/Znprot")
             var oDatePicker = new DatePicker({
                 width: "100%",
-                valueFormat: "yyyy-MM-dd",  
-                displayFormat: "dd/MM/yyyy", 
+                valueFormat: "yyyy-MM-dd",
+                displayFormat: "dd/MM/yyyy",
             });
 
             oDatePicker.setDateValue(this.getOwnerComponent().getModel("RowSelect").getProperty("/Zbudat"));
@@ -287,7 +309,7 @@ sap.ui.define([
                     oDatePicker
                 ],
             }).addStyleClass("sapUiSmallMargin");
-        
+
             // Crear el diálogo
             var oDialog = new Dialog({
                 title: "Seleziona una data per l'annullamento",
@@ -296,7 +318,7 @@ sap.ui.define([
                 ],
                 beginButton: new Button({
                     text: "Conferma",
-                    press: function() {
+                    press: function () {
                         var sSelectedDate = oDatePicker.getDateValue();
                         const Payload = {
                             INumeroprotocollo: nprot,
@@ -309,7 +331,7 @@ sap.ui.define([
                                     if (message !== "") {
                                         MessageToast.show(message);
                                         2
-                                    } else  {
+                                    } else {
                                         MessageToast.show("Operazione Completata");
                                         that.LetturaDati()
                                     }
@@ -323,31 +345,31 @@ sap.ui.define([
                 }),
                 endButton: new Button({
                     text: "Indietro",
-                    press: function() {
+                    press: function () {
                         oDialog.close();
                     }
                 })
             });
-        
+
             // Abrir el diálogo
             oDialog.open();
 
-           
 
-           
+
+
         },
 
         Dettaglio: function (oEvent) {
 
             var oRouter = this.getOwnerComponent().getRouter();
             var nprot = this.getOwnerComponent().getModel("RowSelect").getProperty("/Znprot")
-            this.getOwnerComponent().getModel("CreazioneModel").setProperty("/Nprot", nprot) 
-            if(nprot != undefined ){
+            this.getOwnerComponent().getModel("CreazioneModel").setProperty("/Nprot", nprot)
+            if (nprot != undefined) {
                 oRouter.navTo("AvanzamentoBem");
-            }else{
+            } else {
                 MessageToast.show('Nessun record selezionato');
             }
-            
+
         },
 
         // onSearchFornitori: function (oEvent) {
@@ -435,14 +457,14 @@ sap.ui.define([
         // },
 
         onExcel: function () {
-			
-			var aData = this.getOwnerComponent().getModel("DatiTabellaPrimaPagina").getProperty("/Dati/0/LISTDOCSet/results");
 
-			if (!Array.isArray(aData)) {
-				
-				MessageToast.show('La tabella non contiene valori');
-				return;
-			}
+            var aData = this.getOwnerComponent().getModel("DatiTabellaPrimaPagina").getProperty("/Dati/0/LISTDOCSet/results");
+
+            if (!Array.isArray(aData)) {
+
+                MessageToast.show('La tabella non contiene valori');
+                return;
+            }
 
             var aCols = [
                 { label: "Numero", property: "Znprot" },
@@ -466,26 +488,26 @@ sap.ui.define([
                 { label: "Utente Annullamento", property: "Zusannul" }
             ];
 
-			var aExcelData = aData.map(function (oItem) {
-				var oExcelItem = {};
-				aCols.forEach(function (oCol) {
-					if (oCol.property === 'Zbldat' || oCol.property === 'Zbudat' || oCol.property === 'Zdtannul' ) {
-						oExcelItem[oCol.label] = oItem[oCol.property] ? new Date(oItem[oCol.property]).toLocaleDateString() : "";
-					} else {
-						oExcelItem[oCol.label] = oItem[oCol.property];
-					}
-				});
-				return oExcelItem;
-			});
+            var aExcelData = aData.map(function (oItem) {
+                var oExcelItem = {};
+                aCols.forEach(function (oCol) {
+                    if (oCol.property === 'Zbldat' || oCol.property === 'Zbudat' || oCol.property === 'Zdtannul') {
+                        oExcelItem[oCol.label] = oItem[oCol.property] ? new Date(oItem[oCol.property]).toLocaleDateString() : "";
+                    } else {
+                        oExcelItem[oCol.label] = oItem[oCol.property];
+                    }
+                });
+                return oExcelItem;
+            });
 
-			var oWorksheet = XLSX.utils.json_to_sheet(aExcelData);
-			var oWorkbook = XLSX.utils.book_new();
-			XLSX.utils.book_append_sheet(oWorkbook, oWorksheet, "Sheet1");
-			XLSX.writeFile(oWorkbook, "Export.xlsx");
+            var oWorksheet = XLSX.utils.json_to_sheet(aExcelData);
+            var oWorkbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(oWorkbook, oWorksheet, "Sheet1");
+            XLSX.writeFile(oWorkbook, "Export.xlsx");
 
 
 
-		},
+        },
 
         Aprifornitori: function () {
             var oView = this.getView();
@@ -516,36 +538,36 @@ sap.ui.define([
             var localita = oModel.getProperty("/localita")
             var cap = oModel.getProperty("/cap")
 
-            if(societa){
-            aFilter.push(new Filter("Bukrs", FilterOperator.EQ, societa));
+            if (societa) {
+                aFilter.push(new Filter("Bukrs", FilterOperator.EQ, societa));
             }
-            if(nome){
-            aFilter.push(new Filter("Name1", FilterOperator.Contains, nome));
-        }
-            if(fornitore){
-            aFilter.push(new Filter("Lifnr", FilterOperator.Contains, fornitore));
-        }
-            if(localita){
-            aFilter.push(new Filter("Ort01", FilterOperator.Contains, localita));
-        }
-            if(cap){
-            aFilter.push(new Filter("Pstlz", FilterOperator.Contains, cap));
-        }
+            if (nome) {
+                aFilter.push(new Filter("Name1", FilterOperator.Contains, nome));
+            }
+            if (fornitore) {
+                aFilter.push(new Filter("Lifnr", FilterOperator.Contains, fornitore));
+            }
+            if (localita) {
+                aFilter.push(new Filter("Ort01", FilterOperator.Contains, localita));
+            }
+            if (cap) {
+                aFilter.push(new Filter("Pstlz", FilterOperator.Contains, cap));
+            }
 
             this.getOwnerComponent().getModel().read('/FornitoriSet',
-                
+
                 {
-                    filters:aFilter,
+                    filters: aFilter,
                     success: function (data) {
                         that.getView().getModel("MatchCode").setProperty("/Fornitori", data.results);
                         that.byId("tableFornitori").setBusy(false)
-                       
-                       
+
+
                     },
                     error: function (err) {
                         console.error(err)
                         that.byId("tableFornitori").setBusy(false)
-                        
+
                     }
                 });
 
@@ -575,40 +597,40 @@ sap.ui.define([
             var commessa = oModel.getProperty("/commessa")
             var responsabile = oModel.getProperty("/responsabile")
             var mercato = oModel.getProperty("/mercato")
-            if(wbs){
-            aFilter.push(new Filter("IPosid", FilterOperator.Contains, wbs));
+            if (wbs) {
+                aFilter.push(new Filter("IPosid", FilterOperator.Contains, wbs));
             }
-            if(definizione){
-            aFilter.push(new Filter("IPost1", FilterOperator.Contains, definizione));
-        }
-            if(commessa){
-            aFilter.push(new Filter("IPspid", FilterOperator.Contains, commessa));
-        }
-            if(responsabile){
-            aFilter.push(new Filter("IVerna", FilterOperator.Contains, responsabile));
-        }
-            if(mercato){
-            aFilter.push(new Filter("IZztipocliente", FilterOperator.Contains, mercato));
-        }
+            if (definizione) {
+                aFilter.push(new Filter("IPost1", FilterOperator.Contains, definizione));
+            }
+            if (commessa) {
+                aFilter.push(new Filter("IPspid", FilterOperator.Contains, commessa));
+            }
+            if (responsabile) {
+                aFilter.push(new Filter("IVerna", FilterOperator.Contains, responsabile));
+            }
+            if (mercato) {
+                aFilter.push(new Filter("IZztipocliente", FilterOperator.Contains, mercato));
+            }
 
             this.getOwnerComponent().getModel().read('/CommessaSet',
-                
+
                 {
-                    filters:aFilter,
+                    filters: aFilter,
                     urlParameters: {
                         "$expand": "EValoriSet"
                     },
                     success: function (data) {
-                        
+
                         that.getView().getModel("MatchCode").setProperty("/Commessa", data.results[0].EValoriSet.results);
                         that.byId("CommessaTable").setBusy(false)
-                       
-                       
+
+
                     },
                     error: function (err) {
                         console.error(err)
                         that.byId("CommessaTable").setBusy(false)
-                        
+
                     }
                 });
 
@@ -676,41 +698,41 @@ sap.ui.define([
         },
 
         onSedeTecnicaSearch: function () {
-			const filters = [];
-			var that = this;
-			var SedeTecnica = this.getOwnerComponent().getModel("SedeTecnicaFilterModel").getProperty("/SedeTecnica")
-			var Societa = this.getOwnerComponent().getModel("SedeTecnicaFilterModel").getProperty("/Societa")
-			var Descrizione = this.getOwnerComponent().getModel("SedeTecnicaFilterModel").getProperty("/Descrizione")
-			var WBS = this.getOwnerComponent().getModel("SedeTecnicaFilterModel").getProperty("/WBS")
+            const filters = [];
+            var that = this;
+            var SedeTecnica = this.getOwnerComponent().getModel("SedeTecnicaFilterModel").getProperty("/SedeTecnica")
+            var Societa = this.getOwnerComponent().getModel("SedeTecnicaFilterModel").getProperty("/Societa")
+            var Descrizione = this.getOwnerComponent().getModel("SedeTecnicaFilterModel").getProperty("/Descrizione")
+            var WBS = this.getOwnerComponent().getModel("SedeTecnicaFilterModel").getProperty("/WBS")
 
 
-			if (SedeTecnica != "") {
-				filters.push(new sap.ui.model.Filter("Tplnr", sap.ui.model.FilterOperator.Contains, SedeTecnica));
-			} if (Societa != "") {
-				filters.push(new sap.ui.model.Filter("Zbukrs", sap.ui.model.FilterOperator.Contains, Societa));
-			} if (WBS != "") {
-				filters.push(new sap.ui.model.Filter("Posid", sap.ui.model.FilterOperator.Contains, WBS));
-			} if (Descrizione != "") {
-				filters.push(new sap.ui.model.Filter("Pltxt", sap.ui.model.FilterOperator.Contains, Descrizione));
-			} 
-			this.byId("SedeTecnicaTable").setBusy(true);
-			this.getOwnerComponent().getModel().read("/SedeTecnicaSet", {
-				filters: filters, // use sap.ui.model.Filter for filters
-				success: function (data) {
-					that.byId("SedeTecnicaTable").setBusy(false);
-					that.getOwnerComponent().getModel("MatchCode").setProperty("/SedeTecnica", data)
-	
-
-				}.bind(that),
-				error: function (oError) {
-					that.byId("SedeTecnicaTable").setBusy(false);
-					MessageToast.show('ERRORE DI SISTEMA');
-				}
-			});
+            if (SedeTecnica != "") {
+                filters.push(new sap.ui.model.Filter("Tplnr", sap.ui.model.FilterOperator.Contains, SedeTecnica));
+            } if (Societa != "") {
+                filters.push(new sap.ui.model.Filter("Zbukrs", sap.ui.model.FilterOperator.Contains, Societa));
+            } if (WBS != "") {
+                filters.push(new sap.ui.model.Filter("Posid", sap.ui.model.FilterOperator.Contains, WBS));
+            } if (Descrizione != "") {
+                filters.push(new sap.ui.model.Filter("Pltxt", sap.ui.model.FilterOperator.Contains, Descrizione));
+            }
+            this.byId("SedeTecnicaTable").setBusy(true);
+            this.getOwnerComponent().getModel().read("/SedeTecnicaSet", {
+                filters: filters, // use sap.ui.model.Filter for filters
+                success: function (data) {
+                    that.byId("SedeTecnicaTable").setBusy(false);
+                    that.getOwnerComponent().getModel("MatchCode").setProperty("/SedeTecnica", data)
 
 
+                }.bind(that),
+                error: function (oError) {
+                    that.byId("SedeTecnicaTable").setBusy(false);
+                    MessageToast.show('ERRORE DI SISTEMA');
+                }
+            });
 
-		},
+
+
+        },
 
         onSedeTecnicaSelect: function () {
 
@@ -733,19 +755,19 @@ sap.ui.define([
             }
         },
 
-        ConfermaNumeroCig:function(){
+        ConfermaNumeroCig: function () {
             var oDialog = this.byId("IdNumeroCigHelpRequest");
             if (oDialog) {
                 oDialog.close();
             }
         },
-        ConfermaNumeroOda:function(){
+        ConfermaNumeroOda: function () {
             var oDialog = this.byId("IdNumeroOdaHelpRequest");
             if (oDialog) {
                 oDialog.close();
             }
         },
-        ConfermaAutorebem:function(){
+        ConfermaAutorebem: function () {
             var oDialog = this.byId("IdAutorebemHelpRequest");
             if (oDialog) {
                 oDialog.close();
@@ -806,22 +828,22 @@ sap.ui.define([
                 {
                     success: function (oData) {
 
-                        that.getOwnerComponent().getModel("CreazioneModel").setProperty("/Nprot", oData.ENprot) 
+                        that.getOwnerComponent().getModel("CreazioneModel").setProperty("/Nprot", oData.ENprot)
 
 
-                                    table.setBusy(false)
-                                    
-                                    oRouter.navTo("AvanzamentoBem");
-                               
+                        table.setBusy(false)
+
+                        oRouter.navTo("AvanzamentoBem");
 
 
-                        },
-                        error: function (err) {
-                            this.onClose()
-                            console.error(err)
-                            MessageToast.show("Creazione Impossibile");
-                        }
-        });
+
+                    },
+                    error: function (err) {
+                        this.onClose()
+                        console.error(err)
+                        MessageToast.show("Creazione Impossibile");
+                    }
+                });
 
         },
         onExit: function () {
@@ -956,7 +978,7 @@ sap.ui.define([
         },
 
         SelezioneCommessa: function (oEvent) {
-            
+
             var iSelectedIndex = oEvent.getParameter("rowIndex");
             var oTable = this.byId("CommessaTable");
             var oSelectedContext = oTable.getContextByIndex(iSelectedIndex);
@@ -972,83 +994,83 @@ sap.ui.define([
             this.getView().getModel("CreazioneBemModel").setProperty("/key", sKey)
             this.getView().getModel("CreazioneBemModel").setProperty("/text", sText)
         },
-        ChangeMercatoCombobox:function(oEvent){
+        ChangeMercatoCombobox: function (oEvent) {
         },
 
-        onRowSelectionChange: function(oEvent) {
+        onRowSelectionChange: function (oEvent) {
             var oTable = oEvent.getSource();
             var aSelectedIndices = oTable.getSelectedIndices();
-        
+
             if (aSelectedIndices.length > 0) {
                 // Ottieni il primo indice selezionato
                 var iSelectedIndex = aSelectedIndices[0];
-                
+
                 // Ottieni l'elemento di contesto utilizzando l'indice
                 var oBindingContext = oTable.getContextByIndex(iSelectedIndex);
-                
+
                 if (oBindingContext) {
                     // Estrai il valore desiderato
                     var sValue = oBindingContext.getProperty("Zposid"); // Sostituisci "desiredField" con il campo corretto
-                    
+
                     // Imposta il valore nell'input
                     var oInput = this.getView().byId("Commessa");
                     oInput.setValue(sValue);
-                    
+
                     // Chiudi il dialogo
                     this.byId("IdCommessaHelpRequest").close();
                 }
             }
         },
 
-        SedeTecnicaSelected: function(oEvent) {
-            
-            var oSelectedItem = oEvent.getParameter("listItem"); 
-        
-           
+        SedeTecnicaSelected: function (oEvent) {
+
+            var oSelectedItem = oEvent.getParameter("listItem");
+
+
             if (oSelectedItem) {
                 var oBindingContext = oSelectedItem.getBindingContext("MatchCode");
-                
-                
+
+
                 var sWbsValue = oBindingContext.getProperty("Ort01");
-                
-              
+
+
                 var oInput = this.getView().byId("SedeTecnica");
                 oInput.setValue(sWbsValue);
-                
-              
+
+
                 this.byId('IdHelpRequestSedeTecnica').close();
             }
         },
 
-        onCodiceFornitoreSelect: function(oEvent) {
+        onCodiceFornitoreSelect: function (oEvent) {
             var oTable = oEvent.getSource();
             var aSelectedIndices = oTable.getSelectedIndices();
-        
+
             if (aSelectedIndices.length > 0) {
                 // Ottieni il primo indice selezionato
                 var iSelectedIndex = aSelectedIndices[0];
-                
+
                 // Ottieni l'elemento di contesto utilizzando l'indice
                 var oBindingContext = oTable.getContextByIndex(iSelectedIndex);
-                
+
                 if (oBindingContext) {
                     // Estrai il valore desiderato
                     var sValue = oBindingContext.getProperty("Lifnr"); // Sostituisci "desiredField" con il campo corretto
 
                     var lastFiveChars = sValue.slice(-5);
-                    
+
                     // Imposta il valore nell'input
                     var oInput = this.getView().byId("codicefornitoreinput");
                     oInput.setValue(lastFiveChars);
-                    
+
                     // Chiudi il dialogo
                     this.byId("FragmentCodiceFornitore").close();
                 }
             }
         }
-        
-        
-        
-        
+
+
+
+
     });
 });

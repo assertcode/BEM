@@ -1,0 +1,84 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:t="sap.ui.table"
+>
+    <Dialog
+        id="ConfermaScrittureIntegrative"
+        title="Conferma"
+        draggable="true"
+        resizable="true"
+    >
+        <content>
+            <f:SimpleForm
+                id="FormConfermaScrittureIntegrative"
+                editable="true"
+                layout="ResponsiveGridLayout"
+                title="Scritture Integrative"
+                labelSpanXL="3"
+                labelSpanL="3"
+                labelSpanM="3"
+                labelSpanS="12"
+                adjustLabelSpan="false"
+                emptySpanXL="4"
+                emptySpanL="4"
+                emptySpanM="4"
+                emptySpanS="0"
+                columnsXL="1"
+                columnsL="1"
+                columnsM="1"
+                singleContainerFullSize="false"
+            >
+                <f:content>
+                    <Label text="Sopravvenienza Attiva" />
+                    <Input
+                        editable="false"
+                        value="{
+                            path: 'ConfermaScrittureIntegrative>/Zsopravattiva',
+                            type: 'sap.m.bem.model.type.formatDecimal'
+                        }"
+                    />
+                    <Label text="Sopravvenienza Passiva" />
+                    <Input
+                        editable="false"
+                        value="{
+                            path: 'ConfermaScrittureIntegrative>/Zsopravpassiva',
+                            type: 'sap.m.bem.model.type.formatDecimal'
+                        }"
+                    />
+                    <Label text="Residuo" />
+                    <Input
+                        value="{
+                            path: 'ConfermaScrittureIntegrative>/Zresiduo',
+                            type: 'sap.m.bem.model.type.formatDecimal'
+                        }"
+                    />
+                    <Label text="Motivazioni" />
+                    <TextArea
+                        value="{DatiBemDetail>/OTESTATASet/Zmotivsopravv}"
+                        showExceededText="true"
+                        rows="5"
+                        maxLength="255"
+                        width="100%"
+                        valueState="{= ${DatiBemDetail>/OTESTATASet/Zmotivsopravv}.length > 255 ? 'Error' : 'None' }"
+                    />
+                </f:content>
+            </f:SimpleForm>
+        </content>
+        <beginButton>
+            <Button
+                text="Conferma"
+                type="Emphasized"
+                press=".onConfermaScrittureIntegrativePress"
+            />
+        </beginButton>
+        <endButton>
+            <Button
+                text="Annulla"
+                type="Ghost"
+                press=".onAnnullaScrittureIntegrativePress"
+            />
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>

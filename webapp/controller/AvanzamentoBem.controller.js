@@ -31,6 +31,9 @@ sap.ui.define([
             var oModel = this.createFlowModel();
             this.getView().setModel(oModel, "modello");
 
+            this.getView().setModel(new JSONModel({}), "ConfermaScrittureIntegrative");
+            this.getView().setModel(new JSONModel({}), "SalvaButtonEvent");
+
             if (this.getOwnerComponent().getModel("CreazioneModel").getProperty("/Nprot") == "") {
                 var oRouter = this.getOwnerComponent().getRouter()
                 oRouter.navTo("RouteBEM");
@@ -46,6 +49,7 @@ sap.ui.define([
 
         onSearch: function () {
             if (this.getOwnerComponent().getModel("CreazioneModel").getProperty("/Addposition") == true) {
+                this.onChangeAggiornaAnnoStaz();
                 this.getOwnerComponent().getModel("CreazioneModel").setProperty("/Addposition", false)
                 return
             }
@@ -58,7 +62,7 @@ sap.ui.define([
                 {
                     filters: aFilter,
                     urlParameters: {
-                        "$expand": "DettagliSet,Testata,ListaCampiSet,ListaFunzioniSet"
+                        "$expand": "DettagliSet,Testata,to_EZTRGT003,ListaCampiSet,ListaFunzioniSet"
                     },
                     success: function (data) {
 
@@ -74,6 +78,7 @@ sap.ui.define([
 
 
                         that.getOwnerComponent().getModel("DatiBemDetail").setProperty("/OTESTATASet", data.results[0].Testata)
+                        that.getOwnerComponent().getModel("DatiBemDetail").setProperty("/EZTRGT003", data.results[0].to_EZTRGT003);
 
                         var tpprot = that.getOwnerComponent().getModel("DatiBemDetail").getProperty("/OTESTATASet/Ztpprot")
                         if (tpprot == "75") {
@@ -484,6 +489,338 @@ sap.ui.define([
             }
         },
 
+        _getSingleDocStz: async function (oDettaglio) {
+            const oModel = this.getOwnerComponent().getModel();
+            const oBemDetailModel = this.getOwnerComponent().getModel('DatiBemDetail');
+            const oTestata = oBemDetailModel.getProperty("/OTESTATASet");
+            const aFilters = [];
+
+            // Societa
+            aFilters.push(new Filter("IBukrs", FilterOperator.EQ, oTestata.Zbukrs));
+
+            // Fornitore
+            if (oTestata.Zlifnr) {
+                aFilters.push(new Filter("ILifnr", FilterOperator.Contains, oTestata.Zlifnr));
+            }
+
+            // Anno
+            if (oDettaglio.ZstaStzahr) {
+                aFilters.push(new Filter("IGjahr", FilterOperator.EQ, oDettaglio.ZstaStzahr));
+            }
+
+            // Wbe
+            if (oDettaglio.ZpsPosid) {
+                aFilters.push(new Filter("IPosid", FilterOperator.EQ, oDettaglio.ZpsPosid));
+            }
+
+            // Importo
+            if (oDettaglio.ZstaDmStz) {
+                aFilters.push(new Filter("IDmbtr", FilterOperator.EQ, oDettaglio.ZstaDmStz));
+            }
+
+            // Segno
+            aFilters.push(new Filter("ISegno", FilterOperator.EQ, "+"));
+
+            // Documento
+            if (oDettaglio.ZstaBelnrBm) {
+                aFilters.push(new Filter("IBelnr", FilterOperator.EQ, oDettaglio.ZstaBelnrBm));
+            }
+
+            // Posizione
+            if (oDettaglio.ZstaBuzeiBm) {
+                aFilters.push(new Filter("IBuzei", FilterOperator.EQ, oDettaglio.ZstaBuzeiBm));
+            }
+
+            aFilters.push(new Filter("ISingle", FilterOperator.EQ, true));
+
+            const [aValori, oError] = await new Promise(function (resolve, reject) {
+                oModel.read('/DocStzInputSet', {
+                    filters: aFilters,
+                    urlParameters: {
+                        "$expand": "to_DocStzOutput"
+                    },
+                    success: function (oData) {
+                        resolve([oData.results[0].to_DocStzOutput.results, null]);
+                    },
+                    error: function (oError) {
+                        reject([null, oError]);
+                    }
+                });
+            });
+
+            if (!aValori && oError) {
+                console.error(oError);
+                return null;
+            }
+
+            return aValori.length > 0 ? aValori[0] : null;
+        },
+
+        updateCosts: function () {
+            const oBemDetailModel = this.getOwnerComponent().getModel("DatiBemDetail");
+
+            const oTestata = oBemDetailModel.getProperty("/OTESTATASet");
+            const oBemDefaultPosition = oBemDetailModel.getProperty("/EZTRGT003");
+            const aDettagli = oBemDetailModel.getProperty("/IDettaglioSet");
+
+            if (!oTestata) { return; }
+
+            const sTipoBEM = oBemDefaultPosition.Zpstyp;
+
+            const bIsServizio = sTipoBEM !== null && sTipoBEM === "P";
+
+            let nTotale = 0;
+            let nImporto = 0;
+
+            for (const oDettaglio of aDettagli) {
+                nImporto = 0;
+
+                const nPeinh = 1;
+
+                if (bIsServizio) {
+                    if (oDettaglio.Zdmbtr && oDettaglio.ZmengeD) {
+                        nImporto = parseFloat(oDettaglio.Zdmbtr) * parseFloat(oDettaglio.ZmengeD);
+
+                        const nImpD = nImporto / nPeinh;
+
+                        nImporto = Math.round(nImpD * 100) / 100;
+
+                        oDettaglio.Zprzsconto = nImporto.toFixed(2);
+                        nTotale += parseFloat(oDettaglio.Zprzsconto);
+                    }
+                } else {
+                    if (oDettaglio.Zdmbtr && oDettaglio.ZmengeD) {
+                        nImporto = parseFloat(oDettaglio.Zdmbtr) * parseFloat(oDettaglio.ZmengeD);
+
+                        const nImpD = nImporto / nPeinh;
+
+                        nImporto = Math.round(nImpD * 100) / 100;
+
+                        oDettaglio.Zprzsconto = nImporto.toFixed(2);
+                        nTotale += parseFloat(oDettaglio.Zprzsconto);
+                    }
+                }
+
+                oDettaglio.ZstaDmStz = nImporto.toFixed(2);
+            }
+
+            oTestata.ZnetwrAk = nTotale.toFixed(2);
+
+        },
+
+        checkStanziamenti: async function () {
+            const oDetailErrorModel = this.getOwnerComponent().getModel("DetailErrorModel");
+            const oBemDetailModel = this.getOwnerComponent().getModel("DatiBemDetail");
+            const dtDataFineLavori = oBemDetailModel.getProperty("/OTESTATASet/Zbldat");
+            const dtBudat = oBemDetailModel.getProperty("/OTESTATASet/Zbudat");
+            const aDettagli = oBemDetailModel.getProperty("/IDettaglioSet");
+
+            if (!dtDataFineLavori) {
+                return false;
+            }
+
+            if (!dtBudat) {
+                oDetailErrorModel.setProperty("/Visibility", true);
+                oDetailErrorModel.setProperty("/Message", "Valorizzare la Data Registrazione");
+                return false;
+            } else {
+                oDetailErrorModel.setProperty("/Visibility", false);
+                oDetailErrorModel.setProperty("/Message", "ERROR");
+            }
+
+            const sAnnoFineLavori = String(dtDataFineLavori.getFullYear());
+            const sAnnoCorrente = String(dtBudat.getFullYear());
+
+            const aBlockingMessages = [];
+            const aWarningMessages = [];
+
+            for (const [nIndex, oDettaglio] of aDettagli.entries()) {
+                if (!oDettaglio.ZstaStzahr || oDettaglio.ZstaStzahr === "0000") {
+                    oDettaglio.ZstaStzahr = sAnnoFineLavori;
+                }
+
+                const sAnnoStz = oDettaglio.ZstaStzahr;
+
+                if (sAnnoStz !== sAnnoFineLavori) {
+                    aBlockingMessages.push(`Il valore dell'Anno Stz. alla riga ${nIndex + 1} non è coerente con l'anno della Data Fine lavori`);
+                    continue;
+                }
+
+                if (sAnnoStz === sAnnoCorrente) {
+                    oDettaglio.ZstaDmStz = new Number(0).toFixed(3);
+                    oDettaglio.ZstaBelnrBm = "";
+                    oDettaglio.ZstaBuzeiBm = "000";
+                } else {
+                    const sImpStz = oDettaglio.ZstaDmStz;
+                    const sImpPos = oDettaglio.Zprzsconto;
+
+                    if (!sImpStz || parseFloat(sImpStz) === 0) {
+                        oDettaglio.ZstaDmStz = sImpPos;
+                    }
+
+                    const oValori = await this._getSingleDocStz(oDettaglio);
+
+                    if (oValori) {
+                        oDettaglio.ZstaBelnrBm = oValori.Belnr;
+                        oDettaglio.ZstaBuzeiBm = oValori.Buzei;
+                        oDettaglio.Zsospeso = oValori.Zsospeso;
+                        oDettaglio.ZstaGjahrBm = oValori.Gjahr;
+                    }
+
+                    if (!oValori || !oValori.Belnr) {
+                        aWarningMessages.push(`N. Doc. Stz. e Pos. Stz. non validi alla riga ${nIndex + 1}`);
+                    }
+
+                    if (oValori && oValori.Zotherdoc) {
+                        aWarningMessages.push(`Sono presenti altri N. Doc. Stz. per la riga ${nIndex + 1}`)
+                    }
+                }
+            }
+
+            oBemDetailModel.setProperty("/IDettaglioSet", aDettagli);
+            oBemDetailModel.refresh(true);
+
+            if (aBlockingMessages.length > 0) {
+                oDetailErrorModel.setProperty("/Visibility", true);
+                oDetailErrorModel.setProperty("/Message", aBlockingMessages.join("\n"));
+                return false;
+            } else {
+                oDetailErrorModel.setProperty("/Visibility", false);
+                oDetailErrorModel.setProperty("/Message", "ERROR");
+            }
+
+            if (aWarningMessages.length > 0) {
+                oDetailErrorModel.setProperty("/Visibility", true);
+                oDetailErrorModel.setProperty("/Message", aWarningMessages.join("\n"));
+            } else {
+                oDetailErrorModel.setProperty("/Visibility", false);
+                oDetailErrorModel.setProperty("/Message", "ERROR");
+            }
+
+            return true;
+        },
+
+        aggiornaAnnoStaz: async function () {
+            const oBemDetailModel = this.getOwnerComponent().getModel("DatiBemDetail");
+            const dtDataFineLavori = oBemDetailModel.getProperty("/OTESTATASet/Zbldat");
+            const aDettagli = oBemDetailModel.getProperty("/IDettaglioSet");
+
+            this.updateCosts();
+
+            if (!(await this.checkStanziamenti())) { return; }
+
+            if (!dtDataFineLavori) {
+                return
+            }
+
+            const nAnnoDataFineLavori = dtDataFineLavori.getFullYear();
+
+            for (const oDettaglio of aDettagli) {
+                oDettaglio.ZstaStzahr = String(nAnnoDataFineLavori);
+            }
+
+            oBemDetailModel.setProperty("/IDettaglioSet", aDettagli);
+        },
+
+        checkDataFineLavori: function () {
+            const oDetailErrorModel = this.getOwnerComponent().getModel("DetailErrorModel");
+            const oBemDetailModel = this.getOwnerComponent().getModel("DatiBemDetail");
+            const sTipoProtocollo = oBemDetailModel.getProperty("/OTESTATASet/Ztpprot");
+            const dtDataFineLavori = oBemDetailModel.getProperty("/OTESTATASet/Zbldat");
+            const dtDataCompetenza = oBemDetailModel.getProperty("/OTESTATASet/Zbudat");
+
+            if (!dtDataFineLavori || !dtDataCompetenza) {
+                return;
+            }
+
+            dtDataFineLavori.setHours(0, 0, 0, 0);
+            dtDataCompetenza.setHours(0, 0, 0, 0);
+
+            if (["05", "55", "75"].includes(sTipoProtocollo) && dtDataFineLavori.getTime() === dtDataCompetenza.getTime()) {
+                oDetailErrorModel.setProperty("/Visibility", true);
+                oDetailErrorModel.setProperty("/Message", "Verificare la Data Fine lavori");
+            } else {
+                oDetailErrorModel.setProperty("/Visibility", false);
+                oDetailErrorModel.setProperty("/Message", "ERROR");
+            }
+        },
+
+        onChangeAggiornaAnnoStaz: function () {
+            this.checkDataFineLavori();
+            this.aggiornaAnnoStaz();
+        },
+
+        DocStazValueHelp: function (oEvent) {
+            var oInput = oEvent.getSource();
+            const oDatiBemDetailModel = this.getOwnerComponent().getModel('DatiBemDetail');
+            var wbs = oDatiBemDetailModel.getProperty(sPath + '/ZpsPosid')
+            var dateesercizio = this.getOwnerComponent().getModel('DatiBemDetail').getProperty("/OTESTATASet/Zbldat");
+            var fornitore = this.getOwnerComponent().getModel('DatiBemDetail').getProperty("/OTESTATASet/Zlifnr");
+
+            this.getView().getModel("MatchCodeDocStz").setProperty("/stanziamenti", []);
+            this.getOwnerComponent().getModel("MatchCodeDocStz").setProperty("/OutputSet", []);
+
+            if (dateesercizio) {
+                var datewbsyear = dateesercizio.getFullYear();
+                this.getOwnerComponent().getModel('DocStzFilterModel').setProperty('/esercizio', datewbsyear);
+            }
+
+            if (wbs) {
+                this.getOwnerComponent().getModel('DocStzFilterModel').setProperty('/wbs', wbs)
+            }
+
+            if (fornitore) {
+                this.getOwnerComponent().getModel('DocStzFilterModel').setProperty('/fornitore', fornitore)
+            }
+
+            var oBindingContext = oInput.getBindingContext("DatiBemDetail");
+            // Ottieni il path del contesto
+            sPath = oBindingContext.getPath();
+
+            var oView = this.getView();
+            if (!this.byId("DocStzHelpRequest")) {
+                Fragment.load({
+                    id: oView.getId(),
+                    name: "sap.m.bem.view.fragment.DocStz",
+                    controller: this
+                }).then(function (oDialog) {
+                    oView.addDependent(oDialog);
+                    oDialog.open();
+                });
+            } else {
+                this.byId("DocStzHelpRequest").open();
+            }
+        },
+
+        OnCloseStzDialog: function () {
+            var oDialog = this.byId("DocStzHelpRequest");
+            if (oDialog) {
+                oDialog.close();
+            }
+        },
+
+        OnSelectStz: function () {
+            var oTable = this.byId("DocStzTable");
+            var iSelectedIndex = oTable.getSelectedIndex();
+            var oContext = oTable.getContextByIndex(iSelectedIndex);
+            var oSelectedData = oContext.getObject();
+            var oModel = this.getOwnerComponent().getModel("DatiBemDetail");
+            var aDettaglioSet = oModel.getProperty("/IDettaglioSet");
+
+            if (!Array.isArray(aDettaglioSet) || aDettaglioSet.length === 0) {
+                sap.m.MessageToast.show("IDettaglioSet non contiene dati.");
+                return;
+            }
+
+            oModel.setProperty(`${sPath}/ZstaBuzeiBm`, oSelectedData.Buzei);
+            oModel.setProperty(`${sPath}/Zsospeso`, oSelectedData.Zsospeso);
+            oModel.setProperty(`${sPath}/ZstaBelnrBm`, oSelectedData.Belnr);
+
+            this.byId("DocStzHelpRequest").close();
+
+            this.checkStanziamenti();
+        },
+
         onSearchCommessa: function () {
             var that = this;
             var aFilter = [];
@@ -527,6 +864,57 @@ sap.ui.define([
                     error: function (err) {
                         console.error(err)
                         that.byId("CommessaTable").setBusy(false)
+
+                    }
+                });
+
+        },
+
+        onSearchDocStz: function () {
+            const oDatiBemDetailModel = this.getOwnerComponent().getModel('DatiBemDetail');
+
+            var that = this;
+            var aFilter = [];
+            this.byId("DocStzTable").setBusy(true)
+            const oModel = this.getOwnerComponent().getModel("DocStzFilterModel");
+            const oTestata = oDatiBemDetailModel.getProperty("/OTESTATASet");
+            const oDettaglio = oDatiBemDetailModel.getProperty(sPath);
+            var wbs = oModel.getProperty("/wbs")
+            var esercizio = oModel.getProperty("/esercizio");
+
+            var fornitore = oModel.getProperty("/fornitore")
+
+            if (wbs) {
+                aFilter.push(new Filter("IPosid", FilterOperator.EQ, wbs));
+            }
+            if (esercizio) {
+                aFilter.push(new Filter("IGjahr", FilterOperator.EQ, esercizio));
+            }
+            if (fornitore) {
+                aFilter.push(new Filter("ILifnr", FilterOperator.Contains, fornitore));
+            }
+
+            aFilter.push(new Filter("ISegno", FilterOperator.EQ, (parseFloat(oDettaglio.Zdmbtr) || 0) >= 0 ? "+" : "-"));
+            aFilter.push(new Filter("IBukrs", FilterOperator.EQ, oTestata.Zbukrs));
+            aFilter.push(new Filter("IDmbtr", FilterOperator.EQ, oDettaglio.Zdmbtr));
+
+            this.getOwnerComponent().getModel().read('/DocStzInputSet',
+
+                {
+                    filters: aFilter,
+                    urlParameters: {
+                        "$expand": "to_DocStzOutput"
+                    },
+                    success: function (data) {
+
+                        that.getView().getModel("MatchCodeDocStz").setProperty("/stanziamenti", data.results);
+                        that.byId("DocStzTable").setBusy(false)
+                        that.getOwnerComponent().getModel("MatchCodeDocStz").setProperty("/OutputSet", data.results[0].to_DocStzOutput.results);
+
+                    },
+                    error: function (err) {
+                        console.error(err)
+                        that.byId("DocStzTable").setBusy(false)
 
                     }
                 });
@@ -659,10 +1047,132 @@ sap.ui.define([
             return prezzotot
         },
 
-        SalvaButton: function (oEvent) {
+        presave: async function (oSalvaButtonEvent) {
+            const oView = this.getView();
+            const oDetailErrorModel = this.getOwnerComponent().getModel("DetailErrorModel");
+            const oBemDetailModel = this.getOwnerComponent().getModel("DatiBemDetail");
+            const oConfermaScrittureIntegrativeModel = oView.getModel("ConfermaScrittureIntegrative");
+            const oSalvaButtonEventModel = oView.getModel("SalvaButtonEvent");
+            const { __metadata, ...oTestata } = oBemDetailModel.getProperty("/OTESTATASet");
+            const aDettagli = oBemDetailModel.getProperty("/IDettaglioSet");
 
-            var page = this.byId("AvanzamentoBemPage");
+            this.updateCosts();
+
+            if (!(await this.checkStanziamenti())) {
+                return false;
+            }
+
+            if (oTestata.Zbldat) {
+                oTestata.Zbldat.setHours(6, 0, 0, 0);
+            }
+            if (oTestata.Zbudat) {
+                oTestata.Zbudat.setHours(6, 0, 0, 0);
+            }
+
+            const aMappedDettagli = this.mapDataToModel(aDettagli);
+
+            const oPayload = {
+                Znprot: oTestata.Znprot,
+                I_TESTATASet: { ...oTestata, ZnetwrAk: typeof oTestata.ZnetwrAk === "number" ? oTestata.ZnetwrAk.toFixed(3) : "0.0" },
+                IDettaglioSet: aMappedDettagli,
+                E_POS_RIEPILOGOSet: [],
+                E_RIEPILOGOSet: [],
+            };
+
+            const oModel = this.getOwnerComponent().getModel();
+            const [oBemPresave, oError] = await new Promise(function (resolve, reject) {
+                oModel.create("/BEM_PRESAVESet", oPayload, {
+                    success: function (oData) {
+                        console.log(oData);
+
+                        if (oData.Message !== "") {
+                            oDetailErrorModel.setProperty("/Visibility", true);
+                            oDetailErrorModel.setProperty("/Message", oData.Message);
+                            resolve([null, oData.Message]);
+                        } else {
+                            oDetailErrorModel.setProperty("/Visibility", false);
+                            oDetailErrorModel.setProperty("/Message", "ERROR");
+                            resolve([oData, null]);
+                        }
+                    },
+                    error: function (oError) {
+                        reject([null, oError]);
+                    },
+                });
+            });
+
+            if (!oBemPresave && oError) {
+                console.error(oError);
+                return false;
+            }
+
+            oBemDetailModel.setProperty("/OTESTATASet", oBemPresave.I_TESTATASet);
+            oBemDetailModel.setProperty("/IDettaglioSet", oBemPresave.IDettaglioSet.results);
+            oBemDetailModel.refresh(true);
+
+            const oRiepilogo = oBemPresave.E_RIEPILOGOSet.results && oBemPresave.E_RIEPILOGOSet.results.length > 0 ? oBemPresave.E_RIEPILOGOSet.results[0] : null;
+
+
+            if (oRiepilogo && oRiepilogo.Zshow) {
+                oConfermaScrittureIntegrativeModel.setData(oRiepilogo);
+                oConfermaScrittureIntegrativeModel.refresh(true);
+
+                oSalvaButtonEventModel.setData(oSalvaButtonEvent);
+                oSalvaButtonEventModel.refresh(true);
+
+                if (!this.byId("ConfermaScrittureIntegrative")) {
+                    Fragment.load({
+                        id: oView.getId(),
+                        name: "sap.m.bem.view.fragment.ConfermaScrittureIntegrative",
+                        controller: this
+                    }).then(function (oDialog) {
+                        oView.addDependent(oDialog);
+                        oDialog.open();
+                    });
+                } else {
+                    this.byId("ConfermaScrittureIntegrative").open();
+                }
+
+                return false;
+            }
+
+            return true;
+        },
+
+        onConfermaScrittureIntegrativePress: function () {
+            const oView = this.getView();
+            const oSalvaButtonEventModel = oView.getModel("SalvaButtonEvent");
+            const oDialog = this.byId("ConfermaScrittureIntegrative");
+
+            if (oDialog) {
+                oDialog.close();
+            }
+
+            const oSalvaButtonEvent = oSalvaButtonEventModel.getData();
+            this.SalvaButton(oSalvaButtonEvent, false);
+        },
+
+        onAnnullaScrittureIntegrativePress: function () {
+            const oDialog = this.byId("ConfermaScrittureIntegrative");
+
+            if (oDialog) {
+                oDialog.close();
+            }
+        },
+
+        SalvaButton: async function (oEvent, bCheckPresave = true) {
+            const page = this.byId("AvanzamentoBemPage");
             page.setBusy(true);
+
+            if (bCheckPresave) {
+                const bPresaveOk = await this.presave(oEvent);
+
+                if (!bPresaveOk) {
+                    page.setBusy(false);
+                    return;
+                }
+            }
+
             var oButton = oEvent.getSource();
             var buttonText = oButton.getText();
             var Dati = this.getView().getModel("DatiBemDetail").getData()
@@ -775,7 +1285,7 @@ sap.ui.define([
                         that.getOwnerComponent().getModel("DetailErrorModel").setProperty("/Message", data.Message);
                         var messagee = data.Message.toString()
 
-                        if (messagee.includes("Il modulo di acquisizione") | messagee.includes("creato con successo")) {
+                        if (messagee.includes("Il modulo di acquisizione") || messagee.includes("creato con successo")) {
                             that.ModificaButton()
                             that.onSearch()
                         } else {
@@ -1494,32 +2004,33 @@ sap.ui.define([
             return oCategory ? oCategory.categoryText : ""; // Restituisce il testo o una stringa vuota se non trova corrispondenze
         },
 
-        onDateChange: function (oEvent) {
+        // onDateChange: function (oEvent) {
 
-            var tpprot = this.getOwnerComponent().getModel("DatiBemDetail").getProperty("/OTESTATASet/Ztpprot")
-            if (tpprot != "74" & tpprot != "75") {
+        //     var tpprot = this.getOwnerComponent().getModel("DatiBemDetail").getProperty("/OTESTATASet/Ztpprot")
+        //     if (tpprot != "74" & tpprot != "75") {
 
-                const sValue = oEvent.getParameter("value");
+        //         const sValue = oEvent.getParameter("value");
 
-                if (sValue) {
+        //         if (sValue) {
 
-                    var parts = sValue.split("/");
+        //             var parts = sValue.split("/");
 
-                    var year = parts[2];
+        //             var year = parts[2];
 
-                    var Dati = this.getView().getModel("DatiBemDetail").getData()
-                    var dettagli = Dati.IDettaglioSet
+        //             var Dati = this.getView().getModel("DatiBemDetail").getData()
+        //             var dettagli = Dati.IDettaglioSet
 
 
-                    if (dettagli != []) {
-                        for (var i = 0; i < dettagli.length; i++) {
-                            dettagli[i].ZstaStzahr = year
-                        }
-                    }
+        //             if (dettagli != []) {
+        //                 for (var i = 0; i < dettagli.length; i++) {
+        //                     dettagli[i].ZstaStzahr = year
+        //                 }
+        //             }
 
-                }
-            }
-        },
+        //         }
+        //     }
+        // },
+
         // S.Cannavale
         onInputChange: function (oEvent) {
             const oBinding = oEvent.getSource().getParent().getBindingContext("DatiBemDetail");
@@ -1527,6 +2038,8 @@ sap.ui.define([
 
             const sSconto = (Number(oRow.ZmengeD) * Number(oRow.Zdmbtr)).toString();
             oBinding.setProperty("Zprzsconto", sSconto);
+
+            this.updateCosts();
         }
     });
 });

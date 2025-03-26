@@ -90,8 +90,8 @@
                                     </fb:FilterGroupItem>
                                     <fb:FilterGroupItem name="Area" label="{i18n>Area}" groupName="Group1" visibleInFilterBar="true">
                                         <fb:control>
-                                            <ComboBox  name="Area" selectedKey="{FilterModelFirstPage>/Area}" items="{path: 'societaModel2>/area'}">
-                                                <core:Item key="{societaModel2>description}" text="{societaModel2>description}" />
+                                            <ComboBox  name="Area" selectedKey="{FilterModelFirstPage>/Area}" items="{path: 'AreaFModel>/enumerationValues'}">
+                                                <core:Item key="{AreaFModel>value}" text="{AreaFModel>description}" />
                                             </ComboBox>
                                         </fb:control>
                                     </fb:FilterGroupItem>
