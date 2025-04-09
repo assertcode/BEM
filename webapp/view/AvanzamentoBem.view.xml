@@ -456,7 +456,7 @@
                         <t:template>
                             <Input
                                 value="{path: 'DatiBemDetail>ZmengeD', type: 'sap.m.bem.model.type.formatDecimal'}"
-                                editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/ZmengeD} ? !${DatiBemDetail>/ListaCampiSet/ZmengeD/Zrdonly} : !${DatiBemDetail>/ListaCampiSet/*/Zrdonly})) }"
+                                editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/ZmengeD} ? !${DatiBemDetail>/ListaCampiSet/ZmengeD/Zrdonly} : false)) }"
                                 required="{DatiBemDetail>/ListaCampiSet/ZmengeD/Zstate}"
                                 maxLength="8"
                                 change=".onInputChange"
@@ -468,7 +468,7 @@
                         <t:template>
                             <Input
                                 value="{path: 'DatiBemDetail>Zdmbtr', type: 'sap.m.bem.model.type.formatDecimal'}"
-                                editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zdmbtr} ? !${DatiBemDetail>/ListaCampiSet/Zdmbtr/Zrdonly} : !${DatiBemDetail>/ListaCampiSet/*/Zrdonly} )) }"
+                                editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zdmbtr} ? !${DatiBemDetail>/ListaCampiSet/Zdmbtr/Zrdonly} : false )) }"
                                 required="{DatiBemDetail>/ListaCampiSet/Zdmbtr/Zstate}"
                                 maxLength="8"
                                 change=".onInputChange"
