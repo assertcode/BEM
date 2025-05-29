@@ -9,6 +9,7 @@ sap.ui.define([
         groupingSeparator: ".",
         groupingSize: 3,
         decimalSeparator: ",",
+        decimals: 2
     };
 
     return SimpleType.extend("sap.ui.demo.myCustomType", {
