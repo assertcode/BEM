@@ -456,7 +456,7 @@
                         <t:template>
                             <Input
                                 value="{path: 'DatiBemDetail>ZmengeD', type: 'sap.m.bem.model.type.formatDecimal'}"
-                                editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/ZmengeD} ? !${DatiBemDetail>/ListaCampiSet/ZmengeD/Zrdonly} : false)) }"
+                                editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/ZmengeD} ? !${DatiBemDetail>/ListaCampiSet/ZmengeD/Zrdonly} : !${DatiBemDetail>/ListaCampiSet/*/Zrdonly})) }"
                                 required="{DatiBemDetail>/ListaCampiSet/ZmengeD/Zstate}"
                                 maxLength="9"
                                 change=".onInputChange"
@@ -468,7 +468,7 @@
                         <t:template>
                             <Input
                                 value="{path: 'DatiBemDetail>Zdmbtr', type: 'sap.m.bem.model.type.formatDecimal'}"
-                                editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zdmbtr} ? !${DatiBemDetail>/ListaCampiSet/Zdmbtr/Zrdonly} : false )) }"
+                                editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zdmbtr} ? !${DatiBemDetail>/ListaCampiSet/Zdmbtr/Zrdonly} : !${DatiBemDetail>/ListaCampiSet/*/Zrdonly} )) }"
                                 required="{DatiBemDetail>/ListaCampiSet/Zdmbtr/Zstate}"
                                 maxLength="9"
                                 change=".onInputChange"
@@ -544,7 +544,12 @@
                     >
                         <Label text="N. Doc Stz" />
                         <t:template>
-                            <Input value="{DatiBemDetail>ZstaBelnrBm}" showValueHelp="true" valueHelpRequest="DocStazValueHelp" editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zsta_Belnr_Bm} ? !${DatiBemDetail>/ListaCampiSet/Zsta_Belnr_Bm/Zrdonly} : !${DatiBemDetail>/ListaCampiSet/*/Zrdonly})) }" />
+                            <Input
+                                value="{DatiBemDetail>ZstaBelnrBm}"
+                                showValueHelp="true"
+                                valueHelpRequest="DocStazValueHelp"
+                                editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zsta_Belnr_Bm} ? !${DatiBemDetail>/ListaCampiSet/Zsta_Belnr_Bm/Zrdonly} : !${DatiBemDetail>/ListaCampiSet/*/Zrdonly})) }"
+                            />
                         </t:template>
                     </t:Column>
                     <t:Column
