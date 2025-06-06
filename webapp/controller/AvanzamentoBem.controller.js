@@ -1107,7 +1107,9 @@ sap.ui.define([
             }
 
             oBemDetailModel.setProperty("/OTESTATASet", oBemPresave.I_TESTATASet);
-            oBemDetailModel.setProperty("/IDettaglioSet", oBemPresave.IDettaglioSet.results);
+            if (oBemPresave.IDettaglioSet) {
+                oBemDetailModel.setProperty("/IDettaglioSet", oBemPresave.IDettaglioSet.results);
+            }
             oBemDetailModel.refresh(true);
 
             const oRiepilogo = oBemPresave.E_RIEPILOGOSet.results && oBemPresave.E_RIEPILOGOSet.results.length > 0 ? oBemPresave.E_RIEPILOGOSet.results[0] : null;
@@ -1294,6 +1296,7 @@ sap.ui.define([
                     } else {
                         that.getOwnerComponent().getModel("DetailErrorModel").setProperty("/Visibility", false);
                         that.getOwnerComponent().getModel("DetailErrorModel").setProperty("/Message", "ERROR");
+                        that.ModificaButton()
                         that.onSearch()
                         MessageToast.show('Operazione Completata');
 

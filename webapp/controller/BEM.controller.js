@@ -829,14 +829,12 @@ sap.ui.define([
                     success: function (oData) {
 
                         that.getOwnerComponent().getModel("CreazioneModel").setProperty("/Nprot", oData.ENprot)
-
+                        that.getOwnerComponent().getModel("DetailErrorModel").setProperty("/Visibility", false);
+                        that.getOwnerComponent().getModel("DetailErrorModel").setProperty("/Message", "ERROR");
 
                         table.setBusy(false)
 
                         oRouter.navTo("AvanzamentoBem");
-
-
-
                     },
                     error: function (err) {
                         this.onClose()
