@@ -565,7 +565,7 @@ sap.ui.define([
 
             if (!oTestata) { return; }
 
-            const sTipoBEM = oBemDefaultPosition.Zpstyp;
+            const sTipoBEM = !!oBemDefaultPosition ? oBemDefaultPosition.Zpstyp : null;
 
             const bIsServizio = sTipoBEM !== null && sTipoBEM === "P";
 
