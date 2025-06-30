@@ -491,6 +491,92 @@ sap.ui.define([
         //     return null;
         // },
 
+        CIGValueHelp: function (oEvent) {
+
+            var oInput = oEvent.getSource();
+
+            var oBindingContext = oInput.getBindingContext("DatiBemDetail");
+            sPath = oBindingContext.getPath();
+
+            var oView = this.getView();
+            if (!this.byId("IdHelpRequestCig")) {
+                Fragment.load({
+                    id: oView.getId(),
+                    name: "sap.m.bem.view.fragment.CigMatchcode",
+                    controller: this
+                }).then(function (oDialog) {
+                    oView.addDependent(oDialog);
+                    oDialog.open();
+                });
+            } else {
+                this.byId("IdHelpRequestCig").open();
+            }
+
+            this.getOwnerComponent().getModel("CigFilterModel").setProperty("/Posid", this.getOwnerComponent().getModel("DatiBemDetail").getProperty("/OTESTATASet/ZpsPosid"))
+        },
+
+        onSearchCIG: function () {
+            var that = this;
+            var aFilter = [];
+            this.byId("CigTable").setBusy(true)
+            const oModel = this.getOwnerComponent().getModel("CigFilterModel");
+            var Posid = oModel.getProperty("/Posid")
+            if (Posid) {
+                aFilter.push(new Filter("Posid", FilterOperator.EQ, Posid));
+            }
+
+            this.getOwnerComponent().getModel().read('/CIG_MCSet',
+
+                {
+                    filters: aFilter,
+                    success: function (data) {
+
+                        that.getView().getModel("MatchCode").setProperty("/Cig", data.results);
+                        that.byId("CigTable").setBusy(false)
+
+
+                    },
+                    error: function (err) {
+                        console.error(err)
+                        that.byId("CigTable").setBusy(false)
+
+                    }
+                });
+
+        },
+
+        OnSelectCig: function () {
+
+            var oTable = this.byId("CigTable");
+
+            var oSelectedItem = oTable.getSelectedItem();
+
+            var oModel = this.getOwnerComponent().getModel("DatiBemDetail");
+
+            if (oSelectedItem) {
+
+                var oContext = oSelectedItem.getBindingContext("MatchCode");
+
+                var oSelectedData = oContext.getObject();
+
+                oModel.setProperty(`${sPath}/Zcig`, oSelectedData.Cig);
+
+                this.ConfermaCig()
+
+            } else {
+                MessageToast.show("Nessun record selezionato");
+            }
+        },
+
+
+
+        ConfermaCig: function () {
+            var oDialog = this.byId("IdHelpRequestCig");
+            if (oDialog) {
+                oDialog.close();
+            }
+        },
+
         CommessaValueHelp: function (oEvent) {
 
             var oInput = oEvent.getSource();

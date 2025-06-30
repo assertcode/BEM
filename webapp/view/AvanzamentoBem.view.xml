@@ -640,7 +640,12 @@
                     >
                         <Label text="Codice CIG" />
                         <t:template>
-                            <Text text="{DatiBemDetail>Zcig}" />
+                            <Input
+                            value="{DatiBemDetail>Zcig}"
+                            showValueHelp="true"
+                            valueHelpRequest="CIGValueHelp"
+                            editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zcig} ? !${DatiBemDetail>/ListaCampiSet/Zcig/Zrdonly} : !${DatiBemDetail>/ListaCampiSet/*/Zrdonly})) }"
+                        />
                         </t:template>
                     </t:Column>
 

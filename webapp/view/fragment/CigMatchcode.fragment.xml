@@ -1,0 +1,63 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:ff="sap.ui.layout.form"
+    xmlns:f="sap.f"
+    xmlns:fb="sap.ui.comp.filterbar"
+    xmlns:t="sap.ui.table"
+>
+    <Dialog
+        id="IdHelpRequestCig"
+        title="Codice CIG"
+        draggable="true"
+        resizable="true"
+    >
+    <VBox class="sapUiMediumMargin">
+            <HBox class="sapUiSmallMargin">
+            <Label text="Elemento WBS:" required="true"/>
+            <Input value="{CigFilterModel>/Posid}" width="200px" class="sapUiSmallMarginBegin" maxLength="24"/>
+            </HBox>
+        <HBox>
+        <Button text="Avvio" press="onSearchCIG" />
+        <Button text="Chiudi" press="ConfermaCig" class="sapUiSmallMarginBegin"
+        />
+        </HBox>
+        <Table id="CigTable" growing="true" items="{MatchCode>/Cig}" mode="SingleSelectMaster" selectionChange="OnSelectCig">
+            <columns>
+                <Column>
+                    <Text text="Codice CUP" />
+                </Column>
+                <Column>
+                    <Text text="Codice CIG" />
+                </Column>
+                <Column>
+                    <Text text="Descrizione CIG" />
+                </Column>
+                <Column>
+                    <Text text="Inizio" />
+                </Column>
+                <Column>
+                    <Text text="Fine" />
+                </Column>
+                <Column>
+                    <Text text="Codice CIG precedente" />
+                </Column>
+
+            </columns>
+            <items>
+                <ColumnListItem>
+                    <cells>
+                        <Text text="{MatchCode>Cup}" />
+                        <Text text="{MatchCode>Cig}" />
+                        <Text text="{MatchCode>Desccig}" />
+                        <Text text="{MatchCode>Begda}" />
+                        <Text text="{MatchCode>Endda}" />
+                        <Text text="{MatchCode>Cigprec}" />
+                    </cells>
+                </ColumnListItem>
+            </items>
+        </Table>
+    </VBox>
+   
+</Dialog>
+</core:FragmentDefinition>

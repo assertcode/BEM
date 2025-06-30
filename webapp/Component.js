@@ -39,7 +39,7 @@ sap.ui.define([
 
                 this.setModel(new JSONModel({ Societa: "", Tipo: "" , Nprot: "" , Addposition: false}), "CreazioneModel");
 
-                this.setModel(new JSONModel({ Fornitori: [], Stato: [], Commessa: [], SedeTecnica: [] }), "MatchCode");
+                this.setModel(new JSONModel({ Fornitori: [], Stato: [], Commessa: [], SedeTecnica: [], Cig: [] }), "MatchCode");
 
                 this.setModel(new JSONModel({ Fornitore: [],  descrizione: [], esercizio: [], stanziamenti: []}), "MatchCodeDocStz");
 
@@ -182,6 +182,10 @@ sap.ui.define([
                     localita:"",
                     cap:""
                 }), "FornitoriFilterModel");
+
+                this.setModel(new JSONModel({
+                    Posid:"",
+                }), "CigFilterModel");
 
                 this.setModel(new JSONModel({
                     SedeTecnica:"",

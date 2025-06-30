@@ -73,7 +73,7 @@
                 </t:columns>
             </t:Table>
             <HBox justifyContent="End">
-                <Button text="Conferma" type="Accept" press="ConfermaCommessa" class="sapUiTinyMarginEnd" />
+                <Button text="Chiudi"  press="ConfermaCommessa" class="sapUiTinyMarginEnd" />
             </HBox>
         </content>
     </Dialog>
