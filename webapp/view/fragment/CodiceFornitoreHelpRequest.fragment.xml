@@ -42,14 +42,6 @@
                 <t:columns>
                     <t:Column>
                         <t:label>
-                            <Label text="Società" />
-                        </t:label>
-                        <t:template>
-                            <Text text="{MatchCode>Bukrs}" />
-                        </t:template>
-                    </t:Column>
-                    <t:Column>
-                        <t:label>
                             <Label text="Fornitore" />
                         </t:label>
                         <t:template>
@@ -78,6 +70,14 @@
                         </t:label>
                         <t:template>
                             <Text text="{MatchCode>Pstlz}" />
+                        </t:template>
+                    </t:Column>
+                    <t:Column>
+                        <t:label>
+                            <Label text="Società" />
+                        </t:label>
+                        <t:template>
+                            <Text text="{MatchCode>Bukrs}" />
                         </t:template>
                     </t:Column>
                 </t:columns>
