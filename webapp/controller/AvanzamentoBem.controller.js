@@ -311,6 +311,8 @@ sap.ui.define([
                 return oContext.getObject().Zebelp === oRowContext.getObject().Zebelp;
             });
 
+            var tpprot = this.getOwnerComponent().getModel("DatiBemDetail").getProperty("/OTESTATASet/Ztpprot");
+
             var sPropertyPath = "/IDettaglioSet/" + iIndex + "/Zsgtxt";
             var Owner = this.getOwnerComponent().getModel("Cont")
             var property = this.getOwnerComponent().getModel("DatiBemDetail").getProperty(sPropertyPath);
@@ -351,20 +353,43 @@ sap.ui.define([
             });
 
 
+            if( tpprot == "73"){
 
+                var oModel = new JSONModel({
+                    items: [
+                        { sel: Owner.getProperty("/As"), codice: "*", descrizione: "TUTTO BENE" },
+                        { sel: Owner.getProperty("/A"), codice: "A", descrizione: "RITARDO NELLA CONSEGNA INF. A DUE GG" },
+                        { sel: Owner.getProperty("/B"), codice: "B", descrizione: "RITARDO NELLA CONSEGNA SUP. A DUE GG" },
+                        { sel: Owner.getProperty("/C"), codice: "C", descrizione: "DIFF. TRA QUANT. CONS. E ORD. INF. 2%" },
+                        { sel: Owner.getProperty("/D"), codice: "D", descrizione: "DIFF. TRA QUANT. CONS. E ORD. SUP. 2%" },
+                        { sel: Owner.getProperty("/E"), codice: "E", descrizione: "LUOGO DI CONSEGNA" },
+                        { sel: Owner.getProperty("/F"), codice: "F", descrizione: "RISPETTO IDENTITÀ DEL BENE" },
+                        { sel: Owner.getProperty("/G"), codice: "G", descrizione: "INTEGRITÀ DELL'IMBALLAGGIO" },
+                        { sel: Owner.getProperty("/H"), codice: "H", descrizione: "COMPLETEZZA DELLA DOCUMENTAZIONE" },
+                        { sel: Owner.getProperty("/I"), codice: "I", descrizione: "SOLLECITI" },
+                        { sel: Owner.getProperty("/Z"), codice: "Z", descrizione: "50001: EM NON SIGNIFICATIVA X ISO 50001", editable: false },
+                        { sel: Owner.getProperty("/Y"), codice: "Y", descrizione: "50001: MANCATA CONSEGNA DOC. PREVISTA", editable: false },
+                        { sel: Owner.getProperty("/X"), codice: "X", descrizione: "50001: NON RISP. TEMPISTICHE FORNIT.", editable: false },
+                        { sel: Owner.getProperty("/W"), codice: "W", descrizione: "50001: NON RISP. REG. LEG. E CERTIFIC.", editable: false },
+                        { sel: Owner.getProperty("/V"), codice: "V", descrizione: "50001: NON RISP. SPEC. TEC. E REQ. PROG.", editable: false },
+                        { sel: Owner.getProperty("/Q"), codice: "Q", descrizione: "50001: PIENAMENTE CONFORME ISO 50001", editable: false }
+                    ]
+                });
+
+            }else{
 
             var oModel = new JSONModel({
                 items: [
                     { sel: Owner.getProperty("/As"), codice: "*", descrizione: "TUTTO BENE" },
-                    { sel: Owner.getProperty("/A"), codice: "A", descrizione: "RITARDO NELLA CONSEGNA INF. A DUE GG" },
-                    { sel: Owner.getProperty("/B"), codice: "B", descrizione: "RITARDO NELLA CONSEGNA SUP. A DUE GG" },
-                    { sel: Owner.getProperty("/C"), codice: "C", descrizione: "DIFF. TRA QUANT. CONS. E ORD. INF. 2%" },
-                    { sel: Owner.getProperty("/D"), codice: "D", descrizione: "DIFF. TRA QUANT. CONS. E ORD. SUP. 2%" },
-                    { sel: Owner.getProperty("/E"), codice: "E", descrizione: "LUOGO DI CONSEGNA" },
-                    { sel: Owner.getProperty("/F"), codice: "F", descrizione: "RISPETTO IDENTITÀ DEL BENE" },
-                    { sel: Owner.getProperty("/G"), codice: "G", descrizione: "INTEGRITÀ DELL'IMBALLAGGIO" },
-                    { sel: Owner.getProperty("/H"), codice: "H", descrizione: "COMPLETEZZA DELLA DOCUMENTAZIONE" },
-                    { sel: Owner.getProperty("/I"), codice: "I", descrizione: "SOLLECITI" },
+                    { sel: Owner.getProperty("/A"), codice: "A", descrizione: "NON APPLICAZIONE NORME COMPORTAMENTALI (Es. uso delle divise per trasportatori) " },
+                    { sel: Owner.getProperty("/B"), codice: "B", descrizione: "NON RISPETTO TEMPISTICHE (Inizio/fine prestazione o date pianificate)" },
+                    { sel: Owner.getProperty("/C"), codice: "C", descrizione: "NON RISPETTO DISPOSIZIONE SICUREZZA S.O" },
+                    { sel: Owner.getProperty("/D"), codice: "D", descrizione: "NON ADEGUATEZZA MATERIALI/ATTREZZATURE/PRODOTTI/MEZZI UTILIZZATI (compresa sanificaz. mezzi)" },
+                    { sel: Owner.getProperty("/E"), codice: "E", descrizione: "DOCUMENTAZIONE INCOMPLETA" },
+                    { sel: Owner.getProperty("/F"), codice: "F", descrizione: "PRESTAZIONE NON ESEGUITA A REGOLA D’ARTE" },
+                    { sel: Owner.getProperty("/G"), codice: "G", descrizione: "EVENTUALI DANNEGGIAMENTI ALLA STRUTTURA/BENI DI S.O" },
+                    { sel: Owner.getProperty("/H"), codice: "H", descrizione: "SOLLECITI/RECLAMI" },
+                    { sel: Owner.getProperty("/I"), codice: "I", descrizione: "ALTRE NON CONFORMITÀ" },
                     { sel: Owner.getProperty("/Z"), codice: "Z", descrizione: "50001: EM NON SIGNIFICATIVA X ISO 50001", editable: false },
                     { sel: Owner.getProperty("/Y"), codice: "Y", descrizione: "50001: MANCATA CONSEGNA DOC. PREVISTA", editable: false },
                     { sel: Owner.getProperty("/X"), codice: "X", descrizione: "50001: NON RISP. TEMPISTICHE FORNIT.", editable: false },
@@ -373,6 +398,7 @@ sap.ui.define([
                     { sel: Owner.getProperty("/Q"), codice: "Q", descrizione: "50001: PIENAMENTE CONFORME ISO 50001", editable: false }
                 ]
             });
+        }
             oTable.setModel(oModel);
             var that = this
             var oTemplate = new ColumnListItem({
