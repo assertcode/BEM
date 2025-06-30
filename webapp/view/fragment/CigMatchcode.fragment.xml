@@ -50,8 +50,8 @@
                         <Text text="{MatchCode>Cup}" />
                         <Text text="{MatchCode>Cig}" />
                         <Text text="{MatchCode>Desccig}" />
-                        <Text text="{MatchCode>Begda}" />
-                        <Text text="{MatchCode>Endda}" />
+                        <Text text="{path: 'MatchCode>Begda', type: 'sap.ui.model.type.Date', formatOptions: {pattern: 'dd/MM/yyyy'}}" />
+                        <Text text="{path: 'MatchCode>Endda', type: 'sap.ui.model.type.Date', formatOptions: {pattern: 'dd/MM/yyyy'}}" />
                         <Text text="{MatchCode>Cigprec}" />
                     </cells>
                 </ColumnListItem>

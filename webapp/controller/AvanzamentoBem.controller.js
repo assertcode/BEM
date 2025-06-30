@@ -48,6 +48,7 @@ sap.ui.define([
         },
 
         onSearch: function () {
+            this.byId("AvanzamentoBemPage").setBusy(true)
             if (this.getOwnerComponent().getModel("CreazioneModel").getProperty("/Addposition") == true) {
                 this.onChangeAggiornaAnnoStaz();
                 this.getOwnerComponent().getModel("CreazioneModel").setProperty("/Addposition", false)
@@ -120,8 +121,10 @@ sap.ui.define([
                         that.onFlowCalculator()
                         that.getSyUser()
                         that.AggiornaImportoTotale()
+                        that.byId("AvanzamentoBemPage").setBusy(false)
                     },
                     error: function (err) {
+                        that.byId("AvanzamentoBemPage").setBusy(false)
                         console.error(err)
 
                     }
@@ -493,6 +496,8 @@ sap.ui.define([
 
         CIGValueHelp: function (oEvent) {
 
+            this.getView().getModel("MatchCode").setProperty("/Cig", {});
+
             var oInput = oEvent.getSource();
 
             var oBindingContext = oInput.getBindingContext("DatiBemDetail");
@@ -571,6 +576,7 @@ sap.ui.define([
 
 
         ConfermaCig: function () {
+            this.byId("CigTable").removeSelections();
             var oDialog = this.byId("IdHelpRequestCig");
             if (oDialog) {
                 oDialog.close();
