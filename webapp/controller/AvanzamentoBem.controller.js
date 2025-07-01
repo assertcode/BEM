@@ -50,8 +50,10 @@ sap.ui.define([
         onSearch: function () {
             this.byId("AvanzamentoBemPage").setBusy(true)
             if (this.getOwnerComponent().getModel("CreazioneModel").getProperty("/Addposition") == true) {
+                this.byId("AvanzamentoBemPage").setBusy(false)
                 this.onChangeAggiornaAnnoStaz();
                 this.getOwnerComponent().getModel("CreazioneModel").setProperty("/Addposition", false)
+
                 return
             }
             var that = this
