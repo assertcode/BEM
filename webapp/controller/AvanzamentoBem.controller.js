@@ -1925,22 +1925,33 @@ sap.ui.define([
                 data: stringbody,
                 success: function (data) {
 
+                    // try {
+                    //     const sDecodedPdfText = window.atob(data.DataFile);
+                    //     const blob = new Blob([sDecodedPdfText], { type: 'application/pdf' });
+                    //     const blobUrl = URL.createObjectURL(blob);
+
+                    //     const a = document.createElement('a');
+                    //     a.href = blobUrl;
+                    //     a.download = data.FileName;
+                    //     document.body.appendChild(a);
+                    //     a.click();
+                    //     document.body.removeChild(a);
+
+                    //     URL.revokeObjectURL(blobUrl);
+                    // } catch (e) {
+                    //     console.error("Error decoding PDF:", e);
+                    //     sap.m.MessageToast.show("Errore nella decodifica del PDF.");
+                    // }
+
                     try {
-                        const sDecodedPdfText = window.atob(data.DataFile);
-                        const blob = new Blob([sDecodedPdfText], { type: 'application/pdf' });
-                        const blobUrl = URL.createObjectURL(blob);
-
-                        const a = document.createElement('a');
-                        a.href = blobUrl;
-                        a.download = data.FileName;
-                        document.body.appendChild(a);
-                        a.click();
-                        document.body.removeChild(a);
-
-                        URL.revokeObjectURL(blobUrl);
+                        const sURLBase64 = `data:application/pdf;base64,${data.DataFile}`;
+                        const oLink = document.createElement('a');
+                        oLink.href = sURLBase64;
+                        oLink.download = data.FileName;
+                        oLink.click();
                     } catch (e) {
-                        console.error("Error decoding PDF:", e);
-                        sap.m.MessageToast.show("Errore nella decodifica del PDF.");
+                        console.error("Error download PDF:", e);
+                        sap.m.MessageToast.show("Errore durante download del PDF.");
                     }
 
                     that.byId("UploadSetTable").setBusy(false);
