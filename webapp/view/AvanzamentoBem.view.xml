@@ -464,7 +464,7 @@
                         </t:template>
                     </t:Column>
                     <t:Column width="6rem">
-                        <Label text="Imp Divisa" />
+                        <Label text="Imp. Divisa int." />
                         <t:template>
                             <Input
                                 value="{path: 'DatiBemDetail>Zdmbtr', type: 'sap.m.bem.model.type.formatDecimal'}"

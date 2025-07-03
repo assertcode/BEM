@@ -206,14 +206,15 @@
                         <t:Column width="11rem">
                             <Label text="Importo Totale" />
                             <t:template>
-                                <Text text="{path: 'DatiTabellaPrimaPagina>Zimportobdl', type: 'sap.m.bem.model.type.formatDecimal' }" wrapping="false" />
+                                <Text text="{path: 'DatiTabellaPrimaPagina>Znetwr', type: 'sap.m.bem.model.type.formatDecimal' }" wrapping="false" />
+                                
                             </t:template>
                         </t:Column>
 
                         <t:Column width="11rem">
                             <Label text="Importo Benestatario BEM" />
                             <t:template>
-                                <Text text="{path: 'DatiTabellaPrimaPagina>Znetwr', type: 'sap.m.bem.model.type.formatDecimal' }" wrapping="false" />
+                                <Text text="{path: 'DatiTabellaPrimaPagina>Zimportobdl', type: 'sap.m.bem.model.type.formatDecimal' }" wrapping="false" />
                             </t:template>
                         </t:Column>
 
