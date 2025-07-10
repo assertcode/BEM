@@ -84,7 +84,7 @@ sap.ui.define([
                         that.getOwnerComponent().getModel("DatiBemDetail").setProperty("/EZTRGT003", data.results[0].to_EZTRGT003);
 
                         var tpprot = that.getOwnerComponent().getModel("DatiBemDetail").getProperty("/OTESTATASet/Ztpprot")
-                        if (tpprot == "75" && aStati) {
+                        if (tpprot == "75" && Object.keys(aStati).length > 0) {
                             aStati.Zxblnr1.Zvisible = true
                         }
 
