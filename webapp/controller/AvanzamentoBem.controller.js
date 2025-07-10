@@ -85,7 +85,9 @@ sap.ui.define([
 
                         var tpprot = that.getOwnerComponent().getModel("DatiBemDetail").getProperty("/OTESTATASet/Ztpprot")
                         if (tpprot == "75" && Object.keys(aStati).length > 0) {
+                            if(aStati.Zxblnr1){
                             aStati.Zxblnr1.Zvisible = true
+                            }
                         }
 
                         that.getOwnerComponent().getModel("DatiBemDetail").setProperty("/INumeroprotocollo", data.results[0].Znprot)
