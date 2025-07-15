@@ -47,7 +47,8 @@ sap.ui.define([
 
         },
 
-        onSearch: function () {
+        onSearch: async function () {
+            this.byId("AvanzamentoBemPage").setBusyIndicatorDelay(0)
             this.byId("AvanzamentoBemPage").setBusy(true)
             if (this.getOwnerComponent().getModel("CreazioneModel").getProperty("/Addposition") == true) {
                 this.byId("AvanzamentoBemPage").setBusy(false)
@@ -61,78 +62,82 @@ sap.ui.define([
             var aFilter = []
             const oModel = that.getOwnerComponent().getModel();
             aFilter.push(new Filter("Znprot", FilterOperator.EQ, nprot));
-            oModel.read("/GetDetailSet",
-                {
-                    filters: aFilter,
-                    urlParameters: {
-                        "$expand": "DettagliSet,Testata,to_EZTRGT003,ListaCampiSet,ListaFunzioniSet"
-                    },
-                    success: function (data) {
 
-                        const aStati = {};
-
-                        for (const d of data.results[0].ListaCampiSet.results) {
-                            aStati[d.Zobjname] = {
-                                ...d,
-                                Zvisible: d.Zvisible === '01' ? false : true,
-                                Zstate: d.Zstate === '00' ? false : true
-                            };
-                        }
-
-
-                        that.getOwnerComponent().getModel("DatiBemDetail").setProperty("/OTESTATASet", data.results[0].Testata)
-                        that.getOwnerComponent().getModel("DatiBemDetail").setProperty("/EZTRGT003", data.results[0].to_EZTRGT003);
-
-                        var tpprot = that.getOwnerComponent().getModel("DatiBemDetail").getProperty("/OTESTATASet/Ztpprot")
-                        if (tpprot == "75" && Object.keys(aStati).length > 0) {
-                            if(aStati.Zxblnr1){
-                            aStati.Zxblnr1.Zvisible = true
+            return new Promise((resolve) => {
+                oModel.read("/GetDetailSet",
+                    {
+                        filters: aFilter,
+                        urlParameters: {
+                            "$expand": "DettagliSet,Testata,to_EZTRGT003,ListaCampiSet,ListaFunzioniSet"
+                        },
+                        success: async function (data) {
+    
+                            const aStati = {};
+    
+                            for (const d of data.results[0].ListaCampiSet.results) {
+                                aStati[d.Zobjname] = {
+                                    ...d,
+                                    Zvisible: d.Zvisible === '01' ? false : true,
+                                    Zstate: d.Zstate === '00' ? false : true
+                                };
                             }
+    
+    
+                            that.getOwnerComponent().getModel("DatiBemDetail").setProperty("/OTESTATASet", data.results[0].Testata)
+                            that.getOwnerComponent().getModel("DatiBemDetail").setProperty("/EZTRGT003", data.results[0].to_EZTRGT003);
+    
+                            var tpprot = that.getOwnerComponent().getModel("DatiBemDetail").getProperty("/OTESTATASet/Ztpprot")
+                            if (tpprot == "75" && Object.keys(aStati).length > 0) {
+                                if(aStati.Zxblnr1){
+                                aStati.Zxblnr1.Zvisible = true
+                                }
+                            }
+    
+                            that.getOwnerComponent().getModel("DatiBemDetail").setProperty("/INumeroprotocollo", data.results[0].Znprot)
+                            that.getOwnerComponent().getModel("DatiBemDetail").setProperty("/IUser", data.IUser)
+    
+                            that.getOwnerComponent().getModel("DatiBemDetail").setProperty("/IDettaglioSet", data.results[0].DettagliSet.results);
+                            that.getOwnerComponent().getModel("DatiBemDetail").setProperty("/ListaCampiSet", aStati);
+                            that.getOwnerComponent().getModel("DatiBemDetail").setProperty("/ListaFunzioniSet", data.results[0].ListaFunzioniSet.results);
+    
+    
+                            // logica per eliminazione mandt
+                            // var aData = that.getView().getModel("DatiBemDetail").getProperty("/IDettaglioSet"); 
+                            // var aFilteredData = aData.filter(function(oRecord) {
+                            //     return !oRecord.Mandt; 
+                            // });
+                            // that.getView().getModel("DatiBemDetail").setProperty("/IDettaglioSet", aFilteredData); 
+    
+    
+    
+                            that.getOwnerComponent().getModel("SaveModel").setProperty('/status1', '')
+                            that.getOwnerComponent().getModel("SaveModel").setProperty('/value1', '')
+                            that.getOwnerComponent().getModel("SaveModel").setProperty('/status2', '')
+                            that.getOwnerComponent().getModel("SaveModel").setProperty('/value2', '')
+    
+    
+                            if (data.results[0].ListaFunzioniSet.results.length === 1) {
+                                that.getOwnerComponent().getModel("SaveModel").setProperty('/status1', data.results[0].ListaFunzioniSet.results[0].Zdescst)
+                                that.getOwnerComponent().getModel("SaveModel").setProperty('/value1', data.results[0].ListaFunzioniSet.results[0].Ztpstsu)
+                            } else if (data.results[0].ListaFunzioniSet.results.length === 2) {
+                                that.getOwnerComponent().getModel("SaveModel").setProperty('/status1', data.results[0].ListaFunzioniSet.results[0].Zdescst)
+                                that.getOwnerComponent().getModel("SaveModel").setProperty('/value1', data.results[0].ListaFunzioniSet.results[0].Ztpstsu)
+                                that.getOwnerComponent().getModel("SaveModel").setProperty('/status2', data.results[0].ListaFunzioniSet.results[1].Zdescst)
+                                that.getOwnerComponent().getModel("SaveModel").setProperty('/value2', data.results[0].ListaFunzioniSet.results[1].Ztpstsu)
+                            }
+                            that.onFlowCalculator()
+                            that.AggiornaImportoTotale()
+                            await that.getSyUser()
+                            that.byId("AvanzamentoBemPage").setBusy(false)
+                            resolve();
+                        },
+                        error: function (err) {
+                            that.byId("AvanzamentoBemPage").setBusy(false)
+                            console.error(err)
+                            resolve();
                         }
-
-                        that.getOwnerComponent().getModel("DatiBemDetail").setProperty("/INumeroprotocollo", data.results[0].Znprot)
-                        that.getOwnerComponent().getModel("DatiBemDetail").setProperty("/IUser", data.IUser)
-
-                        that.getOwnerComponent().getModel("DatiBemDetail").setProperty("/IDettaglioSet", data.results[0].DettagliSet.results);
-                        that.getOwnerComponent().getModel("DatiBemDetail").setProperty("/ListaCampiSet", aStati);
-                        that.getOwnerComponent().getModel("DatiBemDetail").setProperty("/ListaFunzioniSet", data.results[0].ListaFunzioniSet.results);
-
-
-                        // logica per eliminazione mandt
-                        // var aData = that.getView().getModel("DatiBemDetail").getProperty("/IDettaglioSet"); 
-                        // var aFilteredData = aData.filter(function(oRecord) {
-                        //     return !oRecord.Mandt; 
-                        // });
-                        // that.getView().getModel("DatiBemDetail").setProperty("/IDettaglioSet", aFilteredData); 
-
-
-
-                        that.getOwnerComponent().getModel("SaveModel").setProperty('/status1', '')
-                        that.getOwnerComponent().getModel("SaveModel").setProperty('/value1', '')
-                        that.getOwnerComponent().getModel("SaveModel").setProperty('/status2', '')
-                        that.getOwnerComponent().getModel("SaveModel").setProperty('/value2', '')
-
-
-                        if (data.results[0].ListaFunzioniSet.results.length === 1) {
-                            that.getOwnerComponent().getModel("SaveModel").setProperty('/status1', data.results[0].ListaFunzioniSet.results[0].Zdescst)
-                            that.getOwnerComponent().getModel("SaveModel").setProperty('/value1', data.results[0].ListaFunzioniSet.results[0].Ztpstsu)
-                        } else if (data.results[0].ListaFunzioniSet.results.length === 2) {
-                            that.getOwnerComponent().getModel("SaveModel").setProperty('/status1', data.results[0].ListaFunzioniSet.results[0].Zdescst)
-                            that.getOwnerComponent().getModel("SaveModel").setProperty('/value1', data.results[0].ListaFunzioniSet.results[0].Ztpstsu)
-                            that.getOwnerComponent().getModel("SaveModel").setProperty('/status2', data.results[0].ListaFunzioniSet.results[1].Zdescst)
-                            that.getOwnerComponent().getModel("SaveModel").setProperty('/value2', data.results[0].ListaFunzioniSet.results[1].Ztpstsu)
-                        }
-                        that.onFlowCalculator()
-                        that.getSyUser()
-                        that.AggiornaImportoTotale()
-                        that.byId("AvanzamentoBemPage").setBusy(false)
-                    },
-                    error: function (err) {
-                        that.byId("AvanzamentoBemPage").setBusy(false)
-                        console.error(err)
-
-                    }
-                });
+                    });
+            });
 
         },
 
@@ -527,6 +532,7 @@ sap.ui.define([
         onSearchCIG: function () {
             var that = this;
             var aFilter = [];
+            this.byId("CigTable").setBusyIndicatorDelay(0)
             this.byId("CigTable").setBusy(true)
             const oModel = this.getOwnerComponent().getModel("CigFilterModel");
             var Posid = oModel.getProperty("/Posid")
@@ -946,6 +952,7 @@ sap.ui.define([
         onSearchCommessa: function () {
             var that = this;
             var aFilter = [];
+            this.byId("CommessaTable").setBusyIndicatorDelay(0)
             this.byId("CommessaTable").setBusy(true)
             const oModel = this.getOwnerComponent().getModel("CommessaFilterModel");
             var wbs = oModel.getProperty("/wbs")
@@ -997,6 +1004,7 @@ sap.ui.define([
 
             var that = this;
             var aFilter = [];
+            this.byId("DocStzTable").setBusyIndicatorDelay(0)
             this.byId("DocStzTable").setBusy(true)
             const oModel = this.getOwnerComponent().getModel("DocStzFilterModel");
             const oTestata = oDatiBemDetailModel.getProperty("/OTESTATASet");
@@ -1286,6 +1294,7 @@ sap.ui.define([
 
         SalvaButton: async function (oEvent, bCheckPresave = true) {
             const page = this.byId("AvanzamentoBemPage");
+            page.setBusyIndicatorDelay(0);
             page.setBusy(true);
 
             if (bCheckPresave) {
@@ -1399,9 +1408,7 @@ sap.ui.define([
             var that = this;
             var oModel = this.getOwnerComponent().getModel();
             oModel.create("/BEM_CHANGESet", payload, {
-                success: function (data) {
-
-                    page.setBusy(false)
+                success: async function (data) {
 
                     if (data.Message !== "") {
 
@@ -1411,7 +1418,7 @@ sap.ui.define([
 
                         if (messagee.includes("Il modulo di acquisizione") || messagee.includes("creato con successo")) {
                             that.ModificaButton()
-                            that.onSearch()
+                            await that.onSearch()
                         } else {
 
                         }
@@ -1419,11 +1426,14 @@ sap.ui.define([
                         that.getOwnerComponent().getModel("DetailErrorModel").setProperty("/Visibility", false);
                         that.getOwnerComponent().getModel("DetailErrorModel").setProperty("/Message", "ERROR");
                         that.ModificaButton()
-                        that.onSearch()
+                        await that.onSearch()
                         MessageToast.show('Operazione Completata');
 
 
                     }
+                    
+
+                    page.setBusy(false)
                 },
                 error: function (oError) {
                     page.setBusy(false)
@@ -1569,7 +1579,10 @@ sap.ui.define([
                 if (oAllegatiTable) {
                     if (oAllegatiTable.getBusy()) {
 
-                    } else { oAllegatiTable.setBusy(true); }
+                    } else {
+                        oAllegatiTable.setBusyIndicatorDelay(0);
+                        oAllegatiTable.setBusy(true);
+                    }
 
 
                 }
@@ -1669,7 +1682,10 @@ sap.ui.define([
                 if (oAllegatiTable) {
                     if (oAllegatiTable.getBusy()) {
 
-                    } else { oAllegatiTable.setBusy(true); }
+                    } else {
+                        oAllegatiTable.setBusyIndicatorDelay(0);
+                        oAllegatiTable.setBusy(true);
+                    }
 
 
                 }
@@ -1747,16 +1763,19 @@ sap.ui.define([
 
         },
 
-        getSyUser: function () {
-
-            this.getOwnerComponent().getModel().read("/SYNAMESet('IUser')", {
-                success: function (data) {
-                    userUploader = data.IUser;
-
-                }.bind(this),
-                error: function (oError) {
-                    MessageToast.show('Impossibile recuperare username');
-                }
+        getSyUser: async function () {
+            const that = this;
+            return new Promise((resolve) => {
+                that.getOwnerComponent().getModel().read("/SYNAMESet('IUser')", {
+                    success: function (data) {
+                        userUploader = data.IUser;
+                        resolve();
+                    },
+                    error: function (oError) {
+                        MessageToast.show('Impossibile recuperare username');
+                        resolve();
+                    }
+                });
             });
         },
 
@@ -1860,6 +1879,7 @@ sap.ui.define([
             this.containerType = "0";
 
             var body = JSON.stringify(this.addBody)
+            that.byId("UploadSetTable").setBusyIndicatorDelay(0);
             that.byId("UploadSetTable").setBusy(true);
 
             var appId = this.getOwnerComponent().getManifestEntry("/sap.app/id"),
@@ -1889,6 +1909,7 @@ sap.ui.define([
 
         onDownloadFiles: function () {
             var that = this
+            that.byId("UploadSetTable").setBusyIndicatorDelay(0);
             that.byId("UploadSetTable").setBusy(true);
 
             var stringID = JSON.stringify(AllegatiFileID)
@@ -1971,6 +1992,7 @@ sap.ui.define([
         onDeleteAllegati: function (oEvent) {
 
             var that = this
+            that.byId("UploadSetTable").setBusyIndicatorDelay(0);
             that.byId("UploadSetTable").setBusy(true);
 
             var stringID = JSON.stringify(AllegatiFileID)
