@@ -43,8 +43,19 @@ sap.ui.define([
             this.globalModel = {}
 
             var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-            oRouter.getRoute("AvanzamentoBem").attachPatternMatched(this.onSearch, this);
+            oRouter.getRoute("AvanzamentoBem").attachPatternMatched(this.onRouteMatched, this);
 
+        },
+
+        onRouteMatched: function () {
+            if (!this.getOwnerComponent().getModel("CreazioneModel").getProperty("/Addposition")) {
+                this.getView().getModel("ConfermaScrittureIntegrative").setData({});
+                this.getView().getModel("SalvaButtonEvent").setData({});
+                this.getView().getModel("DatiBemDetail").setData({});
+                this.getView().getModel("SaveModel").setData({ "status1": "", "value1": "", "status2": "", "value2": "" });
+                this.getView().getModel("DetailErrorModel").setData({ "Visibility": false, "Message": "ERROR" });
+            }
+            this.onSearch();
         },
 
         onSearch: async function () {
@@ -71,9 +82,9 @@ sap.ui.define([
                             "$expand": "DettagliSet,Testata,to_EZTRGT003,ListaCampiSet,ListaFunzioniSet"
                         },
                         success: async function (data) {
-    
+
                             const aStati = {};
-    
+
                             for (const d of data.results[0].ListaCampiSet.results) {
                                 aStati[d.Zobjname] = {
                                     ...d,
@@ -81,41 +92,41 @@ sap.ui.define([
                                     Zstate: d.Zstate === '00' ? false : true
                                 };
                             }
-    
-    
+
+
                             that.getOwnerComponent().getModel("DatiBemDetail").setProperty("/OTESTATASet", data.results[0].Testata)
                             that.getOwnerComponent().getModel("DatiBemDetail").setProperty("/EZTRGT003", data.results[0].to_EZTRGT003);
-    
+
                             var tpprot = that.getOwnerComponent().getModel("DatiBemDetail").getProperty("/OTESTATASet/Ztpprot")
                             if (tpprot == "75" && Object.keys(aStati).length > 0) {
-                                if(aStati.Zxblnr1){
-                                aStati.Zxblnr1.Zvisible = true
+                                if (aStati.Zxblnr1) {
+                                    aStati.Zxblnr1.Zvisible = true
                                 }
                             }
-    
+
                             that.getOwnerComponent().getModel("DatiBemDetail").setProperty("/INumeroprotocollo", data.results[0].Znprot)
                             that.getOwnerComponent().getModel("DatiBemDetail").setProperty("/IUser", data.IUser)
-    
+
                             that.getOwnerComponent().getModel("DatiBemDetail").setProperty("/IDettaglioSet", data.results[0].DettagliSet.results);
                             that.getOwnerComponent().getModel("DatiBemDetail").setProperty("/ListaCampiSet", aStati);
                             that.getOwnerComponent().getModel("DatiBemDetail").setProperty("/ListaFunzioniSet", data.results[0].ListaFunzioniSet.results);
-    
-    
+
+
                             // logica per eliminazione mandt
                             // var aData = that.getView().getModel("DatiBemDetail").getProperty("/IDettaglioSet"); 
                             // var aFilteredData = aData.filter(function(oRecord) {
                             //     return !oRecord.Mandt; 
                             // });
                             // that.getView().getModel("DatiBemDetail").setProperty("/IDettaglioSet", aFilteredData); 
-    
-    
-    
+
+
+
                             that.getOwnerComponent().getModel("SaveModel").setProperty('/status1', '')
                             that.getOwnerComponent().getModel("SaveModel").setProperty('/value1', '')
                             that.getOwnerComponent().getModel("SaveModel").setProperty('/status2', '')
                             that.getOwnerComponent().getModel("SaveModel").setProperty('/value2', '')
-    
-    
+
+
                             if (data.results[0].ListaFunzioniSet.results.length === 1) {
                                 that.getOwnerComponent().getModel("SaveModel").setProperty('/status1', data.results[0].ListaFunzioniSet.results[0].Zdescst)
                                 that.getOwnerComponent().getModel("SaveModel").setProperty('/value1', data.results[0].ListaFunzioniSet.results[0].Ztpstsu)
@@ -125,6 +136,9 @@ sap.ui.define([
                                 that.getOwnerComponent().getModel("SaveModel").setProperty('/status2', data.results[0].ListaFunzioniSet.results[1].Zdescst)
                                 that.getOwnerComponent().getModel("SaveModel").setProperty('/value2', data.results[0].ListaFunzioniSet.results[1].Ztpstsu)
                             }
+
+                            that.getOwnerComponent().getModel("DatiBemDetail").refresh(true);
+
                             that.onFlowCalculator()
                             that.AggiornaImportoTotale()
                             await that.getSyUser()
@@ -365,7 +379,7 @@ sap.ui.define([
             });
 
 
-            if( tpprot == "73"){
+            if (tpprot == "73") {
 
                 var oModel = new JSONModel({
                     items: [
@@ -388,29 +402,29 @@ sap.ui.define([
                     ]
                 });
 
-            }else{
+            } else {
 
-            var oModel = new JSONModel({
-                items: [
-                    { sel: Owner.getProperty("/As"), codice: "*", descrizione: "TUTTO BENE" },
-                    { sel: Owner.getProperty("/A"), codice: "A", descrizione: "NON APPLICAZIONE NORME COMPORTAMENTALI (Es. uso delle divise per trasportatori) " },
-                    { sel: Owner.getProperty("/B"), codice: "B", descrizione: "NON RISPETTO TEMPISTICHE (Inizio/fine prestazione o date pianificate)" },
-                    { sel: Owner.getProperty("/C"), codice: "C", descrizione: "NON RISPETTO DISPOSIZIONE SICUREZZA S.O" },
-                    { sel: Owner.getProperty("/D"), codice: "D", descrizione: "NON ADEGUATEZZA MATERIALI/ATTREZZATURE/PRODOTTI/MEZZI UTILIZZATI (compresa sanificaz. mezzi)" },
-                    { sel: Owner.getProperty("/E"), codice: "E", descrizione: "DOCUMENTAZIONE INCOMPLETA" },
-                    { sel: Owner.getProperty("/F"), codice: "F", descrizione: "PRESTAZIONE NON ESEGUITA A REGOLA D’ARTE" },
-                    { sel: Owner.getProperty("/G"), codice: "G", descrizione: "EVENTUALI DANNEGGIAMENTI ALLA STRUTTURA/BENI DI S.O" },
-                    { sel: Owner.getProperty("/H"), codice: "H", descrizione: "SOLLECITI/RECLAMI" },
-                    { sel: Owner.getProperty("/I"), codice: "I", descrizione: "ALTRE NON CONFORMITÀ" },
-                    { sel: Owner.getProperty("/Z"), codice: "Z", descrizione: "50001: EM NON SIGNIFICATIVA X ISO 50001", editable: false },
-                    { sel: Owner.getProperty("/Y"), codice: "Y", descrizione: "50001: MANCATA CONSEGNA DOC. PREVISTA", editable: false },
-                    { sel: Owner.getProperty("/X"), codice: "X", descrizione: "50001: NON RISP. TEMPISTICHE FORNIT.", editable: false },
-                    { sel: Owner.getProperty("/W"), codice: "W", descrizione: "50001: NON RISP. REG. LEG. E CERTIFIC.", editable: false },
-                    { sel: Owner.getProperty("/V"), codice: "V", descrizione: "50001: NON RISP. SPEC. TEC. E REQ. PROG.", editable: false },
-                    { sel: Owner.getProperty("/Q"), codice: "Q", descrizione: "50001: PIENAMENTE CONFORME ISO 50001", editable: false }
-                ]
-            });
-        }
+                var oModel = new JSONModel({
+                    items: [
+                        { sel: Owner.getProperty("/As"), codice: "*", descrizione: "TUTTO BENE" },
+                        { sel: Owner.getProperty("/A"), codice: "A", descrizione: "NON APPLICAZIONE NORME COMPORTAMENTALI (Es. uso delle divise per trasportatori) " },
+                        { sel: Owner.getProperty("/B"), codice: "B", descrizione: "NON RISPETTO TEMPISTICHE (Inizio/fine prestazione o date pianificate)" },
+                        { sel: Owner.getProperty("/C"), codice: "C", descrizione: "NON RISPETTO DISPOSIZIONE SICUREZZA S.O" },
+                        { sel: Owner.getProperty("/D"), codice: "D", descrizione: "NON ADEGUATEZZA MATERIALI/ATTREZZATURE/PRODOTTI/MEZZI UTILIZZATI (compresa sanificaz. mezzi)" },
+                        { sel: Owner.getProperty("/E"), codice: "E", descrizione: "DOCUMENTAZIONE INCOMPLETA" },
+                        { sel: Owner.getProperty("/F"), codice: "F", descrizione: "PRESTAZIONE NON ESEGUITA A REGOLA D’ARTE" },
+                        { sel: Owner.getProperty("/G"), codice: "G", descrizione: "EVENTUALI DANNEGGIAMENTI ALLA STRUTTURA/BENI DI S.O" },
+                        { sel: Owner.getProperty("/H"), codice: "H", descrizione: "SOLLECITI/RECLAMI" },
+                        { sel: Owner.getProperty("/I"), codice: "I", descrizione: "ALTRE NON CONFORMITÀ" },
+                        { sel: Owner.getProperty("/Z"), codice: "Z", descrizione: "50001: EM NON SIGNIFICATIVA X ISO 50001", editable: false },
+                        { sel: Owner.getProperty("/Y"), codice: "Y", descrizione: "50001: MANCATA CONSEGNA DOC. PREVISTA", editable: false },
+                        { sel: Owner.getProperty("/X"), codice: "X", descrizione: "50001: NON RISP. TEMPISTICHE FORNIT.", editable: false },
+                        { sel: Owner.getProperty("/W"), codice: "W", descrizione: "50001: NON RISP. REG. LEG. E CERTIFIC.", editable: false },
+                        { sel: Owner.getProperty("/V"), codice: "V", descrizione: "50001: NON RISP. SPEC. TEC. E REQ. PROG.", editable: false },
+                        { sel: Owner.getProperty("/Q"), codice: "Q", descrizione: "50001: PIENAMENTE CONFORME ISO 50001", editable: false }
+                    ]
+                });
+            }
             oTable.setModel(oModel);
             var that = this
             var oTemplate = new ColumnListItem({
@@ -1165,6 +1179,9 @@ sap.ui.define([
             var dettaglierr = []
 
             dettaglierr = Dati.IDettaglioSet
+
+            if (!dettaglierr) return;
+
             const dettagli = this.mapDataToModel(dettaglierr);
             var prezzotot = 0;
 
@@ -1431,7 +1448,7 @@ sap.ui.define([
 
 
                     }
-                    
+
 
                     page.setBusy(false)
                 },
