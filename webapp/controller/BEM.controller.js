@@ -1029,7 +1029,7 @@ sap.ui.define([
                 var oBindingContext = oSelectedItem.getBindingContext("MatchCode");
 
 
-                var sWbsValue = oBindingContext.getProperty("Ort01");
+                var sWbsValue = oBindingContext.getProperty("Tplnr");
 
 
                 var oInput = this.getView().byId("SedeTecnica");

@@ -894,6 +894,9 @@ sap.ui.define([
 
         DocStazValueHelp: function (oEvent) {
             var oInput = oEvent.getSource();
+            var oBindingContext = oInput.getBindingContext("DatiBemDetail");
+            // Ottieni il path del contesto
+            sPath = oBindingContext.getPath();
             const oDatiBemDetailModel = this.getOwnerComponent().getModel('DatiBemDetail');
             var wbs = oDatiBemDetailModel.getProperty(sPath + '/ZpsPosid')
             var dateesercizio = this.getOwnerComponent().getModel('DatiBemDetail').getProperty("/OTESTATASet/Zbldat");
@@ -914,10 +917,6 @@ sap.ui.define([
             if (fornitore) {
                 this.getOwnerComponent().getModel('DocStzFilterModel').setProperty('/fornitore', fornitore)
             }
-
-            var oBindingContext = oInput.getBindingContext("DatiBemDetail");
-            // Ottieni il path del contesto
-            sPath = oBindingContext.getPath();
 
             var oView = this.getView();
             if (!this.byId("DocStzHelpRequest")) {
@@ -941,26 +940,55 @@ sap.ui.define([
             }
         },
 
-        OnSelectStz: function () {
-            var oTable = this.byId("DocStzTable");
-            var iSelectedIndex = oTable.getSelectedIndex();
-            var oContext = oTable.getContextByIndex(iSelectedIndex);
-            var oSelectedData = oContext.getObject();
-            var oModel = this.getOwnerComponent().getModel("DatiBemDetail");
-            var aDettaglioSet = oModel.getProperty("/IDettaglioSet");
+        // OnSelectStz: function () {
+        //     var oTable = this.byId("DocStzTable");
+        //     var iSelectedIndex = oTable.getSelectedIndex();
+        //     var oContext = oTable.getContextByIndex(iSelectedIndex);
+        //     var oSelectedData = oContext.getObject();
+        //     var oModel = this.getOwnerComponent().getModel("DatiBemDetail");
+        //     var aDettaglioSet = oModel.getProperty("/IDettaglioSet");
 
-            if (!Array.isArray(aDettaglioSet) || aDettaglioSet.length === 0) {
-                sap.m.MessageToast.show("IDettaglioSet non contiene dati.");
-                return;
+        //     if (!Array.isArray(aDettaglioSet) || aDettaglioSet.length === 0) {
+        //         sap.m.MessageToast.show("IDettaglioSet non contiene dati.");
+        //         return;
+        //     }
+
+        //     oModel.setProperty(`${sPath}/ZstaBuzeiBm`, oSelectedData.Buzei);
+        //     oModel.setProperty(`${sPath}/Zsospeso`, oSelectedData.Zsospeso);
+        //     oModel.setProperty(`${sPath}/ZstaBelnrBm`, oSelectedData.Belnr);
+
+        //     this.byId("DocStzHelpRequest").close();
+
+        //     this.checkStanziamenti();
+        // },
+
+        OnSelectStz: function (oEvent) {
+            var oTable = oEvent.getSource();
+            var aSelectedIndices = oTable.getSelectedIndices();
+
+            if (aSelectedIndices.length > 0) {
+                // Ottieni il primo indice selezionato
+                var iSelectedIndex = aSelectedIndices[0];
+
+                // Ottieni l'elemento di contesto utilizzando l'indice
+                var oBindingContext = oTable.getContextByIndex(iSelectedIndex);
+
+                if (oBindingContext) {
+                    // Estrai il valore desiderato
+                    var sValue = oBindingContext.getProperty("Zsospeso"); // Assicurati che il campo esista
+                    var sValue2 = oBindingContext.getProperty("Belnr"); // Assicurati che il campo esista
+                    var sValue3 = oBindingContext.getProperty("Buzei"); // Assicurati che il campo esista
+
+                    this.getOwnerComponent().getModel("DatiBemDetail").setProperty(sPath + "/Zsospeso", sValue)
+                    this.getOwnerComponent().getModel("DatiBemDetail").setProperty(sPath + "/ZstaBelnrBm", sValue2)
+                    this.getOwnerComponent().getModel("DatiBemDetail").setProperty(sPath + "/ZstaBuzeiBm", sValue3)
+
+                    // Chiudi il dialogo
+                    this.byId("DocStzHelpRequest").close();
+
+                    this.checkStanziamenti();
+                }
             }
-
-            oModel.setProperty(`${sPath}/ZstaBuzeiBm`, oSelectedData.Buzei);
-            oModel.setProperty(`${sPath}/Zsospeso`, oSelectedData.Zsospeso);
-            oModel.setProperty(`${sPath}/ZstaBelnrBm`, oSelectedData.Belnr);
-
-            this.byId("DocStzHelpRequest").close();
-
-            this.checkStanziamenti();
         },
 
         onSearchCommessa: function () {

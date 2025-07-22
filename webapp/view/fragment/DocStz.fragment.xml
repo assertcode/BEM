@@ -82,6 +82,8 @@
                 selectionMode="Single"
                 id="DocStzTable"
                 selectionBehavior="RowOnly"
+                rowSelectionChange="OnSelectStz"
+                
             >
                 <t:columns>
                     <t:Column>
@@ -145,12 +147,12 @@
                     press="OnCloseStzDialog"
                     class="sapUiTinyMarginEnd"
                 />
-                <Button
+                <!-- <Button
                     text="Seleziona"
                     type="Default"
                     press="OnSelectStz"
                     class="sapUiTinyMarginEnd"
-                />
+                /> -->
             </HBox>
         </content>
     </Dialog>
