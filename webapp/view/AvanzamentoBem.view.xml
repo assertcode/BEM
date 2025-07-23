@@ -48,19 +48,22 @@
                     class="sapUiSmallMarginBegin sapUiTinyMarginEnd"
                     press="ModificaButton"
                     text="Modifica"
-                    visible="{EnabledButton>/Modifica}"
-                    type="{= ${VisibleButton>/Salva} === true ? 'Transparent' : 'Emphasized' }"
+                    type="Emphasized"
+                    visible="{= ${VisibleButton>/Salva} === false ? true : false }"
+                    enabled="{= ${SaveModel>/status1} === '' ? false  : true }"
                 />
                 <Button
                     text="{SaveModel>/status1}"
                     type="Emphasized"
                     visible="{= ${SaveModel>/status1} === '' ? false  : true }"
+                    enabled="{= ${VisibleButton>/Salva} === false ? false : true }"
                     press="SalvaButton"
                 />
                 <Button
                     text="{SaveModel>/status2}"
                     type="Emphasized"
                     visible="{= ${SaveModel>/status2} === '' ? false  : true }"
+                    enabled="{= ${VisibleButton>/Salva} === false ? false : true }"
                     press="SalvaButton"
                 />
 
@@ -359,14 +362,14 @@
                         press="SelezioneOrdineAcquisto"
                         class="sapUiTinyMarginEnd"
                         type="Emphasized"
-                        enabled="{EnabledButton>/Modifica}"
+                        enabled="{VisibleButton>/Salva}"
                     />
                     <Button
                         text="Cancella Posizione"
                         press="onDeletePosition"
                         class="sapUiTinyMarginEnd"
                         type="Reject"
-                        enabled="{EnabledButton>/Modifica}"
+                        enabled="{VisibleButton>/Salva}"
                     />
                     <Button
                         text="Crea Benestare"
@@ -376,7 +379,7 @@
                         visible="{= ${DatiBemDetail>/ListaCampiSet/ToolBarButtonBDL} ? ${DatiBemDetail>/ListaCampiSet/ToolBarButtonBDL/Zvisible} : false }"
                         enabled="true"
                     />
-                    <Button
+                    <!-- <Button
                         text="Dettaglio ticket"
                         press="DettaglioTicket"
                         class="sapUiTinyMarginEnd"
@@ -386,7 +389,7 @@
                         press="AzzeraImportiTicket"
                         class="sapUiTinyMarginEnd"
                         enabled="{EnabledButton>/Modifica}"
-                    />
+                    /> -->
                 </Toolbar>
             </Panel>
             <t:Table

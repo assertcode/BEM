@@ -27,8 +27,8 @@
             />
             <fb:FilterBar
                 id="DocStzFilterBar"
-                showClearOnFB="true"
-                showRestoreOnFB="true"
+                showClearOnFB="false"
+                showRestoreOnFB="false"
                 search=".onSearchDocStz"
                 clear="Cancel"
                 showFilterConfiguration="false"

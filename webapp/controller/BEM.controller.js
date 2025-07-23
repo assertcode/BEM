@@ -365,6 +365,7 @@ sap.ui.define([
             var nprot = this.getOwnerComponent().getModel("RowSelect").getProperty("/Znprot")
             this.getOwnerComponent().getModel("CreazioneModel").setProperty("/Nprot", nprot)
             if (nprot != undefined) {
+                this.getView().getModel("VisibleButton").setProperty("/Salva", false)
                 oRouter.navTo("AvanzamentoBem");
             } else {
                 MessageToast.show('Nessun record selezionato');
@@ -833,7 +834,7 @@ sap.ui.define([
                         that.getOwnerComponent().getModel("DetailErrorModel").setProperty("/Message", "ERROR");
 
                         table.setBusy(false)
-
+                        that.getView().getModel("VisibleButton").setProperty("/Salva", true)
                         oRouter.navTo("AvanzamentoBem");
                     },
                     error: function (err) {
