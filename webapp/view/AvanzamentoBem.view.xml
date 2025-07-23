@@ -63,7 +63,7 @@
                     text="{SaveModel>/status2}"
                     type="Emphasized"
                     visible="{= ${SaveModel>/status2} === '' ? false  : true }"
-                    enabled="{= ${VisibleButton>/Salva} === false ? false : true }"
+                    enabled="{= ${VisibleButton>/Salva} === false ? true : false }"
                     press="SalvaButton"
                 />
 
