@@ -34,11 +34,6 @@ sap.ui.define([
             this.getView().setModel(new JSONModel({}), "ConfermaScrittureIntegrative");
             this.getView().setModel(new JSONModel({}), "SalvaButtonEvent");
 
-            if (this.getOwnerComponent().getModel("CreazioneModel").getProperty("/Nprot") == "") {
-                var oRouter = this.getOwnerComponent().getRouter()
-                oRouter.navTo("RouteBEM");
-            }
-
             this.oItemsProcessor = [];
             this.globalModel = {}
 
@@ -48,6 +43,12 @@ sap.ui.define([
         },
 
         onRouteMatched: function () {
+
+            if (this.getOwnerComponent().getModel("CreazioneModel").getProperty("/Nprot") == "") {
+                var oRouter = this.getOwnerComponent().getRouter()
+                oRouter.navTo("RouteBEM");
+            }
+
             if (!this.getOwnerComponent().getModel("CreazioneModel").getProperty("/Addposition")) {
                 this.getView().getModel("ConfermaScrittureIntegrative").setData({});
                 this.getView().getModel("SalvaButtonEvent").setData({});
@@ -1839,29 +1840,30 @@ sap.ui.define([
             const dataOggi = day + '/' + month + '/' + year;
             var numeroprotocolloF = this.getOwnerComponent().getModel("CreazioneModel").getProperty("/Nprot");
             var soc = this.getOwnerComponent().getModel("DatiBemDetail").getProperty("/OTESTATASet/Zbukrs");
-            var Area = this.getOwnerComponent().getModel("DatiBemDetail").getProperty("/OTESTATASet/Zareat");
-            var tpprot = this.getOwnerComponent().getModel("DatiBemDetail").getProperty("/OTESTATASet/Ztpprot");
+            var Area = this.getOwnerComponent().getModel("DatiBemDetail").getProperty("/OTESTATASet/Zdscarea");
             var commessa = this.getOwnerComponent().getModel("DatiBemDetail").getProperty("/OTESTATASet/ZpsPosid");
             var Forn = this.getOwnerComponent().getModel("DatiBemDetail").getProperty("/OTESTATASet/Zlifnr");
             var NomeFornitore = this.getOwnerComponent().getModel("DatiBemDetail").getProperty("/OTESTATASet/Zname1");
             var NomeWBE = this.getOwnerComponent().getModel("DatiBemDetail").getProperty("/OTESTATASet/ZpsPost1");
             var AutoreP = this.getOwnerComponent().getModel("DatiBemDetail").getProperty("/OTESTATASet/Zernam");
-            var tipoAllegato = this.getOwnerComponent().getModel("FileUploadModel").getProperty("/SelectedCategory");
+            var tipoAllegatoKey = this.getOwnerComponent().getModel("FileUploadModel").getProperty("/SelectedCategory");
             var today = new Date();
-            var oModel = this.getView().getModel("societaModel2").getProperty("/TipoProtocollo");
+            // var oModel = this.getView().getModel("societaModel2").getProperty("/TipoProtocollo");
+            var tpprotkey = this.getOwnerComponent().getModel("DatiBemDetail").getProperty("/OTESTATASet/Ztpprot");
 
-            var tpprot = this.getOwnerComponent().getModel("DatiBemDetail").getProperty("/OTESTATASet/Ztpprot");
+            var tpprot = this.getTipoProtocolloTextById(tpprotkey)
+            var tipoAllegato = this.getCategoryTextById(tipoAllegatoKey)
             // fine logica Guid
 
 
             var that = this
             var numeroprotocolloF = this.getOwnerComponent().getModel("CreazioneModel").getProperty("/Nprot");
 
-            var result = oModel.find(function (item) {
-                return item.value === tpprot; // Confronta i valori
-            });
+            // var result = oModel.find(function (item) {
+            //     return item.value === tpprot; // Confronta i valori
+            // });
 
-            var folderID = numeroprotocolloF + " " + result.description
+            var folderID = numeroprotocolloF + " " + tpprot
 
             if (oFile) {
                 const oReader = new FileReader();
@@ -1901,6 +1903,22 @@ sap.ui.define([
             } else {
                 console.error("File non trovato.");
             }
+        },
+
+        getCategoryTextById: function (categoryId) {
+            var aCategories = this.getOwnerComponent().getModel("FileUploadModel").getProperty("/FileCategory")
+            var oMatch = aCategories.find(function (o) {
+                return o.categoryId === categoryId;
+            });
+            return oMatch ? oMatch.categoryText : ""; // oppure null o "Non trovato"
+        },
+
+        getTipoProtocolloTextById: function (categoryId) {
+            var aCategories = this.getView().getModel("societaModel2").getProperty("/TipoProtocollo");
+            var oMatch = aCategories.find(function (o) {
+                return o.value === categoryId;
+            });
+            return oMatch ? oMatch.description : ""; // oppure null o "Non trovato"
         },
 
 
