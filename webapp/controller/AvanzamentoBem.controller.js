@@ -66,7 +66,6 @@ sap.ui.define([
                 this.byId("AvanzamentoBemPage").setBusy(false)
                 this.onChangeAggiornaAnnoStaz();
                 this.getOwnerComponent().getModel("CreazioneModel").setProperty("/Addposition", false)
-
                 return
             }
             var that = this
@@ -701,54 +700,46 @@ sap.ui.define([
 
         updateCosts: function () {
             const oBemDetailModel = this.getOwnerComponent().getModel("DatiBemDetail");
-
-            const oTestata = oBemDetailModel.getProperty("/OTESTATASet");
             const oBemDefaultPosition = oBemDetailModel.getProperty("/EZTRGT003");
             const aDettagli = oBemDetailModel.getProperty("/IDettaglioSet");
-
-            if (!oTestata) { return; }
-
-            const sTipoBEM = !!oBemDefaultPosition ? oBemDefaultPosition.Zpstyp : null;
-
-            const bIsServizio = sTipoBEM !== null && sTipoBEM === "P";
-
-            let nTotale = 0;
-            let nImporto = 0;
-
-            for (const oDettaglio of aDettagli) {
-                nImporto = 0;
-
-                const nPeinh = 1;
-
-                if (bIsServizio) {
-                    if (oDettaglio.Zdmbtr && oDettaglio.ZmengeD) {
-                        nImporto = parseFloat(oDettaglio.Zdmbtr) * parseFloat(oDettaglio.ZmengeD);
-
-                        const nImpD = nImporto / nPeinh;
-
-                        nImporto = Math.round(nImpD * 100) / 100;
-
-                        oDettaglio.Zprzsconto = nImporto.toFixed(2);
-                        nTotale += parseFloat(oDettaglio.Zprzsconto);
-                    }
-                } else {
-                    if (oDettaglio.Zdmbtr && oDettaglio.ZmengeD) {
-                        nImporto = parseFloat(oDettaglio.Zdmbtr) * parseFloat(oDettaglio.ZmengeD);
-
-                        const nImpD = nImporto / nPeinh;
-
-                        nImporto = Math.round(nImpD * 100) / 100;
-
-                        oDettaglio.Zprzsconto = nImporto.toFixed(2);
-                        nTotale += parseFloat(oDettaglio.Zprzsconto);
-                    }
-                }
-
-                oDettaglio.ZstaDmStz = nImporto.toFixed(2);
+        
+            if (!aDettagli || aDettagli.length === 0) {
+                return;
             }
-
-            oTestata.ZnetwrAk = nTotale.toFixed(2);
-
+        
+            const sTipoBEM = oBemDefaultPosition?.Zpstyp || null;
+            const bIsServizio = sTipoBEM === "P";
+        
+            let nTotale = 0;
+        
+            for (let i = 0; i < aDettagli.length; i++) {
+                let nImporto = 0;
+                const oDettaglio = aDettagli[i];
+                const sDettaglioPath = `/IDettaglioSet/${i}`;
+                const nPeinh = 1;
+        
+                if (oDettaglio.Zdmbtr && oDettaglio.ZmengeD) {
+                    nImporto = parseFloat(oDettaglio.Zdmbtr) * parseFloat(oDettaglio.ZmengeD);
+                    nImporto = Math.round((nImporto / nPeinh) * 100) / 100;
+        
+                    const sImportoString = nImporto.toFixed(2);
+        
+                    oBemDetailModel.setProperty(`${sDettaglioPath}/Zprzsconto`, sImportoString);
+                    oBemDetailModel.setProperty(`${sDettaglioPath}/ZstaDmStz`, sImportoString);
+        
+                    nTotale += parseFloat(sImportoString);
+                }
+            }
+        
+            // Aggiorna la testata
+            oBemDetailModel.setProperty("/OTESTATASet/ZnetwrAk", nTotale.toFixed(2));
+        
+            // Refresh della tabella (sap.ui.table.Table con binding rows)
+            const oTable = this.byId("PositionTable");
+            if (oTable) {
+                oTable.getBinding("rows")?.refresh(true);
+                oTable.invalidate(); // forza il ridisegno
+            }
         },
 
         checkStanziamenti: async function () {
@@ -863,6 +854,8 @@ sap.ui.define([
             }
 
             oBemDetailModel.setProperty("/IDettaglioSet", aDettagli);
+            
+
         },
 
         checkDataFineLavori: function () {
