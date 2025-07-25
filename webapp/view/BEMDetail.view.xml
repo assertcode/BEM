@@ -194,7 +194,7 @@
                     </t:template>
                 </t:Column>
 
-                <t:Column width="11rem">
+                <t:Column width="11rem" visible="false">
                     <Label text="Valore" />
                     <t:template>
                         <Text
@@ -204,7 +204,7 @@
                     </t:template>
                 </t:Column>
 
-                <t:Column width="11rem">
+                <t:Column width="11rem" visible="false">
                     <Label text="Valore Residuo" />
                     <t:template>
                         <Text

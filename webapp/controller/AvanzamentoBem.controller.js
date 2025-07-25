@@ -1476,6 +1476,7 @@ sap.ui.define([
                 },
                 error: function (oError) {
                     page.setBusy(false)
+                    MessageToast.show('Errore in fase di salvataggio');
                     console.error(oError);
                 },
 

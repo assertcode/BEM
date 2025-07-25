@@ -236,7 +236,8 @@
                                 visible="{= ${DatiBemDetail>/ListaCampiSet/Znetwr_ak} ? ${DatiBemDetail>/ListaCampiSet/Znetwr_ak/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
                             />
                             <Input
-                                value="{DatiBemDetail>/OTESTATASet/ZnetwrAk}"
+                            
+                                value="{path: 'DatiBemDetail>/OTESTATASet/ZnetwrAk', type: 'sap.m.bem.model.type.formatDecimal'}"
                                 visible="{= ${DatiBemDetail>/ListaCampiSet/Znetwr_ak} ? ${DatiBemDetail>/ListaCampiSet/Znetwr_ak/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
                                 editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Znetwr_ak} ? !${DatiBemDetail>/ListaCampiSet/Znetwr_ak/Zrdonly} : false)) }"
                                 required="{DatiBemDetail>/ListaCampiSet/Znetwr_ak/Zstate}"
@@ -493,7 +494,8 @@
                         <Label text="Prz. Netto" />
                         <t:template>
                             <Text
-                                text="{DatiBemDetail>Zprzsconto}"
+                            text="{path: 'DatiBemDetail>Zprzsconto', type: 'sap.m.bem.model.type.formatDecimal'}"
+
                                 wrapping="false"
                             />
                         </t:template>
@@ -601,7 +603,7 @@
                         <Label text="Importo stanziamento" />
                         <t:template>
                             <Input
-                                value="{DatiBemDetail>ZstaDmStz}"
+                            value="{path: 'DatiBemDetail>ZstaDmStz', type: 'sap.m.bem.model.type.formatDecimal'}"
                                 editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/ZstaDmStz} ? !${DatiBemDetail>/ListaCampiSet/ZstaDmStz/Zrdonly} : false)) }"
                             />
                         </t:template>
