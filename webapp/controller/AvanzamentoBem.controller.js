@@ -702,38 +702,38 @@ sap.ui.define([
             const oBemDetailModel = this.getOwnerComponent().getModel("DatiBemDetail");
             const oBemDefaultPosition = oBemDetailModel.getProperty("/EZTRGT003");
             const aDettagli = oBemDetailModel.getProperty("/IDettaglioSet");
-        
+
             if (!aDettagli || aDettagli.length === 0) {
                 return;
             }
-        
+
             const sTipoBEM = oBemDefaultPosition?.Zpstyp || null;
             const bIsServizio = sTipoBEM === "P";
-        
+
             let nTotale = 0;
-        
+
             for (let i = 0; i < aDettagli.length; i++) {
                 let nImporto = 0;
                 const oDettaglio = aDettagli[i];
                 const sDettaglioPath = `/IDettaglioSet/${i}`;
                 const nPeinh = 1;
-        
+
                 if (oDettaglio.Zdmbtr && oDettaglio.ZmengeD) {
                     nImporto = parseFloat(oDettaglio.Zdmbtr) * parseFloat(oDettaglio.ZmengeD);
                     nImporto = Math.round((nImporto / nPeinh) * 100) / 100;
-        
+
                     const sImportoString = nImporto.toFixed(2);
-        
+
                     oBemDetailModel.setProperty(`${sDettaglioPath}/Zprzsconto`, sImportoString);
                     oBemDetailModel.setProperty(`${sDettaglioPath}/ZstaDmStz`, sImportoString);
-        
+
                     nTotale += parseFloat(sImportoString);
                 }
             }
-        
+
             // Aggiorna la testata
             oBemDetailModel.setProperty("/OTESTATASet/ZnetwrAk", nTotale.toFixed(2));
-        
+
             // Refresh della tabella (sap.ui.table.Table con binding rows)
             const oTable = this.byId("PositionTable");
             if (oTable) {
@@ -854,7 +854,7 @@ sap.ui.define([
             }
 
             oBemDetailModel.setProperty("/IDettaglioSet", aDettagli);
-            
+
 
         },
 
@@ -1254,13 +1254,18 @@ sap.ui.define([
                     success: function (oData) {
                         console.log(oData);
 
-                        if (oData.Message !== "") {
+                        if (oData.ErrorMessage !== "") {
                             oDetailErrorModel.setProperty("/Visibility", true);
-                            oDetailErrorModel.setProperty("/Message", oData.Message);
-                            resolve([null, oData.Message]);
+                            oDetailErrorModel.setProperty("/Message", oData.ErrorMessage);
+                            resolve([null, oData.ErrorMessage]);
                         } else {
-                            oDetailErrorModel.setProperty("/Visibility", false);
-                            oDetailErrorModel.setProperty("/Message", "ERROR");
+                            if (oData.Message !== "") {
+                                oDetailErrorModel.setProperty("/Visibility", true);
+                                oDetailErrorModel.setProperty("/Message", oData.Message);
+                            } else {
+                                oDetailErrorModel.setProperty("/Visibility", false);
+                                oDetailErrorModel.setProperty("/Message", "ERROR");
+                            }
                             resolve([oData, null]);
                         }
                     },
@@ -1335,15 +1340,31 @@ sap.ui.define([
             const page = this.byId("AvanzamentoBemPage");
             page.setBusyIndicatorDelay(0);
             page.setBusy(true);
+            const oDatiBemDetailModel = this.getOwnerComponent().getModel("DatiBemDetail");
+            const oTestata = oDatiBemDetailModel.getProperty("/OTESTATASet");
+            const sFunz = oEvent.getSource().getText();
+
+            let bPresaveOk = true;
 
             if (bCheckPresave) {
-                const bPresaveOk = await this.presave(oEvent);
+                if (sFunz && sFunz === "Salva") {
+                    // premuto tasto salva
+                    bPresaveOk = await this.presave(oEvent);
+                } else {
+                    //premuto Rilascia
+                    const sTipoProt = oTestata.Ztpprot;
+                    if (sTipoProt === "04") {
+                        //forniture
+                        bPresaveOk = await this.presave(oEvent);
+                    }
+                }
 
-                if (!bPresaveOk) {
+                if(!bPresaveOk) {
                     page.setBusy(false);
                     return;
                 }
             }
+
 
             var oButton = oEvent.getSource();
             var buttonText = oButton.getText();
