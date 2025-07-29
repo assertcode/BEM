@@ -1240,6 +1240,10 @@ sap.ui.define([
 
             const aMappedDettagli = this.mapDataToModel(aDettagli);
 
+            aMappedDettagli.forEach(oDettaglio => {
+                oDettaglio.ZmengeD = oDettaglio.ZmengeD.replace(',', '.');
+            });
+
             const oPayload = {
                 Znprot: oTestata.Znprot,
                 I_TESTATASet: { ...oTestata, ZnetwrAk: typeof oTestata.ZnetwrAk === "number" ? oTestata.ZnetwrAk.toFixed(3) : "0.0" },
