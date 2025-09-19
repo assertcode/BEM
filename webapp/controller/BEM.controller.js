@@ -210,11 +210,11 @@ sap.ui.define([
             }
             if (DataDABEM) {
                 DataDABEM.setHours(6)
-                aFilters.push(new Filter("IDataDa", FilterOperator.EQ, DataDABEM.toJSON().split('.')[0]));
+                aFilters.push(new Filter("IDataDa", FilterOperator.EQ, new Date(DataDABEM.toJSON().split('.')[0])));
             }
             if (A) {
                 A.setHours(6)
-                aFilters.push(new Filter("IDataA", FilterOperator.EQ, A.toJSON().split('.')[0]));
+                aFilters.push(new Filter("IDataA", FilterOperator.EQ, new Date(A.toJSON().split('.')[0])));
             }
             if (Commessa) {
                 aFilters.push(new Filter("ICommessa", FilterOperator.Contains, Commessa));
