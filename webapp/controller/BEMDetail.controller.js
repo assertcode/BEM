@@ -83,7 +83,8 @@ sap.ui.define([
                 ZticketExists: "ZticketExists",
                 Ztplnr: "Ztplnr",
                 Zxblnr: "",
-                Zzeile: "Zzeile"
+                Zzeile: "Zzeile",
+                Zpeinh: "Zpeinh"
             };
 
             if (aSelectedIndices.length > 0) {

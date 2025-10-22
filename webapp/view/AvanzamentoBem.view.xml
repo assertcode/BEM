@@ -236,7 +236,6 @@
                                 visible="{= ${DatiBemDetail>/ListaCampiSet/Znetwr_ak} ? ${DatiBemDetail>/ListaCampiSet/Znetwr_ak/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
                             />
                             <Input
-                            
                                 value="{path: 'DatiBemDetail>/OTESTATASet/ZnetwrAk', type: 'sap.m.bem.model.type.formatDecimal'}"
                                 visible="{= ${DatiBemDetail>/ListaCampiSet/Znetwr_ak} ? ${DatiBemDetail>/ListaCampiSet/Znetwr_ak/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
                                 editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Znetwr_ak} ? !${DatiBemDetail>/ListaCampiSet/Znetwr_ak/Zrdonly} : false)) }"
@@ -459,7 +458,7 @@
                         <Label text="Quantità" />
                         <t:template>
                             <Input
-                                value="{DatiBemDetail>ZmengeD}"
+                                value="{path: 'DatiBemDetail>ZmengeD', type: 'sap.m.bem.model.type.formatDecimal'}"
                                 editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/ZmengeD} ? !${DatiBemDetail>/ListaCampiSet/ZmengeD/Zrdonly} : !${DatiBemDetail>/ListaCampiSet/*/Zrdonly})) }"
                                 required="{DatiBemDetail>/ListaCampiSet/ZmengeD/Zstate}"
                                 maxLength="9"
@@ -467,10 +466,12 @@
                             />
                         </t:template>
                     </t:Column>
-                    <t:Column width="6rem" 
-                        visible="{= ${DatiBemDetail>/ListaCampiSet/Zdmbtr} ? ${DatiBemDetail>/ListaCampiSet/Zdmbtr/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }">
+                    <t:Column
+                        width="6rem"
+                        visible="{= ${DatiBemDetail>/ListaCampiSet/Zdmbtr} ? ${DatiBemDetail>/ListaCampiSet/Zdmbtr/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
+                    >
                         <Label text="Imp. Divisa int." />
-                        
+
                         <t:template>
                             <Input
                                 value="{path: 'DatiBemDetail>Zdmbtr', type: 'sap.m.bem.model.type.formatDecimal'}"
@@ -494,8 +495,7 @@
                         <Label text="Prz. Netto" />
                         <t:template>
                             <Text
-                            text="{path: 'DatiBemDetail>Zprzsconto', type: 'sap.m.bem.model.type.formatDecimal'}"
-
+                                text="{path: 'DatiBemDetail>Zprzsconto', type: 'sap.m.bem.model.type.formatDecimal'}"
                                 wrapping="false"
                             />
                         </t:template>
@@ -603,7 +603,7 @@
                         <Label text="Importo stanziamento" />
                         <t:template>
                             <Input
-                            value="{path: 'DatiBemDetail>ZstaDmStz', type: 'sap.m.bem.model.type.formatDecimal'}"
+                                value="{path: 'DatiBemDetail>ZstaDmStz', type: 'sap.m.bem.model.type.formatDecimal'}"
                                 editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/ZstaDmStz} ? !${DatiBemDetail>/ListaCampiSet/ZstaDmStz/Zrdonly} : false)) }"
                             />
                         </t:template>
@@ -648,11 +648,11 @@
                         <Label text="Codice CIG" />
                         <t:template>
                             <Input
-                            value="{DatiBemDetail>Zcig}"
-                            showValueHelp="true"
-                            valueHelpRequest="CIGValueHelp"
-                            editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zcig} ? !${DatiBemDetail>/ListaCampiSet/Zcig/Zrdonly} : !${DatiBemDetail>/ListaCampiSet/*/Zrdonly})) }"
-                        />
+                                value="{DatiBemDetail>Zcig}"
+                                showValueHelp="true"
+                                valueHelpRequest="CIGValueHelp"
+                                editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zcig} ? !${DatiBemDetail>/ListaCampiSet/Zcig/Zrdonly} : !${DatiBemDetail>/ListaCampiSet/*/Zrdonly})) }"
+                            />
                         </t:template>
                     </t:Column>
 

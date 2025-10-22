@@ -716,7 +716,7 @@ sap.ui.define([
                 let nImporto = 0;
                 const oDettaglio = aDettagli[i];
                 const sDettaglioPath = `/IDettaglioSet/${i}`;
-                const nPeinh = 1;
+                const nPeinh = oDettaglio.Zpeinh !== "" ? parseFloat(oDettaglio.Zpeinh) : 1;
 
                 if (oDettaglio.Zdmbtr && oDettaglio.ZmengeD) {
                     nImporto = parseFloat(oDettaglio.Zdmbtr) * parseFloat(oDettaglio.ZmengeD);
@@ -1363,7 +1363,7 @@ sap.ui.define([
                     }
                 }
 
-                if(!bPresaveOk) {
+                if (!bPresaveOk) {
                     page.setBusy(false);
                     return;
                 }
