@@ -716,7 +716,7 @@ sap.ui.define([
                 let nImporto = 0;
                 const oDettaglio = aDettagli[i];
                 const sDettaglioPath = `/IDettaglioSet/${i}`;
-                const nPeinh = oDettaglio.Zpeinh !== "" ? parseFloat(oDettaglio.Zpeinh) : 1;
+                const nPeinh = oDettaglio.Zpeinh ? parseFloat(oDettaglio.Zpeinh) : 1;
 
                 if (oDettaglio.Zdmbtr && oDettaglio.ZmengeD) {
                     nImporto = parseFloat(oDettaglio.Zdmbtr) * parseFloat(oDettaglio.ZmengeD);
@@ -2276,7 +2276,7 @@ sap.ui.define([
             const oBinding = oEvent.getSource().getParent().getBindingContext("DatiBemDetail");
             const oRow = oBinding.getObject();
 
-            const sSconto = (Number(oRow.ZmengeD) * Number(oRow.Zdmbtr)).toString();
+            const sSconto = (Number(oRow.ZmengeD || 0) * Number(oRow.Zdmbtr || 0)).toString();
             oBinding.setProperty("Zprzsconto", sSconto);
 
             this.updateCosts();
