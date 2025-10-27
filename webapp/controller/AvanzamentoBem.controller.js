@@ -1218,6 +1218,8 @@ sap.ui.define([
 
         presave: async function (oSalvaButtonEvent) {
             const oView = this.getView();
+            const page = this.byId("AvanzamentoBemPage");
+            
             const oDetailErrorModel = this.getOwnerComponent().getModel("DetailErrorModel");
             const oBemDetailModel = this.getOwnerComponent().getModel("DatiBemDetail");
             const oConfermaScrittureIntegrativeModel = oView.getModel("ConfermaScrittureIntegrative");
@@ -1241,7 +1243,9 @@ sap.ui.define([
             const aMappedDettagli = this.mapDataToModel(aDettagli);
 
             aMappedDettagli.forEach(oDettaglio => {
+                if (oDettaglio.ZmengeD){
                 oDettaglio.ZmengeD = oDettaglio.ZmengeD.replace(',', '.');
+                }
             });
 
             const oPayload = {
@@ -1274,12 +1278,16 @@ sap.ui.define([
                         }
                     },
                     error: function (oError) {
+                        sap.m.MessageToast.show("Errore durante il salvataggio");
+                        page.setBusy(false);
                         reject([null, oError]);
                     },
                 });
             });
 
             if (!oBemPresave && oError) {
+                sap.m.MessageToast.show("Errore durante il salvataggio");
+                page.setBusy(false);
                 console.error(oError);
                 return false;
             }
