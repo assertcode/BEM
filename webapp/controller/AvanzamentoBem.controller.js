@@ -1286,7 +1286,6 @@ sap.ui.define([
             });
 
             if (!oBemPresave && oError) {
-                sap.m.MessageToast.show("Errore durante il salvataggio");
                 page.setBusy(false);
                 console.error(oError);
                 return false;
