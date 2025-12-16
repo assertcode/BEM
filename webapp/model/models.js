@@ -38,7 +38,8 @@ sap.ui.define([
                         { categoryId: "02", categoryText: "Contratto" },
                         { categoryId: "03", categoryText: "Verbale di coordinamento" },
                         { categoryId: "04", categoryText: "Subappalto" },
-                        { categoryId: "05", categoryText: "Richieste Clienti" }
+                        { categoryId: "05", categoryText: "Richieste Clienti" },
+                        { categoryId: "06", categoryText: "Contabilità lavori – costo" },
                     ]
                 });
                 return oModel;

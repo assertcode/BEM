@@ -1355,6 +1355,12 @@ sap.ui.define([
             const oTestata = oDatiBemDetailModel.getProperty("/OTESTATASet");
             const sFunz = oEvent.getSource().getText();
 
+            const isAttObbCheckOK = await this.checkAttObb();
+            if (!isAttObbCheckOK) {
+                page.setBusy(false);
+                return;
+            }
+
             let bPresaveOk = true;
 
             if (bCheckPresave) {
@@ -1375,7 +1381,6 @@ sap.ui.define([
                     return;
                 }
             }
-
 
             var oButton = oEvent.getSource();
             var buttonText = oButton.getText();
@@ -2241,7 +2246,8 @@ sap.ui.define([
                 { categoryId: "02", categoryText: "Contratto" },
                 { categoryId: "03", categoryText: "Verbale di coordinamento" },
                 { categoryId: "04", categoryText: "Subappalto" },
-                { categoryId: "05", categoryText: "Richieste Clienti" }
+                { categoryId: "05", categoryText: "Richieste Clienti" },
+                { categoryId: "06", categoryText: "Contabilità lavori – costo" },
             ];
 
             var oCategory = aFileCategories.find(function (category) {
@@ -2287,6 +2293,46 @@ sap.ui.define([
             oBinding.setProperty("Zprzsconto", sSconto);
 
             this.updateCosts();
-        }
+        },
+
+        getAttObbActive: function () {
+            const that = this;
+            return new Promise((resolve, reject) => {
+                const oModel = that.getOwnerComponent().getModel();
+                const oBemModel = this.getOwnerComponent().getModel("DatiBemDetail");
+                const sBukrs = oBemModel.getProperty("/OTESTATASet/Zbukrs");
+                const sTpprot = oBemModel.getProperty("/OTESTATASet/Ztpprot");
+                oModel.read(`/AttObbSet(Zbukrs='${sBukrs}',Ztpprot='${sTpprot}')`, {
+                    success: function (oData) {
+                        resolve(oData);
+                    },
+                    error: function (oErr) {
+                        reject(oErr);
+                    }
+                });
+            });
+        },
+
+        checkAttObb: async function() {
+            const oAttObb = await this.getAttObbActive();
+            const oAllegatiModel = this.getOwnerComponent().getModel("AllegatiModel");
+
+            if (oAttObb.Zactive) {
+                const aAllegati = oAllegatiModel.getProperty('/Allegati');
+                const iNumAllObb = aAllegati.filter(x => x.Metadata?.AVA_PF_TipoAllegato === "Contabilità lavori – costo").length;
+
+                if (iNumAllObb < 1) {
+                    this.getOwnerComponent().getModel("DetailErrorModel").setProperty("/Visibility", true);
+                    this.getOwnerComponent().getModel("DetailErrorModel").setProperty("/Message", "Allegato di tipo 'Contabilità lavori – costo' obbligatorio");
+                    return false;
+                } else {
+                    this.getOwnerComponent().getModel("DetailErrorModel").setProperty("/Visibility", false);
+                    this.getOwnerComponent().getModel("DetailErrorModel").setProperty("/Message", "ERROR");
+                    return true;
+                }
+            }
+
+            return true;
+        },
     });
 });
