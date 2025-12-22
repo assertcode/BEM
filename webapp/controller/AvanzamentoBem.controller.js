@@ -1676,9 +1676,9 @@ sap.ui.define([
                 return AllegatiConfig.Societa == selSocieta;
             });
 
-            if (window.location.href.indexOf("test") > 0) {
+            /*if (window.location.href.indexOf("test") > 0) {
                 guid[0].Id = '556c5111-2fa0-476a-9ff8-43d80b5cdee2'
-            }
+            }*/
 
             var oModel = this.getView().getModel("societaModel2").getProperty("/TipoProtocollo");
 
@@ -1777,9 +1777,9 @@ sap.ui.define([
                 return AllegatiConfig.Societa == selSocieta;
             });
 
-            if (window.location.href.indexOf("test") > 0) {
+            /*if (window.location.href.indexOf("test") > 0) {
                 guid[0].Id = '556c5111-2fa0-476a-9ff8-43d80b5cdee2'
-            }
+            }*/
 
             var oModel = this.getView().getModel("societaModel2").getProperty("/TipoProtocollo");
 
@@ -1964,9 +1964,9 @@ sap.ui.define([
                 return AllegatiConfig.Societa == selSocieta;
             });
 
-            if (window.location.href.indexOf("test") > 0) {
+            /*if (window.location.href.indexOf("test") > 0) {
                 guid[0].Id = '556c5111-2fa0-476a-9ff8-43d80b5cdee2'
-            }
+            }*/
 
             this.addBody.pathToUpload = "/" + numeroprotocolloF;
             this.addBody.Guid = guid[0].Id;
@@ -2017,9 +2017,9 @@ sap.ui.define([
                 return AllegatiConfig.Societa == selSocieta;
             });
 
-            if (window.location.href.indexOf("test") > 0) {
+            /*if (window.location.href.indexOf("test") > 0) {
                 guid[0].Id = '556c5111-2fa0-476a-9ff8-43d80b5cdee2'
-            }
+            }*/
 
             // fine logica Guid
 
@@ -2100,9 +2100,9 @@ sap.ui.define([
                 return AllegatiConfig.Societa == selSocieta;
             });
 
-            if (window.location.href.indexOf("test") > 0) {
+            /*if (window.location.href.indexOf("test") > 0) {
                 guid[0].Id = '556c5111-2fa0-476a-9ff8-43d80b5cdee2'
-            }
+            }*/
 
             // fine logica Guid
 
@@ -2254,7 +2254,7 @@ sap.ui.define([
                 return category.categoryId === sCategoryId;
             });
 
-            return oCategory ? oCategory.categoryText : ""; // Restituisce il testo o una stringa vuota se non trova corrispondenze
+            return oCategory ? oCategory.categoryText : sCategoryId; // Restituisce il testo o una stringa vuota se non trova corrispondenze
         },
 
         // onDateChange: function (oEvent) {

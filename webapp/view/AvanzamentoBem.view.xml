@@ -475,7 +475,12 @@
                         <t:template>
                             <Input
                                 value="{path: 'DatiBemDetail>Zdmbtr', type: 'sap.m.bem.model.type.formatDecimal'}"
-                                editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zdmbtr} ? !${DatiBemDetail>/ListaCampiSet/Zdmbtr/Zrdonly} : !${DatiBemDetail>/ListaCampiSet/*/Zrdonly} )) }"
+                                editable="{= ${VisibleButton>/Salva} &amp;&amp; 
+                                    ((${DatiBemDetail>/ListaCampiSet/Zdmbtr} 
+                                    ? !${DatiBemDetail>/ListaCampiSet/Zdmbtr/Zrdonly} 
+                                    : !${DatiBemDetail>/ListaCampiSet/*/Zrdonly} )) &amp;&amp;
+                                    ${DatiBemDetail>Zmeins} === 'AC'
+                                }"
                                 required="{DatiBemDetail>/ListaCampiSet/Zdmbtr/Zstate}"
                                 maxLength="9"
                                 change=".onInputChange"
