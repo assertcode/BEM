@@ -142,6 +142,7 @@ sap.ui.define([
                             that.onFlowCalculator()
                             that.AggiornaImportoTotale()
                             await that.getSyUser()
+                            await that.getFileCategory()
                             that.byId("AvanzamentoBemPage").setBusy(false)
                             resolve();
                         },
@@ -1219,7 +1220,7 @@ sap.ui.define([
         presave: async function (oSalvaButtonEvent) {
             const oView = this.getView();
             const page = this.byId("AvanzamentoBemPage");
-            
+
             const oDetailErrorModel = this.getOwnerComponent().getModel("DetailErrorModel");
             const oBemDetailModel = this.getOwnerComponent().getModel("DatiBemDetail");
             const oConfermaScrittureIntegrativeModel = oView.getModel("ConfermaScrittureIntegrative");
@@ -1243,8 +1244,8 @@ sap.ui.define([
             const aMappedDettagli = this.mapDataToModel(aDettagli);
 
             aMappedDettagli.forEach(oDettaglio => {
-                if (oDettaglio.ZmengeD){
-                oDettaglio.ZmengeD = oDettaglio.ZmengeD.replace(',', '.');
+                if (oDettaglio.ZmengeD) {
+                    oDettaglio.ZmengeD = oDettaglio.ZmengeD.replace(',', '.');
                 }
             });
 
@@ -2295,16 +2296,20 @@ sap.ui.define([
             this.updateCosts();
         },
 
-        getAttObbActive: function () {
+        getAttObb: function () {
             const that = this;
             return new Promise((resolve, reject) => {
                 const oModel = that.getOwnerComponent().getModel();
                 const oBemModel = this.getOwnerComponent().getModel("DatiBemDetail");
-                const sBukrs = oBemModel.getProperty("/OTESTATASet/Zbukrs");
-                const sTpprot = oBemModel.getProperty("/OTESTATASet/Ztpprot");
-                oModel.read(`/AttObbSet(Zbukrs='${sBukrs}',Ztpprot='${sTpprot}')`, {
+                const aFilters = [
+                    new Filter('Zbukrs', FilterOperator.EQ, oBemModel.getProperty("/OTESTATASet/Zbukrs")),
+                    new Filter('Ztpprot', FilterOperator.EQ, oBemModel.getProperty("/OTESTATASet/Ztpprot"))
+                ];
+
+                oModel.read('/AttObbSet', {
+                    filters: aFilters,
                     success: function (oData) {
-                        resolve(oData);
+                        resolve(oData.results);
                     },
                     error: function (oErr) {
                         reject(oErr);
@@ -2313,17 +2318,36 @@ sap.ui.define([
             });
         },
 
-        checkAttObb: async function() {
-            const oAttObb = await this.getAttObbActive();
-            const oAllegatiModel = this.getOwnerComponent().getModel("AllegatiModel");
+        checkAttObb: async function () {
+            const aAttObbs = await this.getAttObb();
 
-            if (oAttObb.Zactive) {
+            if (aAttObbs.length > 0) {
+                await this._getAllegati();
+                const oAllegatiModel = this.getOwnerComponent().getModel("AllegatiModel");
                 const aAllegati = oAllegatiModel.getProperty('/Allegati');
-                const iNumAllObb = aAllegati.filter(x => x.Metadata?.AVA_PF_TipoAllegato === "Contabilità lavori – costo").length;
+                const oFileModel = this.getOwnerComponent().getModel('FileUploadModel');
+                const aFileCategories = oFileModel.getProperty('/FileCategory');
 
-                if (iNumAllObb < 1) {
+                let isError = false;
+                let oAttObb = {};
+                let oFileCategory = {};
+                for (let i = 0; i < aAttObbs.length; i++) {
+                    oAttObb = aAttObbs[i];
+                    oFileCategory = aFileCategories.find(cat => cat.categoryId === oAttObb.Zfilecat);
+                    if (oFileCategory) {
+                        const iNumAll = aAllegati.filter(
+                            x => x.Metadata?.AVA_PF_TipoAllegato === oFileCategory.categoryText
+                        ).length;
+                        if (iNumAll < 1) {
+                            isError = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (isError) {
                     this.getOwnerComponent().getModel("DetailErrorModel").setProperty("/Visibility", true);
-                    this.getOwnerComponent().getModel("DetailErrorModel").setProperty("/Message", "Allegato di tipo 'Contabilità lavori – costo' obbligatorio");
+                    this.getOwnerComponent().getModel("DetailErrorModel").setProperty("/Message", `Allegato di tipo ${oFileCategory.categoryText} obbligatorio`);
                     return false;
                 } else {
                     this.getOwnerComponent().getModel("DetailErrorModel").setProperty("/Visibility", false);
@@ -2334,5 +2358,77 @@ sap.ui.define([
 
             return true;
         },
+        _getAllegati: async function () {
+            var oModel = this.getView().getModel("societaModel2").getProperty("/TipoProtocollo");
+            var tpprot = this.getOwnerComponent().getModel("DatiBemDetail").getProperty("/OTESTATASet/Ztpprot");
+            var that = this
+            var numeroprotocolloF = this.getOwnerComponent().getModel("CreazioneModel").getProperty("/Nprot");
+            var AllegatiConfig = this.getOwnerComponent().getModel("AllegatiConfig").getData();
+            var selSocieta = this.getOwnerComponent().getModel("DatiBemDetail").getProperty("/OTESTATASet/Zbukrs");
+
+            var result = oModel.find(function (item) {
+                return item.value === tpprot; // Confronta i valori
+            });
+
+            var guid = AllegatiConfig.filter((AllegatiConfig) => {
+                return AllegatiConfig.Societa == selSocieta;
+            });
+
+            var folderID = numeroprotocolloF + " " + result.description
+
+            var body = {
+                "Metadata": {
+                    "AVA_PF_NumeroProtocollo": numeroprotocolloF
+                },
+                "Path": folderID,
+                // "relativePath":  numeroprotocolloF,
+                "Guid": guid[0].Id
+            }
+
+            var strbody = JSON.stringify(body)
+
+            var appId = this.getOwnerComponent().getManifestEntry("/sap.app/id"),
+                appPath = appId.replaceAll(".", "/"),
+                appModulePath = jQuery.sap.getModulePath(appPath);
+
+            return new Promise((resolve, reject) => {
+                $.ajax({
+                    method: "POST",
+                    url: appModulePath + "/SharePoint/SharePointRWApi/api/get-documents",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    data: strbody,
+                    success: function (data) {
+                        that.getOwnerComponent().getModel("AllegatiModel").setProperty("/Allegati", data)
+                        resolve(data);
+                    }.bind(this),
+                    error: function (error) {
+                        reject(error);
+                    }.bind(this),
+                })
+            })
+        },
+        getFileCategory: async function () {
+            const oModel = this.getOwnerComponent().getModel();
+            const oFileModel = this.getOwnerComponent().getModel('FileUploadModel');
+
+            return new Promise((resolve, reject) => {
+                oModel.read('/FileCategorySet', {
+                    success: function (oData) {
+                        const aCategories = oData.results.map(cat => ({
+                            categoryId: cat.Id,
+                            categoryText: cat.Category,
+                        }));
+                        oFileModel.setProperty('/SelectedCategory', aCategories[0].categoryId)
+                        oFileModel.setProperty('/FileCategory', aCategories);
+                        resolve();
+                    },
+                    error: function () {
+                        reject();
+                    }
+                });
+            });
+        }
     });
 });
