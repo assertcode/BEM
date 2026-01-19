@@ -319,10 +319,18 @@ sap.ui.define([
                 beginButton: new Button({
                     text: "Conferma",
                     press: function () {
-                        var sSelectedDate = oDatePicker.getDateValue();
+                        var sSelectedDate = oDatePicker.getValue();
+                        var sSelectedDateTest = oDatePicker.getDateValue();
+
+                        var aParts = sSelectedDate.split("-");
+                        var oDate = new Date(
+                            parseInt(aParts[0], 10),     // year
+                            parseInt(aParts[1], 10) - 1, // month (0-based!)
+                            parseInt(aParts[2], 10) + 1     // day
+                        );
                         const Payload = {
                             INumeroprotocollo: nprot,
-                            IBudat: sSelectedDate
+                            IBudat: oDate
                         };
                         oModel.create(`/REJECTSet`, Payload,
                             {
@@ -337,6 +345,7 @@ sap.ui.define([
                                     }
                                 },
                                 error: function (err) {
+                                    MessageToast.show("Errore durante l'annullamento");
                                     console.error(err)
                                 }
                             });
