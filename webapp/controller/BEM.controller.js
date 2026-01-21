@@ -326,8 +326,10 @@ sap.ui.define([
                         var oDate = new Date(
                             parseInt(aParts[0], 10),     // year
                             parseInt(aParts[1], 10) - 1, // month (0-based!)
-                            parseInt(aParts[2], 10) + 1     // day
+                            parseInt(aParts[2], 10)     // day
                         );
+                        oDate.setDate(oDate.getDate() + 1);
+
                         const Payload = {
                             INumeroprotocollo: nprot,
                             IBudat: oDate
@@ -338,7 +340,6 @@ sap.ui.define([
                                     var message = data.Message;
                                     if (message !== "") {
                                         MessageToast.show(message);
-                                        2
                                     } else {
                                         MessageToast.show("Operazione Completata");
                                         that.LetturaDati()
