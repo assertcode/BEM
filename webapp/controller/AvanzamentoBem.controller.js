@@ -1858,7 +1858,7 @@ sap.ui.define([
         },
 
 
-        onBeforeUploadStarts: function (oEvent) {
+        onBeforeUploadStarts: async function (oEvent) {
             const oItem = oEvent.getParameter("item"); // Prende l'elemento caricato
             const oFile = oItem.getFileObject(); // Prende l'oggetto file effettivo
             var today = new Date();
@@ -1897,6 +1897,15 @@ sap.ui.define([
 
             var folderID = numeroprotocolloF + " " + tpprot
 
+            const oAllegatiDetail = await this._getAttachmentDetail(numeroprotocolloF)
+
+            if (oAttachmentDetail.WBE === '') {
+                oEvent.preventDefault();
+                sap.m.MessageToast.show("Valorizzare prima i campi obbligatori");
+                oItem.setUploadState(sap.m.UploadState.Error);
+                return;
+            }
+
             if (oFile) {
                 const oReader = new FileReader();
 
@@ -1914,11 +1923,12 @@ sap.ui.define([
                             "AVA_PF_NumeroProtocollo": numeroprotocolloF,
                             "AVA_PF_DataProtocollo": today,
                             "AVA_PF_TipoProtocollo": tpprot,
-                            "AVA_PF_WBE": commessa,
+                            "AVA_PF_WBE": oAllegatiDetail.WBE,
                             "AVA_PF_Fornitore": Forn,
                             "AVA_PF_DescrizioneFornitore": NomeFornitore,
-                            "AVA_PF_DescrizioneWBE": NomeWBE,
+                            "AVA_PF_DescrizioneWBE": oAllegatiDetail.WBE_Descr,
                             "AVA_PF_TipoAllegato": tipoAllegato,
+                            "AVA_PF_TipoOggetto": oAttachmentDetail.Tpflux
                         },
                         "FileName": oFile.name,
                         "FileData": sBase64,
@@ -1935,6 +1945,20 @@ sap.ui.define([
             } else {
                 console.error("File non trovato.");
             }
+        },
+
+        async _getAttachmentDetail(sNprot) {
+            const oModel = this.getOwnerComponent().getModel();
+            return new Promise((resolve, reject) => {
+                oModel.read(`/AttachmentDetailSet(Nprot='${sNprot}')`, {
+                    success: function (oData) {
+                        resolve(oData)
+                    },
+                    error: function (oErr) {
+                        reject(oErr)
+                    }
+                })
+            });
         },
 
         getCategoryTextById: function (categoryId) {
