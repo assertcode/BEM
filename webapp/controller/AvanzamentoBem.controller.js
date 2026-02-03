@@ -2453,6 +2453,154 @@ sap.ui.define([
                     }
                 });
             });
+        },
+        onAfterItemAdded: async function (oEvent) {
+            const oItem = oEvent.getParameter("item");
+            const oFile = oItem.getFileObject();
+            const oTable = this.byId("UploadSetTable");
+
+            // Set initial state
+            oItem.setUploadState(sap.m.UploadState.Uploading);
+            oTable.setBusy(true);
+
+            try {
+                // 1. Extract Data from Models
+                const oComp = this.getOwnerComponent();
+                const sNumProt = oComp.getModel("CreazioneModel").getProperty("/Nprot");
+                const oDetailData = oComp.getModel("DatiBemDetail").getProperty("/OTESTATASet");
+                const sTipoAllegatoKey = oComp.getModel("FileUploadModel").getProperty("/SelectedCategory");
+
+                // 2. Await Backend Detail (The "Wait" step)
+                let oAllegatiDetail = await this._getAttachmentDetail(sNumProt);
+                oAllegatiDetail = await this._completeAttachmentDetail(oAllegatiDetail);
+
+                if (!oAllegatiDetail || oAllegatiDetail.WBE === '') {
+                    sap.m.MessageToast.show("Valorizzare prima i campi obbligatori");
+                    oItem.setUploadState(sap.m.UploadState.Error);
+                    oTable.setBusy(false);
+                    return;
+                }
+
+                // 3. Await File Conversion to Base64
+                const sBase64 = await this._fileToBase64(oFile);
+
+                // 4. Resolve Guid from Config
+                const aAllegatiConfig = oComp.getModel("AllegatiConfig").getData();
+                const sSelSocieta = oDetailData.Zbukrs;
+                const oConfig = aAllegatiConfig.find(conf => conf.Societa === sSelSocieta);
+                const sGuid = oConfig ? oConfig.Id : "556c5111-2fa0-476a-9ff8-43d80b5cdee2";
+
+                // 5. Prepare Payload
+                const sTpProt = this.getTipoProtocolloTextById(oDetailData.Ztpprot);
+                const oPayload = {
+                    "Metadata": {
+                        "AVA_PF_AreaTerritoriale": oDetailData.Zdscarea,
+                        "AVA_PF_Societa1": sSelSocieta,
+                        "AVA_PF_AutoreProtocollo": oDetailData.Zernam,
+                        "AVA_PF_AutoreUpload": typeof userUploader !== 'undefined' ? userUploader : "",
+                        "AVA_PF_NumeroProtocollo": sNumProt,
+                        "AVA_PF_DataProtocollo": new Date(),
+                        "AVA_PF_TipoProtocollo": sTpProt,
+                        "AVA_PF_WBE": oAllegatiDetail.WBE,
+                        "AVA_PF_Fornitore": oDetailData.Zlifnr,
+                        "AVA_PF_DescrizioneFornitore": oDetailData.Zname1,
+                        "AVA_PF_DescrizioneWBE": oAllegatiDetail.WBE_Descr,
+                        "AVA_PF_TipoAllegato": this.getCategoryTextById(sTipoAllegatoKey),
+                        "AVA_PF_TipoOggetto": oAllegatiDetail.Tpflux
+                    },
+                    "FileName": oFile.name,
+                    "FileData": sBase64,
+                    "FolderPath": sNumProt + " " + sTpProt,
+                    "FolderType": 0,
+                    "Guid": sGuid
+                };
+
+                // 6. Execute Upload
+                await this._postToSharePoint(oPayload);
+
+                // 7. Success
+                oItem.setUploadState(sap.m.UploadState.Complete);
+                this.onAllegatiGetDocument2();
+                sap.m.MessageToast.show("File caricato con successo");
+
+            } catch (oError) {
+                console.error("Upload failed:", oError);
+                oItem.setUploadState(sap.m.UploadState.Error);
+                sap.m.MessageToast.show("Chiamata Fallita Riprovare");
+            } finally {
+                oTable.setBusy(false);
+            }
+        },
+
+        // --- Helper: Convert FileReader to Promise ---
+        _fileToBase64: function (oFile) {
+            return new Promise((resolve, reject) => {
+                const oReader = new FileReader();
+                oReader.onload = (e) => resolve(e.target.result.split(",")[1]);
+                oReader.onerror = (err) => reject(err);
+                oReader.readAsDataURL(oFile);
+            });
+        },
+
+        // --- Helper: Post to SharePoint ---
+        _postToSharePoint: function (oBody) {
+            const appId = this.getOwnerComponent().getManifestEntry("/sap.app/id");
+            const appModulePath = jQuery.sap.getModulePath(appId.replaceAll(".", "/"));
+
+            return new Promise((resolve, reject) => {
+                $.ajax({
+                    method: "POST",
+                    url: appModulePath + "/SharePoint/SharePointRWApi/api/UploadFile",
+                    headers: { "Content-Type": "application/json" },
+                    data: JSON.stringify(oBody),
+                    success: (res) => resolve(res),
+                    error: (err) => reject(err)
+                });
+            });
+        },
+
+        _completeAttachmentDetail: async function (oAttachmentDetail) {
+            if (!this.getOwnerComponent().getModel("VisibleButton").getProperty("/Salva"))
+                return oAttachmentDetail;
+
+            const oModel = this.getOwnerComponent().getModel();
+
+            const Bukrs = this.getOwnerComponent().getModel("DatiBemDetail")
+                .getProperty("/OTESTATASet/Zbukrs");
+
+            if (Bukrs === 'FLET') {
+                const CdC = this.getOwnerComponent().getModel("DatiBemDetail")
+                    .getProperty("/OTESTATASet/Zkostl");
+                if (CdC !== '') {
+                    oAttachmentDetail.WBE = CdC;
+                    oAttachmentDetail.WBE_Descr = this.getOwnerComponent().getModel("DatiBemDetail")
+                        .getProperty("/OTESTATASet/ZdescrCdc");
+                } else {
+                    oAttachmentDetail.WBE =
+                        oAttachmentDetail.WBE_Descr = '';
+                }
+            } else {
+                const WBE = this.getOwnerComponent().getModel("DatiBemDetail")
+                    .getProperty("/OTESTATASet/ZpsPosid");;
+                if (WBE !== '') {
+                    const WBEDetails = await new Promise((resolve) => {
+                        oModel.read(`/GetProjectSet(WBE='${WBE}')`, {
+                            success: resolve
+                        })
+                    });
+                    oAttachmentDetail.WBE = WBEDetails.WBE_Proj;
+                    oAttachmentDetail.WBE_Descr = WBEDetails.WBE_Proj_Descr;
+                } else {
+                    oAttachmentDetail.WBE =
+                        oAttachmentDetail.WBE_Descr = '';
+                }
+            }
+
+            const AreaT = this.getOwnerComponent().getModel("DatiBemDetail")
+                .getProperty("/OTESTATASet/Zdscarea");;
+            oAttachmentDetail.AreaT = AreaT;
+
+            return oAttachmentDetail;
         }
     });
 });

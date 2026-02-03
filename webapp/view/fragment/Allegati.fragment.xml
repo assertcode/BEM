@@ -46,14 +46,21 @@
 
 
 				<dependents>
-						<p:UploadSetwithTable
-						multiple="false"
-                        beforeInitiatingItemUpload="onBeforeInitiatingItemUpload" 
-                        beforeUploadStarts="onBeforeUploadStarts" 
-                        uploadCompleted="onUploadCompleted"
-                        itemValidationHandler=".itemValidationCallback"
-                        actions="uploadButton"
+                        <p:UploadSetwithTable
+                            multiple="false"
+                            beforeInitiatingItemUpload="onBeforeInitiatingItemUpload" 
+                            uploadCompleted="onAfterItemAdded"
+                            itemValidationHandler=".itemValidationCallback"
+                            actions="uploadButton"
 						>
+						<!--<p:UploadSetwithTable
+                            multiple="false"
+                            beforeInitiatingItemUpload="onBeforeInitiatingItemUpload" 
+                            beforeUploadStarts="onBeforeUploadStarts" 
+                            uploadCompleted="onUploadCompleted"
+                            itemValidationHandler=".itemValidationCallback"
+                            actions="uploadButton"
+						> -->
 							<!-- <p:rowConfiguration>
 								<upload:UploadItemConfiguration
 								fileNamePath="fileName"
