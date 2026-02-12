@@ -2346,37 +2346,50 @@ sap.ui.define([
             const aAttObbs = await this.getAttObb();
 
             if (aAttObbs.length > 0) {
-                await this._getAllegati();
-                const oAllegatiModel = this.getOwnerComponent().getModel("AllegatiModel");
-                const aAllegati = oAllegatiModel.getProperty('/Allegati');
-                const oFileModel = this.getOwnerComponent().getModel('FileUploadModel');
-                const aFileCategories = oFileModel.getProperty('/FileCategory');
+                try {
+                    await this._getAllegati();
+                    const oAllegatiModel = this.getOwnerComponent().getModel("AllegatiModel");
+                    const aAllegati = oAllegatiModel.getProperty('/Allegati');
+                    const oFileModel = this.getOwnerComponent().getModel('FileUploadModel');
+                    const aFileCategories = oFileModel.getProperty('/FileCategory');
 
-                let isError = false;
-                let oAttObb = {};
-                let oFileCategory = {};
-                for (let i = 0; i < aAttObbs.length; i++) {
-                    oAttObb = aAttObbs[i];
-                    oFileCategory = aFileCategories.find(cat => cat.categoryId === oAttObb.Zfilecat);
-                    if (oFileCategory) {
-                        const iNumAll = aAllegati.filter(
-                            x => x.Metadata?.AVA_PF_TipoAllegato === oFileCategory.categoryText
-                        ).length;
-                        if (iNumAll < 1) {
-                            isError = true;
-                            break;
+                    let isError = false;
+                    let oAttObb = {};
+                    let oFileCategory = {};
+                    for (let i = 0; i < aAttObbs.length; i++) {
+                        oAttObb = aAttObbs[i];
+                        oFileCategory = aFileCategories.find(cat => cat.categoryId === oAttObb.Zfilecat);
+                        if (oFileCategory) {
+                            const iNumAll = aAllegati.filter(
+                                x => x.Metadata?.AVA_PF_TipoAllegato === oFileCategory.categoryText
+                            ).length;
+                            if (iNumAll < 1) {
+                                isError = true;
+                                break;
+                            }
                         }
                     }
-                }
 
-                if (isError) {
-                    this.getOwnerComponent().getModel("DetailErrorModel").setProperty("/Visibility", true);
-                    this.getOwnerComponent().getModel("DetailErrorModel").setProperty("/Message", `Allegato di tipo ${oFileCategory.categoryText} obbligatorio`);
-                    return false;
-                } else {
-                    this.getOwnerComponent().getModel("DetailErrorModel").setProperty("/Visibility", false);
-                    this.getOwnerComponent().getModel("DetailErrorModel").setProperty("/Message", "ERROR");
-                    return true;
+                    if (isError) {
+                        this.getOwnerComponent().getModel("DetailErrorModel").setProperty("/Visibility", true);
+                        this.getOwnerComponent().getModel("DetailErrorModel").setProperty("/Message", `Allegato di tipo ${oFileCategory.categoryText} obbligatorio`);
+                        return false;
+                    } else {
+                        this.getOwnerComponent().getModel("DetailErrorModel").setProperty("/Visibility", false);
+                        this.getOwnerComponent().getModel("DetailErrorModel").setProperty("/Message", "ERROR");
+                        return true;
+                    }
+                } catch (error) {
+                    if (error.responseText) {
+                        const responseText = JSON.parse(error.responseText);
+                        this.getOwnerComponent().getModel("DetailErrorModel").setProperty("/Visibility", true);
+                        if (responseText.Message.includes('Configurazione')) {
+                            this.getOwnerComponent().getModel("DetailErrorModel").setProperty("/Message", `Configurazione ${error.guid} non trovata!`);
+                        } else {
+                            this.getOwnerComponent().getModel("DetailErrorModel").setProperty("/Message", responseText.Message);
+                        }
+                        return false;
+                    }
                 }
             }
 
@@ -2428,6 +2441,9 @@ sap.ui.define([
                         resolve(data);
                     }.bind(this),
                     error: function (error) {
+                        if (error.responseText.includes('Configurazione')) {
+                            error.guid = guid[0].Id;
+                        }
                         reject(error);
                     }.bind(this),
                 })

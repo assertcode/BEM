@@ -51,7 +51,7 @@ sap.ui.define([
                     { "Societa": 'CSTA', "Id": 'b26e0323-485e-400b-ab7f-ce250a860473' },
                     { "Societa": 'FLET', "Id": 'a8fbf5a8-d793-4404-ad94-a6307f4eda60' },
                     { "Societa": 'GETA', "Id": '97509354-5a07-48d4-ac48-7feef062e81e' },
-                    { "Societa": 'GS4', "Id": '54a1f993-0712-4d97-9c33-8a7bee0296f3' },
+                    { "Societa": 'GS4',  "Id": '54a1f993-0712-4d97-9c33-8a7bee0296f3' },
                     { "Societa": 'INLO', "Id": 'c0b433bc-db8d-4083-b5a3-997619e49f70' },
                     { "Societa": 'ISOM', "Id": '222f712d-0a37-41f8-a36c-7d5e4abc9018' },
                     { "Societa": 'KANA', "Id": '3d35553c-1284-41bd-b238-8cddf0f0984d' },
