@@ -45,6 +45,7 @@
             </Panel>
             <OverflowToolbar>
                 <Button
+                    id="btnModifica"
                     class="sapUiSmallMarginBegin sapUiTinyMarginEnd"
                     press="ModificaButton"
                     text="Modifica"
@@ -53,6 +54,7 @@
                     enabled="{= ${SaveModel>/status1} === '' ? false  : true }"
                 />
                 <Button
+                    id="btnStatus1"
                     text="{SaveModel>/status1}"
                     type="Emphasized"
                     visible="{= ${SaveModel>/status1} === '' ? false  : true }"
@@ -60,6 +62,7 @@
                     press="SalvaButton"
                 />
                 <Button
+                    id="btnStatus2"
                     text="{SaveModel>/status2}"
                     type="Emphasized"
                     visible="{= ${SaveModel>/status2} === '' ? false  : true }"
@@ -83,6 +86,12 @@
                     press="Chiudi"
                     text="Chiudi"
                     visible="false"
+                />
+                <Button
+                    class="sapUiTinyMarginEnd"
+                    press="onStoricoPress"
+                    text="Storico"
+                    visible="true"
                 />
             </OverflowToolbar>
             <Panel id="detailsPanel">
@@ -350,6 +359,51 @@
                                 visible="{= ${DatiBemDetail>/ListaCampiSet/Zxblnr1} ? ${DatiBemDetail>/ListaCampiSet/Zxblnr1/Zvisible} : ${DatiBemDetail>/ListaCampiSet/*/Zvisible} }"
                                 editable="{= ${VisibleButton>/Salva} &amp;&amp; ((${DatiBemDetail>/ListaCampiSet/Zxblnr1} ? !${DatiBemDetail>/ListaCampiSet/Zxblnr1/Zrdonly} : !${DatiBemDetail>/ListaCampiSet/*/Zrdonly})) }"
                                 required="{DatiBemDetail>/ListaCampiSet/Zrfbnr/Zstate}"
+                            />
+                        </f:content>
+                    </s:SimpleForm>
+                </VBox>
+            </Panel>
+            <Panel visible="{= ${ApproversModel>/1} !== '' }">
+                <VBox fitContainer="true">
+                    <s:SimpleForm
+                        title="Approvatori Previsti"
+                        editable="false"
+                        layout="ColumnLayout"
+                        columnsM="2"
+                        columnsL="3"
+                        columnsXL="4"
+                    >
+                        <f:content>
+                            <Label
+                                text="1° Approvatore"
+                                visible="{= ${ApproversModel>/1} !== '' }"
+                            />
+                            <Input
+                                value="{ApproversModel>/1}"
+                                visible="{= ${ApproversModel>/1} !== '' }"
+                                editable="false"
+                                maxLength="12"
+                            />
+                            <Label
+                                text="2° Approvatore"
+                                visible="{= ${ApproversModel>/2} !== '' }"
+                            />
+                            <Input
+                                value="{ApproversModel>/2}"
+                                visible="{= ${ApproversModel>/2} !== '' }"
+                                editable="false"
+                                maxLength="12"
+                            />
+                            <Label
+                                text="3° Approvatore"
+                                visible="{= ${ApproversModel>/3} !== '' }"
+                            />
+                            <Input
+                                value="{ApproversModel>/3s}"
+                                visible="{= ${ApproversModel>/3} !== '' }"
+                                editable="false"
+                                maxLength="12"
                             />
                         </f:content>
                     </s:SimpleForm>

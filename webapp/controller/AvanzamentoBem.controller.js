@@ -16,9 +16,10 @@ sap.ui.define([
     "sap/ui/core/library",
     "sap/ui/core/Item",
     "sap/ui/core/Fragment",
-    "sap/m/PDFViewer"
+    "sap/m/PDFViewer",
+    "sap/m/bem/model/formatter"
 
-], function (Controller, JSONModel, MessageToast, Filter, FilterOperator, Container, Dialog, Button, Label, Table, Column, CheckBox, Text, ColumnListItem, coreLibrary, CoreItem, Fragment, PDFViewer) {
+], function (Controller, JSONModel, MessageToast, Filter, FilterOperator, Container, Dialog, Button, Label, Table, Column, CheckBox, Text, ColumnListItem, coreLibrary, CoreItem, Fragment, PDFViewer, formatter) {
     "use strict";
 
     var addBody;
@@ -27,6 +28,9 @@ sap.ui.define([
     var sPath
 
     return Controller.extend("sap.m.bem.controller.AvanzamentoBem", {
+
+        formatter: formatter,
+
         onInit: function () {
             var oModel = this.createFlowModel();
             this.getView().setModel(oModel, "modello");
@@ -42,11 +46,17 @@ sap.ui.define([
 
         },
 
-        onRouteMatched: function () {
+        onRouteMatched: function (oEvent) {
 
             if (this.getOwnerComponent().getModel("CreazioneModel").getProperty("/Nprot") == "") {
-                var oRouter = this.getOwnerComponent().getRouter()
-                oRouter.navTo("RouteBEM");
+                const sBem = oEvent.getParameter("arguments").bem;
+
+                if (!sBem || sBem === "") {
+                    var oRouter = this.getOwnerComponent().getRouter()
+                    oRouter.navTo("RouteBEM");
+                } else {
+                    this.getOwnerComponent().getModel("CreazioneModel").setProperty("/Nprot", sBem)
+                }
             }
 
             if (!this.getOwnerComponent().getModel("CreazioneModel").getProperty("/Addposition")) {
@@ -143,6 +153,7 @@ sap.ui.define([
                             that.AggiornaImportoTotale()
                             await that.getSyUser()
                             await that.getFileCategory()
+                            await that.getApprovers();
                             that.byId("AvanzamentoBemPage").setBusy(false)
                             resolve();
                         },
@@ -161,43 +172,89 @@ sap.ui.define([
             var Stato = this.getOwnerComponent().getModel("DatiBemDetail").getProperty("/OTESTATASet/Ztpstato")
             var Enabled = this.getOwnerComponent().getModel("EnabledButton");
             if (Stato === "B03") {
+                this.getView().getModel("modello").setProperty("/lanes/2/label", "Consuntivazione Costi Autorizzata");
                 Enabled.setProperty("/Modifica", false)
                 this.getView().getModel("VisibleButton").setProperty("/Salva", false)
                 modello.forEach(function (node) {
-                    if (node.id === "2" || node.id === "3") {
+                    if (node.id <= "6") {
                         node.state = "Positive";
-                    }
-                    if (node.id === "4") {
+                    } else {
                         node.state = "Negative";
                     }
                 });
             } else if (Stato === "B02") {
-                Enabled.setProperty("/Modifica", true)
-                // this.getView().getModel("VisibleButton").setProperty("/Salva", false)
+                this.getView().getModel("modello").setProperty("/lanes/2/label", "Consuntivazione Costi Da Autorizzare");
+                Enabled.setProperty("/Modifica", false)
+                this.getView().getModel("VisibleButton").setProperty("/Salva", false)
                 modello.forEach(function (node) {
-                    if (node.id === "2") {
+                    if (node.id <= "2") {
                         node.state = "Positive";
-                    }
-                    if (node.id === "3" || node.id === "4") {
+                    } else {
                         node.state = "Negative";
                     }
                 });
             } else if (Stato === "B01") {
+                this.getView().getModel("modello").setProperty("/lanes/2/label", "Consuntivazione Costi Da Autorizzare");
                 Enabled.setProperty("/Modifica", true);
                 modello.forEach(function (node) {
-                    if (node.id === "2" || node.id === "3" || node.id === "4") {
+                    if (node.id === "1") {
+                        node.state = "Positive";
+                    } else {
                         node.state = "Negative";
                     }
                 });
             } else if (Stato === "B04") {
+                this.getView().getModel("modello").setProperty("/lanes/2/label", "Consuntivazione Costi Autorizzata");
                 Enabled.setProperty("/Modifica", false);
                 this.getView().getModel("VisibleButton").setProperty("/Salva", false)
                 modello.forEach(function (node) {
-                    if (node.id === "2" || node.id === "3" || node.id === "4") {
-                        node.state = "Positive";
-                    }
+                    node.state = "Positive";
                 });
+            } else if (Stato === "B05") {
+                this.getView().getModel("VisibleButton").setProperty("/Salva", false)
+                Enabled.setProperty("/Modifica", false);
+                this.byId("btnModifica").setEnabled(false);
+                this.byId("btnStatus1").setEnabled(true);
+                this.byId("btnStatus2").setEnabled(true);
+
+                const subStato = this.getOwnerComponent().getModel("DatiBemDetail").getProperty("/OTESTATASet/Ztpsotst");
+                switch (subStato) {
+                    case "": {
+                        this.getView().getModel("modello").setProperty("/lanes/2/label", "1° Approvazione");
+                        modello.forEach(function (node) {
+                            if (node.id <= "3") {
+                                node.state = "Positive";
+                            } else {
+                                node.state = "Negative";
+                            }
+                        });
+                        break;
+                    }
+                    case "B51": {
+                        this.getView().getModel("modello").setProperty("/lanes/2/label", "2° Approvazione");
+                        modello.forEach(function (node) {
+                            if (node.id <= "4") {
+                                node.state = "Positive";
+                            } else {
+                                node.state = "Negative";
+                            }
+                        });
+                        break;
+                    }
+                    case "B52": {
+                        this.getView().getModel("modello").setProperty("/lanes/2/label", "3° Approvazione");
+                        modello.forEach(function (node) {
+                            if (node.id <= "5") {
+                                node.state = "Positive";
+                            } else {
+                                node.state = "Negative";
+                            }
+                        });
+                        break;
+                    }
+                }
             }
+
             this.byId("processFlow").updateModel();
         },
 
@@ -209,7 +266,7 @@ sap.ui.define([
                         "lane": "0",
                         "children": ["2"],
                         "state": "Positive",
-                        "title": "Node 1",
+                        "title": "Aperto",
                         "focused": true
                     },
                     {
@@ -217,23 +274,47 @@ sap.ui.define([
                         "lane": "1",
                         "children": ["3"],
                         "state": "Negative",
-                        "title": "Node 2",
+                        "title": "Salvato",
                         "focused": false
                     },
                     {
                         "id": "3",
                         "lane": "2",
-                        "children": [4],
+                        "children": ["6"],
                         "state": "Negative",
-                        "title": "Node 3",
+                        "title": "Approvazione",
                         "focused": false
                     },
                     {
                         "id": "4",
+                        "lane": "2",
+                        "children": ["6"],
+                        "state": "Negative",
+                        "title": "Approvazione",
+                        "focused": false
+                    },
+                    {
+                        "id": "5",
+                        "lane": "2",
+                        "children": ["6"],
+                        "state": "Negative",
+                        "title": "Approvazione",
+                        "focused": false
+                    },
+                    {
+                        "id": "6",
                         "lane": "3",
+                        "children": ["7"],
+                        "state": "Negative",
+                        "title": "Rilasciato",
+                        "focused": false
+                    },
+                    {
+                        "id": "7",
+                        "lane": "4",
                         "children": [],
                         "state": "Negative",
-                        "title": "Node 4",
+                        "title": "Cancellato",
                         "focused": false
                     }
                 ],
@@ -252,14 +333,20 @@ sap.ui.define([
                     },
                     {
                         "id": "2",
+                        "icon": "sap-icon://activity-assigned-to-goal",
+                        "label": "Consuntivazione Costi Da Autorizzare",
+                        "position": 2
+                    },
+                    {
+                        "id": "3",
                         "icon": "sap-icon://accept",
                         "label": "Consuntivazione Costi Rilasciata",
-                        "position": 2
+                        "position": 3
                     }, {
-                        "id": "3",
+                        "id": "4",
                         "icon": "sap-icon://decline",
                         "label": "Consuntivazione Costi Annullata",
-                        "position": 3
+                        "position": 4
                     }
                 ]
             });
@@ -1398,6 +1485,13 @@ sap.ui.define([
                 nxStato = this.getOwnerComponent().getModel("SaveModel").getProperty('/value2')
             }
 
+            let sRejectNote = "";
+            if (nxStato === "B02") {
+                const [isOk, sText] = await this._getRejectNote();
+                sRejectNote = sText;
+                if (!isOk) return;
+            }
+
             var dettaglierr = []
 
             // if ( Dati.IDettaglioSet) {
@@ -1421,6 +1515,7 @@ sap.ui.define([
             // }
 
             var testata = Dati.OTESTATASet
+
             if (testata.Zbldat) {
                 testata.Zbldat.setHours(6, 0, 0, 0);
             }
@@ -1480,6 +1575,7 @@ sap.ui.define([
                 "Zaufnr": testata.Zaufnr,
                 "Zauftext": testata.Zauftext,
                 "Zmodel": testata.Zmodel,
+                "NotaResp": sRejectNote,
                 "IDettaglioSet": dettagli
             }
             var that = this;
@@ -2617,6 +2713,137 @@ sap.ui.define([
             oAttachmentDetail.AreaT = AreaT;
 
             return oAttachmentDetail;
+        },
+
+        onStoricoPress: function () {
+            const oView = this.getView();
+
+            if (!this._storicoDialog) {
+                this._storicoDialog = Fragment.load({
+                    id: oView.getId(),
+                    name: "sap.m.bem.view.fragment.Storico",
+                    controller: this
+                }).then(function (oDialog) {
+                    oView.addDependent(oDialog);
+                    return oDialog;
+                });
+            }
+
+            this._storicoDialog.then(function (oDialog) {
+                oDialog.open();
+                this._loadStoricoData();
+            }.bind(this));
+        },
+
+        _loadStoricoData: function () {
+            const oODataModel = this.getOwnerComponent().getModel();
+            const oStoricoModel = this.getOwnerComponent().getModel("StoricoModel");
+            const sNumProt = this.getOwnerComponent().getModel("DatiBemDetail").getProperty("/OTESTATASet/Znprot");
+            const oTable = this.byId("storicoTable");
+
+            if (oTable) {
+                oTable.setBusy(true);
+            }
+
+            oODataModel.read("/StoricoSet", {
+                filters: [new sap.ui.model.Filter("ZNPROT", "EQ", sNumProt)],
+                success: function (oData) {
+                    oStoricoModel.setProperty("/rows", oData.results);
+
+                    if (oTable) {
+                        oTable.setBusy(false);
+                    }
+                },
+                error: function (oError) {
+                    if (oTable) {
+                        oTable.setBusy(false);
+                    }
+                }
+            });
+        },
+
+        onCloseStoricoDialog: function () {
+            this._storicoDialog.then(function (oDialog) {
+                oDialog.close();
+            });
+        },
+
+        getApprovers: async function () {
+            const filters = [];
+
+            const Znprot = this.getOwnerComponent().getModel("DatiBemDetail").getProperty("/OTESTATASet/Znprot");
+
+            filters.push(new sap.ui.model.Filter("NPROT", sap.ui.model.FilterOperator.EQ, Znprot));
+
+            this.getOwnerComponent().getModel("ApproversModel").setData({
+                1: '',
+                2: '',
+                3: ''
+            });
+
+            return new Promise((resolve) => {
+                this.getOwnerComponent().getModel().read("/AutorizzatoriSet", {
+                    filters: filters,
+                    success: function (data) {
+                        const approvers = this.getOwnerComponent().getModel("ApproversModel").getData();
+
+                        data.results.forEach(row => {
+                            approvers[row.ORDER] = row.UNAME;
+                        });
+
+                        this.getOwnerComponent().getModel("ApproversModel").setData(approvers);
+                        resolve();
+                    }.bind(this),
+                    error: function (oError) {
+                        MessageToast.show('ERRORE DI SISTEMA');
+                        resolve();
+                    }
+                });
+            })
+        },
+
+        _getRejectNote: function () {
+            return new Promise(function (resolve, reject) {
+                const oView = this.getView();
+
+                var fnOpenDialog = function (oDialog) {
+                    oDialog.getButtons()[0].attachPress(function onConfirm() {
+                        var oTextArea = this.byId("rejectReasonTextArea");
+                        var sText = oTextArea.getValue();
+
+                        if (sText.trim() === "") {
+                            sap.m.MessageToast.show("La motivazione è obbligatoria!");
+                            return;
+                        }
+
+                        oDialog.getButtons()[0].detachPress(onConfirm);
+                        oDialog.close();
+                        resolve([true, sText]);
+                    }.bind(this));
+
+                    oDialog.getButtons()[1].attachPress(function onCancel() {
+                        oDialog.getButtons()[1].detachPress(onCancel);
+                        oDialog.close();
+                        reject([false, ""]); 
+                    });
+
+                    oDialog.open();
+                }.bind(this);
+
+                if (!this._oRejectDialog) {
+                    Fragment.load({
+                        id: oView.getId(),
+                        name: "sap.m.bem.view.fragment.RejectDialog",
+                        controller: this
+                    }).then(function (oDialog) {
+                        oView.addDependent(oDialog);
+                        this._oRejectDialog = oDialog;
+                        fnOpenDialog(oDialog);
+                    }.bind(this));
+                } else {
+                    fnOpenDialog(this._oRejectDialog);
+                }
+            }.bind(this));
         }
     });
 });

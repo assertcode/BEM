@@ -1,0 +1,70 @@
+<core:FragmentDefinition
+    xmlns:m="sap.m"
+    xmlns:core="sap.ui.core"
+>
+    <m:Dialog
+        id="storicoDialog"
+        title="Dettaglio Storico Protocollo"
+        contentWidth="800px"
+        resizable="true"
+        draggable="true"
+    >
+        <m:content>
+            <m:Table
+                id="storicoTable"
+                inset="false"
+                items="{StoricoModel>/rows}"
+            >
+                <m:columns>
+                    <m:Column styleClass="cellBorderRight cellBorderLeft">
+                        <m:Text text="Progressivo" />
+                    </m:Column>
+                    <m:Column styleClass="cellBorderRight">
+                        <m:Text text="Stato Protocollo" />
+                    </m:Column>
+                    <m:Column styleClass="cellBorderRight">
+                        <m:Text text="Sottostato Protocollo" />
+                    </m:Column>
+                    <m:Column styleClass="cellBorderRight">
+                        <m:Text text="Data" />
+                    </m:Column>
+                    <m:Column styleClass="cellBorderRight">
+                        <m:Text text="Ora" />
+                    </m:Column>
+                    <m:Column styleClass="cellBorderRight">
+                        <m:Text text="Utenza" />
+                    </m:Column>
+                    <m:Column styleClass="cellBorderRight">
+                        <m:Text text="Nome e Cognome" />
+                    </m:Column>
+                </m:columns>
+                <m:items>
+                    <m:ColumnListItem vAlign="Middle">
+                        <m:cells>
+                            <m:Text text="{StoricoModel>ZCOUNT}" />
+                            <m:Text text="{StoricoModel>ZDESCST}" />
+                            <m:Text text="{StoricoModel>ZDESCSOTST}" />
+                            <m:Text
+                                text="{path: 'StoricoModel>ZBEDAT', type: 'sap.ui.model.type.Date', formatOptions: {pattern: 'dd/MM/yyyy'}}"
+                                wrapping="false"
+                            />
+                            <m:Text
+                                text="{path: 'StoricoModel>ZUZEIT/ms', formatter: '.formatter.formatMillisecondsToTime'}"
+                                wrapping="false"
+                            />
+                            <m:Text text="{StoricoModel>ZBENAM}" />
+                            <m:Text text="{StoricoModel>ZDSCBENAM}" />
+                        </m:cells>
+                    </m:ColumnListItem>
+                </m:items>
+            </m:Table>
+        </m:content>
+
+        <m:endButton>
+            <m:Button
+                text="Close"
+                press=".onCloseStoricoDialog"
+            />
+        </m:endButton>
+    </m:Dialog>
+</core:FragmentDefinition>
