@@ -2806,7 +2806,9 @@ sap.ui.define([
             return new Promise(function (resolve, reject) {
                 const oView = this.getView();
 
-                var fnOpenDialog = function (oDialog) {
+                const fnOpenDialog = function (oDialog) {
+                    this.byId("rejectReasonTextArea").setValue("");
+
                     oDialog.getButtons()[0].attachPress(function onConfirm() {
                         var oTextArea = this.byId("rejectReasonTextArea");
                         var sText = oTextArea.getValue();
