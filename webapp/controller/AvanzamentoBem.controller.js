@@ -1486,7 +1486,7 @@ sap.ui.define([
             }
 
             let sRejectNote = "";
-            if (nxStato === "B02") {
+            if (buttonText.toLowerCase().includes('rifiuta')) {
                 const [isOk, sText] = await this._getRejectNote();
                 sRejectNote = sText;
                 if (!isOk) return;
@@ -2824,7 +2824,7 @@ sap.ui.define([
                     oDialog.getButtons()[1].attachPress(function onCancel() {
                         oDialog.getButtons()[1].detachPress(onCancel);
                         oDialog.close();
-                        reject([false, ""]); 
+                        reject([false, ""]);
                     });
 
                     oDialog.open();
