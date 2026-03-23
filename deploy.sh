@@ -78,16 +78,13 @@ if [ -z "$CF_PASSWORD" ]; then
 fi
 
 # ---- Steps -------------------------------------------------
-echo "[1/4] Logging in to Cloud Foundry..."
-cf login -a "$API_URL" -u "$CF_USER" -p "$CF_PASSWORD"
+echo "[1/3] Logging in to Cloud Foundry and setting target..."
+cf login -a "$API_URL" -u "$CF_USER" -p "$CF_PASSWORD" -o "$TARGET_ORG" -s "$TARGET_SPACE"
 
-echo "[2/4] Setting target org and space..."
-cf target -o "$TARGET_ORG" -s "$TARGET_SPACE"
-
-echo "[3/4] Building MTA archive..."
+echo "[2/3] Building MTA archive..."
 npm run build:mta
 
-echo "[4/4] Deploying to $ENV_LABEL..."
+echo "[3/3] Deploying to $ENV_LABEL..."
 npm run deploy
 
 echo ""
