@@ -140,7 +140,7 @@
         },
         {
           "name": "AvanzamentoBem",
-          "pattern": "AvanzamentoBem",
+          "pattern": "AvanzamentoBem/:bem:",
           "target": [
             "AvanzamentoBem"
           ]

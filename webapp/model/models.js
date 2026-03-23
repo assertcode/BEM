@@ -66,6 +66,20 @@ sap.ui.define([
                 var oModel = new JSONModel([]);
                 return oModel;
 
+            },
+
+            createStoricoModel: function () {
+                var oModel = new JSONModel({rows: []});
+                return oModel;
+            },
+
+            createApproversModel: function () {
+                var oModel = new JSONModel({
+                    1: '',
+                    2: '',
+                    3: ''
+                });
+                return oModel;
             }
 
         };

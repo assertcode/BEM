@@ -29,7 +29,7 @@ sap.ui.define([
 
                 this.setModel(new JSONModel({ nprot: "" }), "RowSelect");
 
-                this.setModel(new JSONModel({  "status1":"", "value1":"", "status2":"", "value2":"" }), "SaveModel");
+                this.setModel(new JSONModel({  "status1":"", "value1":"", "status2":"", "value2":"", "status3":"", "value3":"", }), "SaveModel");
 
                 this.setModel(new JSONModel({   "Visibility" : false, "Message" : "ERROR" }), "DetailErrorModel");
 
@@ -221,7 +221,8 @@ sap.ui.define([
                   
                 }), "DocStzFilterModel");
                 
-                
+                this.setModel(models.createStoricoModel(), "StoricoModel");
+                this.setModel(models.createApproversModel(), "ApproversModel");
             }
         });
 
