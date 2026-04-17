@@ -1784,7 +1784,7 @@ sap.ui.define([
 
 
             var that = this
-            var numeroprotocolloF = this.getOwnerComponent().getModel("CreazioneModel").getProperty("/Nprot");
+            var numeroprotocolloF = this.getOwnerComponent().getModel("CreazioneModel").getProperty("/Nprot").replace(/^0+(?!$)/, '');
 
             var result = oModel.find(function (item) {
                 return item.value === tpprot; // Confronta i valori
@@ -1885,7 +1885,7 @@ sap.ui.define([
 
 
             var that = this
-            var numeroprotocolloF = this.getOwnerComponent().getModel("CreazioneModel").getProperty("/Nprot");
+            var numeroprotocolloF = this.getOwnerComponent().getModel("CreazioneModel").getProperty("/Nprot").replace(/^0+(?!$)/, '');
 
             var result = oModel.find(function (item) {
                 return item.value === tpprot; // Confronta i valori
@@ -2495,7 +2495,7 @@ sap.ui.define([
             var oModel = this.getView().getModel("societaModel2").getProperty("/TipoProtocollo");
             var tpprot = this.getOwnerComponent().getModel("DatiBemDetail").getProperty("/OTESTATASet/Ztpprot");
             var that = this
-            var numeroprotocolloF = this.getOwnerComponent().getModel("CreazioneModel").getProperty("/Nprot");
+            var numeroprotocolloF = this.getOwnerComponent().getModel("CreazioneModel").getProperty("/Nprot").replace(/^0+(?!$)/, '');
             var AllegatiConfig = this.getOwnerComponent().getModel("AllegatiConfig").getData();
             var selSocieta = this.getOwnerComponent().getModel("DatiBemDetail").getProperty("/OTESTATASet/Zbukrs");
 

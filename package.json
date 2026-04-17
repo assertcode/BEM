@@ -32,7 +32,7 @@
     "undeploy": "cf undeploy sapmbem --delete-services --delete-service-keys --delete-service-brokers",
     "build:deploy": "npm run build:mta && npm run deploy",
     "deploy:qua": "bash ./deploy.sh quality",
-    "deploy:prod": "bash ./deploy.sh production"
+    "deploy:prd": "bash ./deploy.sh production"
   },
   "sapuxLayer": "CUSTOMER_BASE",
   "ui5": {
